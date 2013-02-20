@@ -1,0 +1,17 @@
+build/
+.todo
+.gradle/
+bin/
+.project
+.classpath
+.settings/
+rebel.xml
+*.iml
+*.ipr
+*.iws
+.gradletasknamecache
+*.bak
+out/
+*.lock
+target/
+.idea/

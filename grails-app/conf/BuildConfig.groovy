@@ -38,10 +38,15 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
 
+    def gebVersion = "0.7.2"
+    def seleniumVersion = "2.30.0"
+
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 
         // runtime 'mysql:mysql-connector-java:5.1.20'
+        test ("org.codehaus.geb:geb-junit4:$gebVersion")
+        test ("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
     }
 
     plugins {
@@ -61,5 +66,8 @@ grails.project.dependency.resolution = {
         runtime ":database-migration:1.2.1"
 
         compile ':cache:1.0.1'
+
+        test ":geb:$gebVersion"
+        test ":cucumber:0.8.0"
     }
 }

@@ -13,7 +13,7 @@ class ListPage extends Page {
     static url = "course/list"
 
     static at = {
-        title ==~ /Course List/
+        title ==~ /教学经验累积管理系统/
     }
 
     static content = {

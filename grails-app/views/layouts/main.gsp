@@ -7,8 +7,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title><g:layoutTitle default="Grails"/></title>
-        <dojo:header theme="claro" showSpinner="true"
+        <title><g:message code="default.app.title"/></title>
+        <dojo:header theme="tundra" showSpinner="true"
                      modulePaths="[bootstrap: 'dojo-bootstrap/1.2']"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet"
@@ -21,8 +21,44 @@
         <r:layoutResources/>
     </head>
 
-    <body>
-        <g:layoutBody/>
+    <body class="tundra">
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <button type="button" class="btn btn-navbar"
+                            data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="brand" href="#"><g:message
+                            code="default.app.title"/></a>
+
+
+                    <form class="navbar-form pull-right">
+                        <input class="span2" type="text"
+                               placeholder="<g:message
+                                       code='label.login.username'/>">
+                        <input class="span2" type="password"
+                               placeholder="<g:message
+                                       code='label.login.password'/>">
+                        <button type="submit" class="btn"><g:message
+                                code="label.login"/></button>
+                    </form>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+        <div class="container">
+            <g:layoutBody/>
+
+            <hr>
+
+            <footer>
+                <p class="text-center">&copy; <g:message
+                        code="default.company.name"/> 2013</p>
+            </footer>
+        </div>
 
         <g:javascript library="application"/>
         <r:layoutResources/>

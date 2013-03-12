@@ -69,6 +69,8 @@ grails.project.dependency.resolution = {
 
         compile ':cache:1.0.1'
 
+        compile ":shiro:1.1.4"
+
         test ":geb:$gebVersion"
         test ":cucumber:0.8.0"
         test(":spock:0.7") {

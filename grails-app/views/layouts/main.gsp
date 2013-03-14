@@ -34,17 +34,28 @@
                     <a class="brand" href="#"><g:message
                             code="default.app.title"/></a>
 
-
-                    <form class="navbar-form pull-right">
-                        <input class="span2" type="text"
-                               placeholder="<g:message
-                                       code='label.login.username'/>">
-                        <input class="span2" type="password"
-                               placeholder="<g:message
-                                       code='label.login.password'/>">
-                        <button type="submit" class="btn"><g:message
-                                code="label.login"/></button>
-                    </form>
+                    <shiro:authenticated>
+                        <div class="pull-right">
+                            您好,<shiro:principal/><%=link(action: 'signOut', controller: 'auth') { '（注销）' }%>
+                        </div>
+                    </shiro:authenticated>
+                    <shiro:notAuthenticated>
+                        <g:form class="navbar-form pull-right"
+                                controller="auth" action="signIn">
+                            <input type="hidden" name="targetUri"
+                                   value="${targetUri}"/>
+                            <input class="span2" type="text"
+                                   name="username" value="${username}"
+                                   placeholder="<g:message
+                                           code='label.login.username'/>">
+                            <input class="span2" type="password"
+                                   name="password" value=""
+                                   placeholder="<g:message
+                                           code='label.login.password'/>">
+                            <button type="submit" class="btn"><g:message
+                                    code="label.login"/></button>
+                        </g:form>
+                    </shiro:notAuthenticated>
                 </div><!--/.nav-collapse -->
             </div>
         </div>

@@ -4,7 +4,11 @@ import com.sanwn.mousika.domain.Course
 
 class CourseController {
 
-    def scaffold = Course
+    def index() {
+        redirect(action: 'list')
+    }
 
-    def index() {}
+    def list() {
+        def courses = Course.all
+    }
 }

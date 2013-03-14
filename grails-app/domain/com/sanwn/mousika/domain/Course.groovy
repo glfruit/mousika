@@ -9,7 +9,20 @@ package com.sanwn.mousika.domain
  */
 class Course {
 
+    /**
+     * 课程名称
+     */
     String title
+
+    /**
+     * 课程描述
+     */
+    String description
+
+    /**
+     * 是否访客可见
+     */
+    boolean guestVisible
 
     String author
 

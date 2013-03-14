@@ -1,4 +1,4 @@
-package com.sanwn.mousika.domain
+package com.sanwn.mousika.controllers
 
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException

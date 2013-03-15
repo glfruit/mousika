@@ -17,6 +17,13 @@
         <link rel="stylesheet"
               href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"
               type="text.css"/>
+        <dojo:require modules="['dijit.dijit', 'dijit.Calendar']"/>
+        <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+        </style>
         <g:layoutHead/>
         <r:layoutResources/>
     </head>
@@ -61,8 +68,22 @@
         </div>
 
         <div class="container">
-            <g:layoutBody/>
+            <div class="row">
+                <div class="span3">
+                    <h4 style="border-bottom: 1px solid #000;color: #777777;">新闻通知</h4>
+                </div>
 
+                <div class="span6">
+                    <g:layoutBody/>
+                </div>
+
+                <div class="span3">
+                    <div class="pull-right" data-dojo-type="dijit.Calendar"
+                         data-dojo-props="onChange:function(){dojo.byId('formatted').innerHTML=dojo.date.locale.format(arguments[0], {formatLength: 'full', selector:'date'})}"></div>
+
+                    <p id="formatted"></p>
+                </div>
+            </div>
             <hr>
 
             <footer>

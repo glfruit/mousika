@@ -10,6 +10,7 @@
         <title><g:message code="default.app.title"/></title>
         <dojo:header theme="tundra" showSpinner="true"
                      modulePaths="[bootstrap: 'dojo-bootstrap/1.2']"/>
+        <dojo:css file="dojo/resources/dnd.css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet"
               href="${resource(dir: 'css', file: 'bootstrap.css')}"
@@ -17,7 +18,8 @@
         <link rel="stylesheet"
               href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"
               type="text.css"/>
-        <dojo:require modules="['dijit.dijit', 'dijit.Calendar']"/>
+        <dojo:require
+                modules="['dijit.dijit', 'dijit.Calendar', 'dojo.dnd.Source', 'dijit.TitlePane']"/>
         <style type="text/css">
         body {
             padding-top: 60px;
@@ -67,17 +69,23 @@
             </div>
         </div>
 
-        <div class="container">
-            <div class="row">
-                <div class="span3">
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span2">
                     <h4 style="border-bottom: 1px solid #000;color: #777777;">新闻通知</h4>
                 </div>
 
-                <div class="span6">
+                <div class="span8">
                     <g:layoutBody/>
                 </div>
 
-                <div class="span3">
+                <div class="span2" style="padding-top: 20px;">
+                    <div id="tp2" data-dojo-type="dijit.TitlePane"
+                         data-dojo-props="title: '新闻通知'"
+                         style="padding-bottom: 10px;">
+                        Click arrow to close me.
+                    </div>
+
                     <div class="pull-right" data-dojo-type="dijit.Calendar"
                          data-dojo-props="onChange:function(){dojo.byId('formatted').innerHTML=dojo.date.locale.format(arguments[0], {formatLength: 'full', selector:'date'})}"></div>
 

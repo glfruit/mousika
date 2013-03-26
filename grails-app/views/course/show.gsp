@@ -1,72 +1,56 @@
-
 <%@ page import="com.sanwn.mousika.domain.Course" %>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'course.label', default: 'Course')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
-	</head>
-	<body>
-		<a href="#show-course" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="show-course" class="content scaffold-show" role="main">
-			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<ol class="property-list course">
-			
-				<g:if test="${courseInstance?.author}">
-				<li class="fieldcontain">
-					<span id="author-label" class="property-label"><g:message code="course.author.label" default="Author" /></span>
-					
-						<span class="property-value" aria-labelledby="author-label"><g:fieldValue bean="${courseInstance}" field="author"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${courseInstance?.description}">
-				<li class="fieldcontain">
-					<span id="description-label" class="property-label"><g:message code="course.description.label" default="Description" /></span>
-					
-						<span class="property-value" aria-labelledby="description-label"><g:fieldValue bean="${courseInstance}" field="description"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${courseInstance?.guestVisible}">
-				<li class="fieldcontain">
-					<span id="guestVisible-label" class="property-label"><g:message code="course.guestVisible.label" default="Guest Visible" /></span>
-					
-						<span class="property-value" aria-labelledby="guestVisible-label"><g:formatBoolean boolean="${courseInstance?.guestVisible}" /></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${courseInstance?.title}">
-				<li class="fieldcontain">
-					<span id="title-label" class="property-label"><g:message code="course.title.label" default="Title" /></span>
-					
-						<span class="property-value" aria-labelledby="title-label"><g:fieldValue bean="${courseInstance}" field="title"/></span>
-					
-				</li>
-				</g:if>
-			
-			</ol>
-			<g:form>
-				<fieldset class="buttons">
-					<g:hiddenField name="id" value="${courseInstance?.id}" />
-					<g:link class="edit" action="edit" id="${courseInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-				</fieldset>
-			</g:form>
-		</div>
-	</body>
+    <head>
+        <meta name="layout" content="main">
+        <g:set var="entityName"
+               value="${message(code: 'course.label', default: 'Course')}"/>
+        <title><g:message code="default.list.label"
+                          args="[entityName]"/></title>
+        <style>
+        .commands {
+            white-space: nowrap;
+            display: inline;
+        }
+            li {
+                cursor: text;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h4 style="border-bottom: 1px solid #000;color: #777777;">
+            ${fieldValue(bean: courseInstance, field: "title")}
+        </h4>
+        <g:if test="${flash.message}">
+            <div class="message" role="status">${flash.message}</div>
+        </g:if>
+        <div style="border: black solid 1px;">
+            <ol data-dojo-type="dojo.dnd.Source" data-dojo-props="accept: ['item']" id="wishlistNode">
+                <li class="dojoDndItem" dndType="item">Wrist watch</li>
+                <li class="dojoDndItem" dndType="item">Life jacket</li>
+                <li class="dojoDndItem" dndType="item">
+                    <div style="float: left;padding-right: 10px;">
+                        <a href="#">Docu</a>
+                        <span>Doc Type</span>
+                    </div>
+                    <span class="commands">
+                        <a href="#"><g:img file="editstring.svg"/></a>
+                        <a href="#" style="cursor: move;"><g:img file="move_2d.svg"/> </a>
+                        <a href="#"><g:img file="hide.svg"/></a>
+                    </span>
+                </li>
+                <li class="dojoDndItem" dndType="item">Vintage microphone</li>
+                <li class="dojoDndItem" dndType="item">TIE fighter</li>
+            </ol>
+        </div>
+
+        <div style="height: 300px;">
+            <ol data-dojo-type="dojo.dnd.Source"
+                data-dojo-props="accept: ['item']"
+                style="height:300px;border: 1px solid #aaa;">
+
+            </ol>
+        </div>
+    </body>
 </html>

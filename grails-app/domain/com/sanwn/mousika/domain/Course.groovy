@@ -10,6 +10,11 @@ package com.sanwn.mousika.domain
 class Course {
 
     /**
+     * 课程代码
+     */
+    String code
+
+    /**
      * 课程名称
      */
     String title
@@ -26,6 +31,29 @@ class Course {
 
     String author
 
+    /**
+     * 课程开始日期
+     */
+    Date startDate
+
+    /**
+     *
+     */
+    int numberOfWeeks
+
+    int timesPerWeek
+
     static constraints = {
+        code blank: false
+        title blank: false
+        description nullable: true
+        author nullable: false
+        startDate min: new Date().clearTime()
+        numberOfWeeks min: 0
+        timesPerWeek min: 0
+    }
+
+    static mapping = {
+        description column: "description", sqlType: "text"
     }
 }

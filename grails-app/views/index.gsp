@@ -30,5 +30,9 @@
                 code="label.course.list"/></h4>
 
         <p>暂时没有任何课程</p>
+        <shiro:authenticated>
+            <g:link controller="course" action="create"
+                    class="btn">创建新课程</g:link>
+        </shiro:authenticated>
     </body>
 </html>

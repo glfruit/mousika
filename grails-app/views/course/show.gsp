@@ -12,21 +12,33 @@
             white-space: nowrap;
             display: inline;
         }
-            li {
-                cursor: text;
-            }
+
+        li {
+            cursor: text;
+        }
         </style>
     </head>
 
     <body>
         <h4 style="border-bottom: 1px solid #000;color: #777777;">
-            ${fieldValue(bean: courseInstance, field: "title")}
+            ${courseInstance?.title}
         </h4>
         <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
         </g:if>
+        <div style="border: 1px solid #E1E1E8;box-shadow: 40px 0 0 #FBFBFC inset, 41px 0 0 #ECECF0 inset;">
+            <p>新闻讨论区</p>
+            <p><span><i class="icon-plus"></i> 添加一个活动或资源</span></p>
+        </div>
+        <g:each in="${0..<courseInstance?.numberOfWeeks}" var="n">
+            <div style="border: 1px solid #E1E1E8;margin-bottom: 10px;margin-top: 10px;">
+                <p>2013-2014</p>
+                <p><span><i class="icon-plus"></i> 添加一个活动或资源</span></p>
+            </div>
+        </g:each>
         <div style="border: black solid 1px;">
-            <ol data-dojo-type="dojo.dnd.Source" data-dojo-props="accept: ['item']" id="wishlistNode">
+            <ol data-dojo-type="dojo.dnd.Source"
+                data-dojo-props="accept: ['item']" id="wishlistNode">
                 <li class="dojoDndItem" dndType="item">Wrist watch</li>
                 <li class="dojoDndItem" dndType="item">Life jacket</li>
                 <li class="dojoDndItem" dndType="item">
@@ -36,7 +48,7 @@
                     </div>
                     <span class="commands">
                         <a href="#"><g:img file="editstring.svg"/></a>
-                        <a href="#" style="cursor: move;"><g:img file="move_2d.svg"/> </a>
+                        <a href="#" style="cursor: move;"><i class="icon-move"></i></a>
                         <a href="#"><g:img file="hide.svg"/></a>
                     </span>
                 </li>

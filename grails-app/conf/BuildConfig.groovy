@@ -62,7 +62,9 @@ grails.project.dependency.resolution = {
         //runtime ":yui-minify-resources:0.1.4"
         compile ":dojo:1.7.2.0"
         compile ":twitter-bootstrap:2.3.0"
-        compile ":ckeditor:3.6.3.0"
+        compile ":searchable:0.6.4"
+        compile ":taggable:1.0.1"
+        compile ":platform-core:1.0.RC5"
 
         build ":tomcat:$grailsVersion"
 

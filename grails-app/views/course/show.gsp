@@ -26,14 +26,14 @@
         <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
         </g:if>
-        <div style="border: 1px solid #E1E1E8;box-shadow: 40px 0 0 #FBFBFC inset, 41px 0 0 #ECECF0 inset;">
+        <div style="border: 1px solid #E1E1E8;box-shadow: 30px 0 0 orange inset;">
             <p>新闻讨论区</p>
             <p><span><i class="icon-plus"></i> 添加一个活动或资源</span></p>
         </div>
         <g:each in="${0..<courseInstance?.numberOfWeeks}" var="n">
             <div style="border: 1px solid #E1E1E8;margin-bottom: 10px;margin-top: 10px;">
                 <p>2013-2014</p>
-                <p><span><i class="icon-plus"></i> 添加一个活动或资源</span></p>
+                <a style="text-align: right;margin-right: 5px;"><span><i class="icon-plus"></i> 添加一个活动或资源</span></a>
             </div>
         </g:each>
         <div style="border: black solid 1px;">

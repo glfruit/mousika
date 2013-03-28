@@ -45,7 +45,11 @@
                 </ul>
             </g:hasErrors>
             <g:form action="save" class="form-horizontal">
-                <g:render template="form"/>
+                <f:all bean="courseInstance"/>
+                <div class="control-group pagination-centered">
+                    <g:submitButton name="create"
+                                    value="${message(code: 'default.button.create.label', default: 'Create')}"/>
+                </div>
             </g:form>
         </div>
         <dojo:amdRequire

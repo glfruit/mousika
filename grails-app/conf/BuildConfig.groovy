@@ -65,6 +65,7 @@ grails.project.dependency.resolution = {
         compile ":searchable:0.6.4"
         compile ":taggable:1.0.1"
         compile ":platform-core:1.0.RC5"
+        compile ":fields:1.3"
 
         build ":tomcat:$grailsVersion"
 

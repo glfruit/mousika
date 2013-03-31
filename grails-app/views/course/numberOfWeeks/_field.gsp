@@ -4,6 +4,6 @@
     </label>
 
     <div class="controls">
-        <g:textArea name="${property}" value="${value}" rows="10" />
+        <g:select name="${property}" from="${0..15}" value="${value}"/>
     </div>
 </div>

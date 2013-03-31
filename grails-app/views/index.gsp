@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main"/>
+        <meta name="layout" content="dojo"/>
         %{--<r:require modules="bootstrap"/>--}%
         <style type="text/css" media="screen">
 
@@ -18,10 +18,10 @@
             border-bottom: 1px solid #ddd;
         }
 
-        .dijitCalendarDateTemplate {
-            margin: 25px auto;
-            width: 600px;
-        }
+        /*.dijitCalendarDateTemplate {*/
+            /*margin: 25px auto;*/
+            /*width: 600px;*/
+        /*}*/
         </style>
     </head>
 

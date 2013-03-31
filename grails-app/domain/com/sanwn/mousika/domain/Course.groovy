@@ -29,7 +29,7 @@ class Course {
      */
     boolean guestVisible
 
-    String author
+    boolean available
 
     /**
      * 课程开始日期
@@ -37,20 +37,16 @@ class Course {
     Date startDate
 
     /**
-     *
+     * 授课周数
      */
     int numberOfWeeks
-
-    int timesPerWeek
 
     static constraints = {
         code blank: false
         title blank: false
         description nullable: true
-        author nullable: false
         startDate min: new Date().clearTime()
         numberOfWeeks min: 0
-        timesPerWeek min: 0
     }
 
     static mapping = {

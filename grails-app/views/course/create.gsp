@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main">
+        <meta name="layout" content="dojo">
         <g:set var="entityName"
                value="${message(code: 'course.label', default: 'Course')}"/>
         <g:javascript src="../tiny_mce/tiny_mce.js"/>
@@ -24,6 +24,9 @@
                 plugin_preview_height: "600"
             });
         </r:script>
+        <link rel="stylesheet"
+              href="${resource(dir: 'css', file: 'datepicker.css')}"
+              type="text/css"/>
         %{--<ckeditor:resources/>--}%
         <title><g:message code="default.create.label"
                           args="[entityName]"/></title>
@@ -47,12 +50,20 @@
             <g:form action="save" class="form-horizontal">
                 <f:all bean="courseInstance"/>
                 <div class="control-group pagination-centered">
-                    <g:submitButton name="create"
+                    <g:submitButton name="create" class="btn btn-primary"
                                     value="${message(code: 'default.button.create.label', default: 'Create')}"/>
+                    <a class="btn" href="${createLink(action: 'list')}">取消</a>
                 </div>
             </g:form>
         </div>
-        <dojo:amdRequire
-                modules="['dijit.form.DateTextBox', 'dojoui.widget.Editor']"/>
+        <script>
+            require(['dijit/form/DateTextBox']);
+//            require(['dojo/query', 'bootstrap/Datepicker'], function (query) {
+//                query("#startDate").datepicker({
+//                    format: 'yyyy-mm-dd',
+//                    weekStart: 1
+//                });
+//            });
+        </script>
     </body>
 </html>

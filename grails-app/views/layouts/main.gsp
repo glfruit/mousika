@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
+<!--[if lt IE 7 ]> <html lang="zh-CN" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="zh-CN" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="zh-CN" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="zh-CN" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="zh-CN" class="no-js"><!--<![endif]-->
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title><g:message code="default.app.title"/></title>
         <dojo:header theme="tundra" showSpinner="true"
-                     modulePaths="[bootstrap: 'dojo-bootstrap/1.2']"/>
+                     modulePaths="[bootstrap: 'lib/dojo-bootstrap']" async="true"/>
         <dojo:css file="dojo/resources/dnd.css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet"
@@ -19,7 +19,7 @@
               href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"
               type="text.css"/>
         <dojo:require
-                modules="['dijit.dijit', 'dijit.Calendar', 'dojo.dnd.Source', 'dijit.TitlePane']"/>
+                modules="['dijit/dijit', 'dijit/Calendar', 'dojo/dnd/Source', 'dijit/TitlePane']"/>
         <style type="text/css">
         body {
             padding-top: 60px;
@@ -80,13 +80,13 @@
                 </div>
 
                 <div class="span2" style="padding-top: 20px;">
-                    <div id="tp2" data-dojo-type="dijit.TitlePane"
+                    <div id="tp2" data-dojo-type="dijit/TitlePane"
                          data-dojo-props="title: '新闻通知'"
                          style="padding-bottom: 10px;">
                         Click arrow to close me.
                     </div>
 
-                    <div class="pull-right" data-dojo-type="dijit.Calendar"
+                    <div data-dojo-type="dijit/Calendar"
                          data-dojo-props="onChange:function(){dojo.byId('formatted').innerHTML=dojo.date.locale.format(arguments[0], {formatLength: 'full', selector:'date'})}"></div>
 
                     <p id="formatted"></p>

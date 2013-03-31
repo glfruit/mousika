@@ -28,7 +28,7 @@ class CourseController {
         }
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'course.label', default: 'Course'), courseInstance.id])
-        redirect(action: "show", id: courseInstance.id)
+        redirect(action: "enrol", id: courseInstance.id)
     }
 
     def show(Long id) {
@@ -64,8 +64,8 @@ class CourseController {
         if (version != null) {
             if (courseInstance.version > version) {
                 courseInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'course.label', default: 'Course')] as Object[],
-                          "Another user has updated this Course while you were editing")
+                        [message(code: 'course.label', default: 'Course')] as Object[],
+                        "Another user has updated this Course while you were editing")
                 render(view: "edit", model: [courseInstance: courseInstance])
                 return
             }
@@ -99,5 +99,9 @@ class CourseController {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'course.label', default: 'Course'), id])
             redirect(action: "show", id: id)
         }
+    }
+
+    def enrol(Long id) {
+
     }
 }

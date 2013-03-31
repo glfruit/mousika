@@ -3,7 +3,7 @@
 
     <div class="controls">
         <g:if test="${type == Date}">
-            <dojo:datePicker name="${property}" value="${value}"/>
+            <dojo:datePicker name="${property}" value="${value}" pickEarlierDate="false"/>
         </g:if>
         <g:elseif test="${type == boolean || type == Boolean}">
             <g:checkBox name="${property}" value="${value}"/>

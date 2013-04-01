@@ -5,9 +5,18 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 class BootStrap {
 
     def init = { servletContext ->
-        def user = new User(username: "test", passwordHash: new Sha256Hash("test").toHex())
+        def user = new User(username: "test", fullname: "彭启华", email: "ppller25@126.com", passwordHash: new Sha256Hash("test").toHex())
         user.addToPermissions("*:*")
         user.save()
+
+        user = new User(username: "glix", fullname: "李果", email: "glfruit80@gmail.com", passwordHash: new Sha256Hash("test").toHex())
+        user.addToPermissions("*:*")
+        user.save()
+
+        user = new User(username: "linda", fullname: "李彦熹", email: "linda@123.com", passwordHash: new Sha256Hash("test").toHex())
+        user.addToPermissions("*:*")
+        user.save()
+
         def role = new Role(name: "系统管理员")
         role.addToPermissions("*:*")
         role.save()

@@ -64,7 +64,7 @@ class AuthController {
             }
 
             // Now redirect back to the login page.
-            redirect(uri: "/")
+            redirect(url: "/")
 //            redirect(action: "login", params: m,)   //FIXME: 重定向到index.gsp
         }
     }

@@ -1,8 +1,14 @@
 package com.sanwn.mousika.domain
 
 class User {
+
+    static searchable = true
+
     String username
     String passwordHash
+
+    String fullname
+    String email
     
     static hasMany = [ roles: Role, permissions: String ]
 

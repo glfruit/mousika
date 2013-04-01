@@ -1,4 +1,5 @@
-<%@ page import="com.sanwn.mousika.domain.Course" %>
+<%@ page import="com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Role; com.sanwn.mousika.domain.Course" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -32,17 +33,54 @@
                 <button type="button" class="close" data-dismiss="modal"
                         aria-hidden="true">×</button>
 
-                <h3 id="myModalLabel">Modal header</h3>
+                <h4 id="myModalLabel">添加成员</h4>
             </div>
 
             <div class="modal-body">
-                <p>One fine body…</p>
+                分配角色：<g:select id="roleList" name="role" from="${Role.list()}"
+                               optionKey="id" optionValue="name"/>
+                <table class="table table-striped">
+                    <g:each in="${users}" var="u" status="i">
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>img</td>
+                            <td>${u.fullname}</td>
+                            <td>${u.email}</td>
+                            <td>
+                                <g:form id="userForm${i + 1}" controller="user"
+                                        action="assign">
+                                    <input type="hidden" class="user-id"
+                                           value="${u.id}"/>
+                                    <button type="button"
+                                            class="btn enrol">添加</button>
+                                </g:form>
+                            </td>
+                        </tr>
+                    </g:each>
+                </table>
+
+                <div class="pagination">
+                    <ul>
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+
+                <form class="form-search">
+                    <input type="text" class="input-medium search-query">
+                    <button type="submit" class="btn">搜索</button>
+                </form>
             </div>
 
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal"
-                        aria-hidden="true">Close</button>
-                <button class="btn btn-primary">Save changes</button>
+                        aria-hidden="true">关闭</button>
+                <button class="btn btn-primary">保存</button>
             </div>
         </div>
         <table class="table">
@@ -62,7 +100,29 @@
             </tbody>
         </table>
         <script type="text/javascript">
-            require(["dijit/Dialog", "dijit/form/TextBox", "dijit/form/Button", "bootstrap/Modal"]);
+            require(["dojo/query", "dojo/ready", "bootstrap/Modal"], function (query, ready) {
+                ready(function () {
+                    query(".enrol").on("click", function (e) {
+                        require(['dojo/request', 'dojo/dom', 'dojo/dom-attr'], function (request, dom, domAttr) {
+                            request.post("${request.contextPath}/user/assign", {
+                                data: {
+                                    uid: domAttr.get(query(e.target).siblings(".user-id")[0], "value"),
+                                    rid: dom.byId("roleList").value
+                                }
+                            }).then(function (response) {
+                                        require(["dojo/json"], function (json) {
+                                            if (json.parse(response).success) {
+                                                query(e.target).parents("tr").first().addClass("success");
+                                                query(e.target).addClass("hide");
+                                            } else {
+                                                alert("failure!" + json.parse(response).error);
+                                            }
+                                        });
+                                    });
+                        });
+                    });
+                });
+            });
         </script>
     </body>
 </html>

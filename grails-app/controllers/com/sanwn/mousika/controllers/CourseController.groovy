@@ -1,6 +1,7 @@
 package com.sanwn.mousika.controllers
 
 import com.sanwn.mousika.domain.Course
+import com.sanwn.mousika.domain.User
 import org.springframework.dao.DataIntegrityViolationException
 
 class CourseController {
@@ -102,6 +103,8 @@ class CourseController {
     }
 
     def enrol(Long id) {
-
+        params.max = Math.min(params.max ?: 10, 100)
+        params.offset = params.offset ?: 0
+        [users: User.list(params), userCount: User.count()]
     }
 }

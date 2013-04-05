@@ -1,11 +1,11 @@
 package com.sanwn.mousika.controllers
 
+import com.sanwn.mousika.domain.User
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
-import org.apache.shiro.web.util.SavedRequest
-import org.apache.shiro.web.util.WebUtils
 import org.apache.shiro.grails.ConfigUtils
+import org.apache.shiro.web.util.WebUtils
 
 class AuthController {
     def shiroSecurityManager
@@ -13,7 +13,7 @@ class AuthController {
     def index = { redirect(action: "login", params: params) }
 
     def login = {
-        return [ username: params.username, rememberMe: (params.rememberMe != null), targetUri: params.targetUri ]
+        return [username: params.username, rememberMe: (params.rememberMe != null), targetUri: params.targetUri]
     }
 
     def signIn = {
@@ -23,29 +23,30 @@ class AuthController {
         if (params.rememberMe) {
             authToken.rememberMe = true
         }
-        
+
         // If a controller redirected to this page, redirect back
         // to it. Otherwise redirect to the root URI.
         def targetUri = params.targetUri ?: "/"
-        
+
         // Handle requests saved by Shiro filters.
         def savedRequest = WebUtils.getSavedRequest(request)
         if (savedRequest) {
             targetUri = savedRequest.requestURI - request.contextPath
             if (savedRequest.queryString) targetUri = targetUri + '?' + savedRequest.queryString
         }
-        
-        try{
+
+        try {
             // Perform the actual login. An AuthenticationException
             // will be thrown if the username is unrecognised or the
             // password is incorrect.
+            log.info("用户" + params.username + "尝试登录")
             SecurityUtils.subject.login(authToken)
+            User.findByUsername(params.username).lastAccessed = new Date()
 
-            println "Redirecting to '${targetUri}"
             log.info "Redirecting to '${targetUri}'."
             redirect(uri: targetUri)
         }
-        catch (AuthenticationException ex){
+        catch (AuthenticationException ex) {
             // Authentication failed, so display the appropriate message
             // on the login page.
             log.info "Authentication failure for user '${params.username}'."
@@ -53,7 +54,7 @@ class AuthController {
 
             // Keep the username and "remember me" setting so that the
             // user doesn't have to enter them again.
-            def m = [ username: params.username ]
+            def m = [username: params.username]
             if (params.rememberMe) {
                 m["rememberMe"] = true
             }
@@ -75,8 +76,8 @@ class AuthController {
         SecurityUtils.subject?.logout()
         // For now, redirect back to the home page.
         if (ConfigUtils.getCasEnable() && ConfigUtils.isFromCas(principal)) {
-            redirect(uri:ConfigUtils.getLogoutUrl())
-        }else {
+            redirect(uri: ConfigUtils.getLogoutUrl())
+        } else {
             redirect(uri: "/")
         }
         ConfigUtils.removePrincipal(principal)

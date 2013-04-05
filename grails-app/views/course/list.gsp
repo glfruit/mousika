@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.domain.Course" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils; com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Course" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,32 +15,28 @@
         <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
         </g:if>
-        <ul class="thumbnails">
-            <g:each in="${courseInstanceList}" status="i"
-                    var="courseInstance">
-                <li class="span6">
-                    <div class="thumbnail">
-                        <div class="container">
-                            <div class="row">
-                                <div class="span2">
-                                    <h4>
-                                        <g:link action="show"
-                                                id="${courseInstance.id}">
-                                            ${fieldValue(bean: courseInstance, field: "title")}
-                                        </g:link>
-                                    </h4>
+        <g:each in="${courseInstanceList}" status="i"
+                var="courseInstance">
+            <section
+                    style="border: 1px solid #777777;padding-left: 10px;padding-right: 10px;">
+                <ul class="thumbnails">
+                    <li class="span5">
+                        <h3>
+                            <g:link action="show"
+                                    id="${courseInstance.id}">
+                                ${fieldValue(bean: courseInstance, field: "title")}
+                            </g:link>
+                        </h3>
 
-                                    <p>教师：${fieldValue(bean: courseInstance, field: "author")}</p> <!-- TODO: 将教师链接到个人信息页面 -->
-                                </div>
-
-                                <div class="span4">
-                                    <p>${fieldValue(bean: courseInstance, field: "description")}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </g:each>
-        </ul>
+                        <p>教师：${teachers[i].user.fullname}</p>
+                    </li>
+                    <li class="span6">
+                        <g:set var="desc"
+                               value="${courseInstance.description}"/>
+                        ${StringEscapeUtils.unescapeHtml(desc)}
+                    </li>
+                </ul>
+            </section>
+        </g:each>
     </body>
 </html>

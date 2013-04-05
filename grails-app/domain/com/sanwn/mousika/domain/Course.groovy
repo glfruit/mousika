@@ -10,43 +10,45 @@ package com.sanwn.mousika.domain
 class Course {
 
     /**
-     * 课程代码
-     */
-    String code
-
-    /**
      * 课程名称
      */
     String title
+
+    /**
+     * 课程代码
+     */
+    String code
 
     /**
      * 课程描述
      */
     String description
 
+    Date startDate
+
     /**
      * 是否访客可见
      */
     boolean guestVisible
 
-    boolean available
-
     /**
-     * 课程开始日期
+     * 是否允许学生学习
      */
-    Date startDate
+    boolean available
 
     /**
      * 授课周数
      */
     int numberOfWeeks
 
+
+    static hasMany = [courseMembers: CourseMember]
+
+
     static constraints = {
         code blank: false
         title blank: false
         description nullable: true
-        startDate min: new Date().clearTime()
-        numberOfWeeks min: 0
     }
 
     static mapping = {

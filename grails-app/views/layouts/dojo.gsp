@@ -55,6 +55,7 @@
         <script type="text/javascript">
             require(['dojo/parser', 'dijit/dijit', 'dijit/Calendar', 'dijit/TitlePane']);
         </script>
+        %{--<r:require module="ember"/>--}%
         <g:layoutHead/>
         <r:layoutResources/>
     </head>
@@ -69,7 +70,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="brand" href="#"><g:message
+                    <a class="brand" href="${request.contextPath}"><g:message
                             code="default.app.title"/></a>
 
                     <shiro:authenticated>
@@ -94,6 +95,9 @@
                                     code="label.login"/></button>
                         </g:form>
                     </shiro:notAuthenticated>
+                    <g:if test="${flash.message}">
+                        <p class="alert alert-error">${flash.message}</p>
+                    </g:if>
                 </div><!--/.nav-collapse -->
             </div>
         </div>

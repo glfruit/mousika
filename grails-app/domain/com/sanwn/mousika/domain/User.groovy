@@ -9,10 +9,17 @@ class User {
 
     String fullname
     String email
-    
-    static hasMany = [ roles: Role, permissions: String ]
+
+    Date lastAccessed
+
+    static hasMany = [roles: Role, permissions: String]
 
     static constraints = {
         username(nullable: false, blank: false, unique: true)
+        lastAccessed nullable: true
+    }
+
+    static mapping = {
+        table 'mousika_user'
     }
 }

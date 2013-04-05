@@ -1,0 +1,25 @@
+package com.sanwn.mousika.domain
+
+import grails.plugin.spock.IntegrationSpec
+
+class CourseIntegrationSpec extends IntegrationSpec {
+
+    def "add a course member to course"() {
+        setup:
+        def user = new User(username: "un", passwordHash: "pwd", fullname: "full", email: "e@g.com").save()
+        def role = new Role(name: "rl").save()
+        def course = new Course(code: "code", title: "title", startDate: new Date()).save()
+        def member = new CourseMember(user: user, role: role)
+
+        when:
+        course.addToCourseMembers(member)
+        course.save(flush: true)
+
+        then:
+        course.hasErrors() == false
+        member.hasErrors() == false
+        member.user == user
+        member.role == role
+        member.course == course
+    }
+}

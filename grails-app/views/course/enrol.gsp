@@ -59,18 +59,24 @@
                     </g:each>
                 </table>
 
-                <div class="pagination">
-                    <ul>
-                        <li><a href="#">&laquo;</a></li>
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
-                        <li><a href="#">&raquo;</a></li>
-                    </ul>
-                </div>
-
+                <g:if test="${pages > 1}">
+                    <div class="pagination pagination-centered">
+                        <ul>
+                            <li class="${offset == 0 ? 'disabled' : ''}">
+                                <a href="#back" class="page-link">&laquo;</a>
+                            </li>
+                            <g:each in="${1..pages}" var="page">
+                                <li class="${offset + 1 == page ? 'active' : ''}">
+                                    <a href="#${page - 1}"
+                                       class="page-link">${page}</a>
+                                </li>
+                            </g:each>
+                            <li class="${offset + 1 == pages ? 'disabled' : ''}"><a
+                                    href="#forward"
+                                    class="page-link">&raquo;</a></li>
+                        </ul>
+                    </div>
+                </g:if>
                 <form class="form-search">
                     <input type="text" class="input-medium search-query">
                     <button type="submit" class="btn">搜索</button>
@@ -78,9 +84,8 @@
             </div>
 
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal"
+                <button id="enrol-done" class="btn" data-dismiss="modal"
                         aria-hidden="true">关闭</button>
-                <button class="btn btn-primary">保存</button>
             </div>
         </div>
         <table class="table">
@@ -90,21 +95,29 @@
                 <th>最后访问时间</th>
                 <th>角色</th>
             </thead>
-            <tbody>
-                <tr>
-                    <td>李果</td>
-                    <td>gleexpp@gmail.com</td>
-                    <td>2013-03-29 15:30</td>
-                    <td>教师</td>
-                </tr>
+            <tbody id="userRows">
+                <g:each in="${members}" var="member">
+                    <tr>
+                        <td>${member.fullname}</td>
+                        <td>${member.email}</td>
+                        <td>${member.lastAccessed}</td>
+                        <td>
+                            <g:each in="${member.roles}" var="role">
+                                ${role.name}<i class="icon-remove"></i>
+                            </g:each>
+                        </td>
+                    </tr>
+                </g:each>
             </tbody>
         </table>
         <script type="text/javascript">
-            require(["dojo/query", "dojo/ready", "bootstrap/Modal"], function (query, ready) {
+            require(["dojo/query",
+                "dojo/ready",
+                "bootstrap/Modal"], function (query, ready) {
                 ready(function () {
                     query(".enrol").on("click", function (e) {
                         require(['dojo/request', 'dojo/dom', 'dojo/dom-attr'], function (request, dom, domAttr) {
-                            request.post("${request.contextPath}/user/assign", {
+                            request.post("${request.contextPath}/course/assign/${params.id}", {
                                 data: {
                                     uid: domAttr.get(query(e.target).siblings(".user-id")[0], "value"),
                                     rid: dom.byId("roleList").value
@@ -119,6 +132,45 @@
                                             }
                                         });
                                     });
+                        });
+                    });
+                    query(".page-link").on("click", function (e) {  //TODO: 处理分页
+                        e.stopPropagation();
+                        e.preventDefault();
+                        require(['dojo/request', 'dojo/dom-attr'], function (request, domAttr) {
+                            var clz = query(e.target).parent().attr("class").toString();
+                            if (!clz.contains("active")) {
+                                var p = query(e.target).attr("href").substring(1);
+                                if (p == "back") {
+
+                                } else if (p == "forward") {
+
+                                } else {
+                                    p = parseInt(p);
+
+                                }
+                            }
+                        });
+                    });
+                    query("#enrol-done").on("click", function () {
+                        require(['dojo/request'], function (request) {
+                            request.post("${request.contextPath}/course/listMembers/${params.id}").then(function (response) {
+                                require(['dojo/dom', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/json', 'dojo/query'],
+                                        function (dom, domConstruct, arrayUtil, json, query) {
+                                            var users = json.parse(response);
+                                            arrayUtil.forEach(users, function (user) {
+                                                var tr = domConstruct.create('tr', null, query('#userRows')[0]);
+                                                domConstruct.create("td", {innerHTML: user.fullname}, tr);
+                                                domConstruct.create("td", {innerHTML: user.email}, tr);
+                                                domConstruct.create("td", {innerHTML: user.lastAccessed}, tr);
+                                                var roles = '';
+                                                arrayUtil.forEach(user.roles, function (role) {
+                                                    roles = roles + role.name + '<i class="icon-remove></i>"'
+                                                });
+                                                domConstruct.create("td", {innerHTML: roles}, tr);
+                                            });
+                                        });
+                            });
                         });
                     });
                 });

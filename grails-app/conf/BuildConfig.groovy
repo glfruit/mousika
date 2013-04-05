@@ -38,29 +38,30 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
 
-    def gebVersion = "0.7.2"
-    def seleniumVersion = "2.30.0"
+//    def gebVersion = "0.7.2"
+//    def seleniumVersion = "2.30.0"
 
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
 
         // runtime 'mysql:mysql-connector-java:5.1.20'
-        test("org.codehaus.geb:geb-junit4:$gebVersion")
-        test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
+//        test("org.codehaus.geb:geb-junit4:$gebVersion")
+//        test("org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion")
+        runtime 'postgresql:postgresql:9.1-901-1.jdbc4'
 
         test("org.spockframework:spock-grails-support:0.7-groovy-2.0")
     }
 
     plugins {
         runtime ":hibernate:$grailsVersion"
-        runtime ":jquery:1.8.3"
+        runtime ":jquery:1.9.1"
         runtime ":resources:1.2.RC2"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.4"
-        compile ":dojo:1.7.2.0"
+//        compile ":dojo:1.7.2.0"
         compile ":twitter-bootstrap:2.3.0"
         compile ":searchable:0.6.4"
         compile ":taggable:1.0.1"
@@ -70,15 +71,14 @@ grails.project.dependency.resolution = {
         build ":tomcat:$grailsVersion"
 
         runtime ":database-migration:1.2.1"
-
         compile ':cache:1.0.1'
-
         compile ":shiro:1.1.4"
+        compile ":codenarc:0.18.1"
 
-        test ":geb:$gebVersion"
-        test ":cucumber:0.8.0"
         test(":spock:0.7") {
             exclude "spock-grails-support"
         }
+//        test ":geb:$gebVersion"
+//        test ":cucumber:0.8.0"
     }
 }

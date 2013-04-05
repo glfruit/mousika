@@ -1,15 +1,22 @@
 package com.sanwn.mousika.controllers
 
-import grails.test.mixin.TestFor
+import grails.test.mixin.TestMixin
+import grails.test.mixin.support.GrailsUnitTestMixin
 import spock.lang.Specification
 
 /**
- *
- * @author glix
- * @version 1.0
- *
+ * See the API for {@link grails.test.mixin.support.GrailsUnitTestMixin} for usage instructions
  */
-@TestFor(CourseController)
+@TestMixin(GrailsUnitTestMixin)
 class CourseControllerSpec extends Specification {
 
+    def setup() {
+    }
+
+    def cleanup() {
+    }
+
+    def "test something"() {
+        assert 1 == 1
+    }
 }

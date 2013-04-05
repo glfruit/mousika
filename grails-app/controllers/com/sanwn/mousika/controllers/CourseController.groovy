@@ -1,6 +1,8 @@
 package com.sanwn.mousika.controllers
 
 import com.sanwn.mousika.domain.Course
+import com.sanwn.mousika.domain.CourseMember
+import com.sanwn.mousika.domain.Role
 import com.sanwn.mousika.domain.User
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -14,7 +16,14 @@ class CourseController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [courseInstanceList: Course.list(params), courseInstanceTotal: Course.count()]
+        def courses = Course.list(params)
+        def teachers = []
+        courses.each { course ->
+            teachers << course.courseMembers.find { member ->  //TODO: 一门课程只有一名教师？
+                member.role.name == "教师"
+            }
+        }
+        [courseInstanceList: Course.list(params), courseInstanceTotal: Course.count(), teachers: teachers]
     }
 
     def create() {
@@ -105,6 +114,31 @@ class CourseController {
     def enrol(Long id) {
         params.max = Math.min(params.max ?: 10, 100)
         params.offset = params.offset ?: 0
-        [users: User.list(params), userCount: User.count()]
+        def userCount = User.count()
+        def course = Course.get(id)
+        def members = course.courseMembers.user
+        [users: User.list(params), members: members,
+                userCount: userCount, pages: userCount / params.max + 1, offset: params.offset]
+    }
+
+    def assign(Long id) {
+        def course = Course.get(id)
+        def user = User.get(params.uid)
+        def role = Role.get(params.rid)
+        user.addToRoles(role)
+        def member = new CourseMember(user: user, role: role)
+        course.addToCourseMembers(member)
+        course.save(flush: true)
+        render(contentType: "text/json") {  //TODO: handle failure
+            [success: !course.hasErrors()]
+        }
+    }
+
+    def listMembers(Long id) {
+        def course = Course.get(id)
+        def members = course.courseMembers.user
+        render(contentType: "text/json") {
+            members
+        }
     }
 }

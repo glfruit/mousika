@@ -48,7 +48,15 @@
                 </ul>
             </g:hasErrors>
             <g:form action="save" class="form-horizontal">
-                <f:all bean="courseInstance"/>
+                <f:with bean="courseInstance">
+                    <f:field property="code"/>
+                    <f:field property="title"/>
+                    <f:field property="description"/>
+                    <f:field property="startDate"/>
+                    <f:field property="numberOfWeeks"/>
+                    <f:field property="available"/>
+                    <f:field property="guestVisible"/>
+                </f:with>
                 <div class="control-group pagination-centered">
                     <g:submitButton name="create" class="btn btn-primary"
                                     value="${message(code: 'default.button.create.label', default: 'Create')}"/>
@@ -58,12 +66,12 @@
         </div>
         <script>
             require(['dijit/form/DateTextBox']);
-//            require(['dojo/query', 'bootstrap/Datepicker'], function (query) {
-//                query("#startDate").datepicker({
-//                    format: 'yyyy-mm-dd',
-//                    weekStart: 1
-//                });
-//            });
+            //            require(['dojo/query', 'bootstrap/Datepicker'], function (query) {
+            //                query("#startDate").datepicker({
+            //                    format: 'yyyy-mm-dd',
+            //                    weekStart: 1
+            //                });
+            //            });
         </script>
     </body>
 </html>

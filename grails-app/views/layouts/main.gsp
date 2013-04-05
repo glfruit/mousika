@@ -9,7 +9,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title><g:message code="default.app.title"/></title>
         <dojo:header theme="tundra" showSpinner="true"
-                     modulePaths="[bootstrap: 'lib/dojo-bootstrap']" async="true"/>
+                     modulePaths="[bootstrap: 'lib/dojo-bootstrap']"
+                     async="true"/>
         <dojo:css file="dojo/resources/dnd.css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet"
@@ -99,8 +100,7 @@
                         code="default.company.name"/> 2013</p>
             </footer>
         </div>
-
-        <g:javascript library="application"/>
         <r:layoutResources/>
+        <g:javascript library="application"/>
     </body>
 </html>

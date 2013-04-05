@@ -1,58 +1,42 @@
-
-<%@ page import="com.sanwn.mousika.domain.Course" %>
+<%@ page import="org.apache.commons.lang.StringEscapeUtils; com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Course" %>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'course.label', default: 'Course')}" />
-		<title><g:message code="default.list.label" args="[entityName]" /></title>
-	</head>
-	<body>
-		<a href="#list-course" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="list-course" class="content scaffold-list" role="main">
-			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<table>
-				<thead>
-					<tr>
-					
-						<g:sortableColumn property="author" title="${message(code: 'course.author.label', default: 'Author')}" />
-					
-						<g:sortableColumn property="description" title="${message(code: 'course.description.label', default: 'Description')}" />
-					
-						<g:sortableColumn property="guestVisible" title="${message(code: 'course.guestVisible.label', default: 'Guest Visible')}" />
-					
-						<g:sortableColumn property="title" title="${message(code: 'course.title.label', default: 'Title')}" />
-					
-					</tr>
-				</thead>
-				<tbody>
-				<g:each in="${courseInstanceList}" status="i" var="courseInstance">
-					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
-					
-						<td><g:link action="show" id="${courseInstance.id}">${fieldValue(bean: courseInstance, field: "author")}</g:link></td>
-					
-						<td>${fieldValue(bean: courseInstance, field: "description")}</td>
-					
-						<td><g:formatBoolean boolean="${courseInstance.guestVisible}" /></td>
-					
-						<td>${fieldValue(bean: courseInstance, field: "title")}</td>
-					
-					</tr>
-				</g:each>
-				</tbody>
-			</table>
-			<div class="pagination">
-				<g:paginate total="${courseInstanceTotal}" />
-			</div>
-		</div>
-	</body>
+    <head>
+        <meta name="layout" content="dojo">
+        <g:set var="entityName"
+               value="${message(code: 'course.label', default: 'Course')}"/>
+        <title><g:message code="default.list.label"
+                          args="[entityName]"/></title>
+    </head>
+
+    <body>
+        <h4 style="border-bottom: 1px solid #000;color: #777777;"><g:message
+                code="label.course.list"/></h4>
+        <g:if test="${flash.message}">
+            <div class="message" role="status">${flash.message}</div>
+        </g:if>
+        <g:each in="${courseInstanceList}" status="i"
+                var="courseInstance">
+            <section
+                    style="border: 1px solid #777777;padding-left: 10px;padding-right: 10px;">
+                <ul class="thumbnails">
+                    <li class="span5">
+                        <h3>
+                            <g:link action="show"
+                                    id="${courseInstance.id}">
+                                ${fieldValue(bean: courseInstance, field: "title")}
+                            </g:link>
+                        </h3>
+
+                        <p>教师：${teachers[i].user.fullname}</p>
+                    </li>
+                    <li class="span6">
+                        <g:set var="desc"
+                               value="${courseInstance.description}"/>
+                        ${StringEscapeUtils.unescapeHtml(desc)}
+                    </li>
+                </ul>
+            </section>
+        </g:each>
+    </body>
 </html>

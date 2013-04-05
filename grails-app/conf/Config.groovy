@@ -12,7 +12,7 @@
 // }
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
-grails.mime.file.extensions = true // enables the parsing of file extensions from URLs into the request format
+grails.mime.file.extensions = false // enables the parsing of file extensions from URLs into the request format
 grails.mime.use.accept.header = false
 grails.mime.types = [
     all:           '*/*',
@@ -71,13 +71,25 @@ environments {
     }
 }
 
+grails.resources.modules = {
+    ember {
+        dependsOn 'jquery,handlebars'
+        resource url: 'js/lib/ember/ember-1.0.0-rc.2.js', disposition: 'head'
+    }
+
+    handlebars {
+        dependsOn 'jquery'
+        resource url: 'js/lib/ember/handlebars-1.0.0-rc.3.js', disposition: 'head'
+    }
+}
+
 // log4j configuration
 log4j = {
     // Example of changing the log pattern for the default console appender:
     //
-    //appenders {
-    //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
-    //}
+    appenders {
+        console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
+    }
 
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP

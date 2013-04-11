@@ -8,6 +8,7 @@ import org.apache.shiro.grails.ConfigUtils
 import org.apache.shiro.web.util.WebUtils
 
 class AuthController {
+
     def shiroSecurityManager
 
     def index = { redirect(action: "login", params: params) }

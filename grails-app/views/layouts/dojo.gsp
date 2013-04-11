@@ -55,7 +55,14 @@
         <script type="text/javascript">
             require(['dojo/parser', 'dijit/dijit', 'dijit/Calendar', 'dijit/TitlePane']);
         </script>
-        %{--<r:require module="ember"/>--}%
+    %{--<r:require module="ember"/>--}%
+        <shiro:hasRole name="教师">
+            <style type="text/css">
+            #courseAdmin {
+                display: none;
+            }
+            </style>
+        </shiro:hasRole>
         <g:layoutHead/>
         <r:layoutResources/>
     </head>
@@ -106,6 +113,34 @@
             <div class="row-fluid">
                 <div class="span2">
                     <h4 style="border-bottom: 1px solid #000;color: #777777;">新闻通知</h4>
+                    <shiro:hasRole name="教师">
+                        <div>
+                            <p id="courseAdminTitle" style="cursor: pointer;"><i id="titleIcon"
+                                                        class="icon-chevron-right"></i><span>课程管理</span>
+                            </p>
+                            <ul id="courseAdmin" style="list-style: none;">
+                                <li><i class="icon-edit"></i>打开编辑</li>
+                                <li><i class="icon-pencil"></i>编辑设置</li>
+                                <li><i class="icon-user"></i>成员</li>
+                                <li><i class="icon-list"></i> 成绩</li>
+                                <li><i class="icon-arrow-up"></i> 导入</li>
+                            </ul>
+                        </div>
+                        <script>
+                            require(['dojo/on', 'dojo/dom', 'dojo/dom-style', 'dojo/dom-class'], function (on, dom, domStyle, domClass) {
+                                on(dom.byId('courseAdminTitle'), "click", function () {
+                                    if (domClass.contains("titleIcon", "icon-chevron-right")) {
+                                        domClass.replace("titleIcon", "icon-chevron-down", "icon-chevron-right");
+                                    } else {
+                                        domClass.replace("titleIcon", "icon-chevron-right", "icon-chevron-down");
+                                    }
+                                    var display = domStyle.get(dom.byId('courseAdmin'), 'display');
+                                    display = display == "none" ? "block" : "none";
+                                    domStyle.set(dom.byId('courseAdmin'), 'display', display);
+                                });
+                            });
+                        </script>
+                    </shiro:hasRole>
                 </div>
 
                 <div class="span7">
@@ -116,7 +151,9 @@
                     <div id="tp2" data-dojo-type="dijit/TitlePane"
                          data-dojo-props="title: '新闻通知'"
                          style="padding-bottom: 10px;">
-                        Click arrow to close me.
+                        <p>新增课程《计算机网络基础》</p>
+
+                        <p>《Java程序设计》课程授课地点更改通知</p>
                     </div>
 
                     <div>
@@ -124,7 +161,7 @@
                             <script type="dojo/method"
                                     data-dojo-event="onChange"
                                     data-dojo-args="value">
-                                require(["dojo/dom", "dojo/date/locale"], function(dom, locale){
+                                require(["dojo/dom", "dojo/date/locale","dojo/on"], function(dom, locale,on){
                                 dom.byId('formatted').innerHTML = locale.format(value, {formatLength: 'full', selector:'date'});
                                 });
                             </script>

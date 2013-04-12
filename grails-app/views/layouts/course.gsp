@@ -47,7 +47,8 @@
                     "config-tlmSiblingOfDojo": true
                 },
                 async: true,
-                parseOnLoad: true
+                parseOnLoad: true,
+                locale: 'zh'
             };
         </script>
         <script type="text/javascript"
@@ -77,8 +78,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="brand"
-                       href="${createLink(controller: 'course', action: 'list')}"><g:message
+                    <a class="brand" href="${request.contextPath}"><g:message
                             code="default.app.title"/></a>
 
                     <shiro:authenticated>
@@ -89,10 +89,6 @@
                     <shiro:notAuthenticated>
                         <g:form class="navbar-form pull-right"
                                 controller="auth" action="signIn">
-                            <g:if test="${flash.message}">
-                                <p class="span2"
-                                   style="color: red;padding-top:10px;">${flash.message}</p>
-                            </g:if>
                             <input type="hidden" name="targetUri"
                                    value="${targetUri}"/>
                             <input class="span2" type="text"
@@ -114,8 +110,10 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span2">
-                    <h4 style="border-bottom: 1px solid #000;color: #777777;">导航</h4>
-                    <shiro:hasRole name="教师">
+                    <h4 style="border-bottom: 1px solid #000;color: #777777;">
+                        <g:message code="label.app.menu.nav"/>
+                    </h4>
+                    <shiro:hasAnyRole in="[教师, 系统管理员, 课程负责人]">
                         <div>
                             <p id="courseAdminTitle" style="cursor: pointer;"><i
                                     id="titleIcon"
@@ -143,7 +141,7 @@
                                 });
                             });
                         </script>
-                    </shiro:hasRole>
+                    </shiro:hasAnyRole>
                 </div>
 
                 <div class="span7">

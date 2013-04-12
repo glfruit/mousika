@@ -72,7 +72,7 @@ grails.project.dependency.resolution = {
 
         runtime ":database-migration:1.2.1"
         compile ':cache:1.0.1'
-        compile ":shiro:1.1.4"
+        compile ":shiro:1.2.0-SNAPSHOT"
         compile ":codenarc:0.18.1"
 
         test(":spock:0.7") {

@@ -4,6 +4,7 @@ import com.sanwn.mousika.domain.Course
 import com.sanwn.mousika.domain.CourseMember
 import com.sanwn.mousika.domain.Role
 import com.sanwn.mousika.domain.User
+import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
 
 class CourseController {
@@ -16,14 +17,31 @@ class CourseController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        def courses = Course.list(params)
+        params.sort = params.sort ?: 'title'
+        params.offset = params.offset ?: 0
+
+        def isAdmin = SecurityUtils.subject.hasRole(Role.ADMIN)
+        def courses, count
+        if (isAdmin) {
+            courses = Course.list(params)
+            count = Course.count()
+        } else {
+            def user = User.findByUsername(SecurityUtils.subject.principal)
+            courses = Course.findAll([max: params.max, sort: params.sort, offset: params.offset]) {
+                courseMembers.user == user
+            }
+            count = Course.createCriteria().count {
+                'in'('id', courses.id)
+            }
+        }
+
         def teachers = []
         courses.each { course ->
             teachers << course.courseMembers.find { member ->  //TODO: 一门课程只有一名教师？
                 member.role.name == "教师"
             }
         }
-        [courseInstanceList: Course.list(params), courseInstanceTotal: Course.count(), teachers: teachers]
+        [courseInstanceList: courses, courseInstanceTotal: count, teachers: teachers]
     }
 
     def create() {
@@ -114,6 +132,8 @@ class CourseController {
     def enrol(Long id) {
         params.max = Math.min(params.max ?: 10, 100)
         params.offset = params.offset ?: 0
+        params.sort = 'fullname'
+        params.order = 'asc'
         def userCount = User.count()
         def course = Course.get(id)
         def members = course.courseMembers.user

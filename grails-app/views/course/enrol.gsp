@@ -3,7 +3,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="dojo">
         <g:set var="entityName"
                value="${message(code: 'course.label', default: 'Course')}"/>
         <title><g:message code="default.list.label"
@@ -100,7 +99,8 @@
                     <tr>
                         <td>${member.fullname}</td>
                         <td>${member.email}</td>
-                        <td>${member.lastAccessed}</td>
+                        <td><g:formatDate date="${member.lastAccessed}"
+                                          format="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
                             <g:each in="${member.roles}" var="role">
                                 ${role.name}<i class="icon-remove"></i>
@@ -155,14 +155,20 @@
                     query("#enrol-done").on("click", function () {
                         require(['dojo/request'], function (request) {
                             request.post("${request.contextPath}/course/listMembers/${params.id}").then(function (response) {
-                                require(['dojo/dom', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/json', 'dojo/query'],
-                                        function (dom, domConstruct, arrayUtil, json, query) {
+                                require(['dojo/dom', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/json', 'dojo/query', 'dojo/date/locale'],
+                                        function (dom, domConstruct, arrayUtil, json, query, locale) {
                                             var users = json.parse(response);
                                             arrayUtil.forEach(users, function (user) {
                                                 var tr = domConstruct.create('tr', null, query('#userRows')[0]);
                                                 domConstruct.create("td", {innerHTML: user.fullname}, tr);
                                                 domConstruct.create("td", {innerHTML: user.email}, tr);
-                                                domConstruct.create("td", {innerHTML: user.lastAccessed}, tr);
+                                                var lastAccessed = 'N/A';
+                                                if (user.lastAccessed) {
+                                                    lastAccessed = locale.format(user.lastAccessed, {
+                                                        datePattern: 'yyyy-MM-dd hh:mm:ss'
+                                                    });
+                                                }
+                                                domConstruct.create("td", {innerHTML: lastAccessed}, tr);
                                                 var roles = '';
                                                 arrayUtil.forEach(user.roles, function (role) {
                                                     roles = roles + role.name + '<i class="icon-remove></i>"'

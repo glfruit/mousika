@@ -4,7 +4,6 @@ import com.sanwn.mousika.domain.User
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
-import org.apache.shiro.grails.ConfigUtils
 import org.apache.shiro.web.util.WebUtils
 
 class AuthController {
@@ -27,7 +26,7 @@ class AuthController {
 
         // If a controller redirected to this page, redirect back
         // to it. Otherwise redirect to the root URI.
-        def targetUri = params.targetUri ?: "/"
+        def targetUri = params.targetUri ?: "/course"
 
         // Handle requests saved by Shiro filters.
         def savedRequest = WebUtils.getSavedRequest(request)
@@ -66,8 +65,7 @@ class AuthController {
             }
 
             // Now redirect back to the login page.
-            redirect(url: "/")
-//            redirect(action: "login", params: m,)   //FIXME: 重定向到index.gsp
+            redirect(uri: "/")
         }
     }
 
@@ -76,12 +74,7 @@ class AuthController {
         def principal = SecurityUtils.subject?.principal
         SecurityUtils.subject?.logout()
         // For now, redirect back to the home page.
-        if (ConfigUtils.getCasEnable() && ConfigUtils.isFromCas(principal)) {
-            redirect(uri: ConfigUtils.getLogoutUrl())
-        } else {
-            redirect(uri: "/")
-        }
-        ConfigUtils.removePrincipal(principal)
+        redirect(uri: "/")
     }
 
     def unauthorized = {

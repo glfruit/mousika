@@ -15,6 +15,7 @@ environments {
         dataSource {
             dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
             url = "jdbc:postgresql://localhost/mousika_dev"
+            logSql = true
         }
     }
     test {

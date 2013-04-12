@@ -22,4 +22,24 @@ class CourseIntegrationSpec extends IntegrationSpec {
         member.role == role
         member.course == course
     }
+
+    def "find courses taught by user"() {
+        setup:
+        def user = new User(username: "un", passwordHash: "pwd", fullname: "full", email: "e@g.com").save()
+        def role = new Role(name: "rl").save()
+        def course = new Course(code: "code", title: "title", startDate: new Date()).save()
+        def member = new CourseMember(user: user, role: role)
+
+        when:
+        course.addToCourseMembers(member)
+        course.save(flush: true)
+
+        then:
+        def owned = Course.findAll {
+            courseMembers.user == user
+        }
+        owned != null
+        owned.size() == 1
+
+    }
 }

@@ -7,7 +7,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title><g:message code="default.app.title"/></title>
+        <title><g:message
+                code="default.app.title"/><shiro:isNotLoggedIn>-${message(code: 'label.login')}</shiro:isNotLoggedIn></title>
         <link rel="stylesheet"
               href="${resource(dir: 'js/lib/dijit/themes/tundra', file: 'tundra.css')}"
               type="text/css"/>

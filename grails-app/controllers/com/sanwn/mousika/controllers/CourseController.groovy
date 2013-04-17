@@ -4,6 +4,7 @@ import com.sanwn.mousika.domain.Course
 import com.sanwn.mousika.domain.CourseMember
 import com.sanwn.mousika.domain.Role
 import com.sanwn.mousika.domain.User
+import grails.converters.deep.JSON
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -49,8 +50,10 @@ class CourseController {
     }
 
     def save() {
+        params.startDate = params.date('startDate')
         def courseInstance = new Course(params)
         if (!courseInstance.save(flush: true)) {
+            log.error("添加课程${courseInstance.title}失败:${courseInstance.errors.fieldError.defaultMessage}")
             render(view: "create", model: [courseInstance: courseInstance])
             return
         }
@@ -158,7 +161,7 @@ class CourseController {
         def course = Course.get(id)
         def members = course.courseMembers.user
         render(contentType: "text/json") {
-            members
+            members as JSON
         }
     }
 }

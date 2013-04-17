@@ -3,8 +3,12 @@
 
     <div class="controls">
         <g:if test="${type == Date}">
-            <g:datePicker name="${property}" value="${value}" precision="day"/>
-        %{--<g:textField name="${property}" value="${value}"--}%
+            <div id="datePickerDiv" class="input-append date"
+                 data-date-format="yyyy-mm-dd">
+                <input type="text" name="${property}" value="${value}"
+                       readonly="true"/>
+                <span class="add-on"><i class="icon-th"></i></span>
+            </div>
         %{--data-dojo-type="dijit/form/DateTextBox"/>--}%
         </g:if>
         <g:elseif test="${type == boolean || type == Boolean}">

@@ -5,8 +5,7 @@
     <head>
         <g:set var="entityName"
                value="${message(code: 'course.label', default: 'Course')}"/>
-        <title><g:message code="default.list.label"
-                          args="[entityName]"/></title>
+        <title><g:message code="course.enrol.label"/></title>
         <style>
         .commands {
             white-space: nowrap;
@@ -20,7 +19,8 @@
     </head>
 
     <body>
-        <h4 style="border-bottom: 1px solid #000;color: #777777;">
+        <h4 id="courseTitleHead"
+            style="border-bottom: 1px solid #000;color: #777777;">
             添加成员
         </h4>
         <a href="#myModal" role="button" class="btn"

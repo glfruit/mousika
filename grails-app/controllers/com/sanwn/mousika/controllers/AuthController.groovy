@@ -39,7 +39,7 @@ class AuthController {
             // Perform the actual login. An AuthenticationException
             // will be thrown if the username is unrecognised or the
             // password is incorrect.
-            log.info("用户" + params.username + "尝试登录")
+            log.info("用户[${params.username}]尝试登录")
             SecurityUtils.subject.login(authToken)
             User.findByUsername(params.username).lastAccessed = new Date()
 

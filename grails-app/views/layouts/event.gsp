@@ -7,8 +7,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title><g:message
-                code="default.app.title"/><shiro:isNotLoggedIn>-${message(code: 'label.login')}</shiro:isNotLoggedIn></title>
+        <title><g:layoutTitle
+                default="${message(code: 'default.app.title')}"/></title>
         <link rel="stylesheet"
               href="${resource(dir: 'js/lib/dijit/themes/tundra', file: 'tundra.css')}"
               type="text/css"/>
@@ -48,7 +48,8 @@
                     "config-tlmSiblingOfDojo": true
                 },
                 async: true,
-                parseOnLoad: true
+                parseOnLoad: true,
+                locale: 'zh'
             };
         </script>
         <script type="text/javascript"
@@ -78,8 +79,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="brand"
-                       href="${createLink(controller: 'course', action: 'list')}"><g:message
+                    <a class="brand" href="${request.contextPath}"><g:message
                             code="default.app.title"/></a>
 
                     <shiro:authenticated>
@@ -90,23 +90,17 @@
                     <shiro:notAuthenticated>
                         <g:form class="navbar-form pull-right"
                                 controller="auth" action="signIn">
-                            <g:if test="${flash.message}">
-                                <p class="span2"
-                                   style="color: red;padding-top:10px;">${flash.message}</p>
-                            </g:if>
                             <input type="hidden" name="targetUri"
                                    value="${targetUri}"/>
                             <input class="span2" type="text"
-                                   id="username"
                                    name="username" value="${username}"
                                    placeholder="<g:message
                                            code='label.login.username'/>">
                             <input class="span2" type="password"
-                                   id="password"
                                    name="password" value=""
                                    placeholder="<g:message
                                            code='label.login.password'/>">
-                            <button type="submit" class="btn login"><g:message
+                            <button type="submit" class="btn"><g:message
                                     code="label.login"/></button>
                         </g:form>
                     </shiro:notAuthenticated>
@@ -117,8 +111,10 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="span2">
-                    <h4 style="border-bottom: 1px solid #000;color: #777777;">导航</h4>
-                    <shiro:hasRole name="教师">
+                    <h4 style="border-bottom: 1px solid #000;color: #777777;">
+                        <g:message code="label.app.menu.nav"/>
+                    </h4>
+                    <shiro:hasAnyRole in="[教师, 系统管理员, 课程负责人]">
                         <div>
                             <p id="courseAdminTitle" style="cursor: pointer;"><i
                                     id="titleIcon"
@@ -130,6 +126,9 @@
                                 <li><i class="icon-user"></i>成员</li>
                                 <li><i class="icon-list"></i> 成绩</li>
                                 <li><i class="icon-arrow-up"></i> 导入</li>
+                                <li><i class="icon-calendar"></i><a
+                                        href="${createLink(action: 'index')}">日程管理</a>
+                                </li>
                             </ul>
                         </div>
                         <script>
@@ -146,7 +145,7 @@
                                 });
                             });
                         </script>
-                    </shiro:hasRole>
+                    </shiro:hasAnyRole>
                 </div>
 
                 <div class="span7">

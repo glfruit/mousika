@@ -7,7 +7,8 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title><g:message code="default.app.title"/></title>
+        <title><g:layoutTitle
+                default="${message(code: 'default.app.title')}"/></title>
         <link rel="stylesheet"
               href="${resource(dir: 'js/lib/dijit/themes/tundra', file: 'tundra.css')}"
               type="text/css"/>
@@ -163,7 +164,7 @@
                                     data-dojo-event="onChange"
                                     data-dojo-args="value">
                                 require(["dojo/dom", "dojo/date/locale","dojo/on"], function(dom, locale,on){
-                                dom.byId('formatted').innerHTML = locale.format(value, {formatLength: 'full', selector:'date'});
+                                dom.byId('formatted').innerHTML = locale.format(value, {formatLength: 'full', selector:'date',locale:'zh'});
                                 });
                             </script>
                         </div>

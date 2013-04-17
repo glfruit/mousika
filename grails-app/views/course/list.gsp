@@ -3,7 +3,7 @@
 <html>
     <head>
         <g:set var="entityName"
-               value="${message(code: 'course.label', default: 'Course')}"/>
+               value="${message(code: 'course.label')}"/>
         <title><g:message code="default.list.label"
                           args="[entityName]"/></title>
     </head>
@@ -49,7 +49,7 @@
         </g:else>
         <shiro:hasPermission permission="course:create">
             <g:link controller="course" action="create"
-                    class="btn">创建新课程</g:link>
+                    class="btn create">创建新课程</g:link>
         </shiro:hasPermission>
     </body>
 </html>

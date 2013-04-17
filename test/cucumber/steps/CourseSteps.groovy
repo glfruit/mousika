@@ -1,23 +1,25 @@
 import pages.LoginPage
-import pages.course.CreatePage
+import pages.course.EnrolPage
+import pages.course.ListPage
 
 import static cucumber.api.groovy.EN.*
 
-Given(~'I login with valid username and password$') {->
+Given(~'^I login with valid username "([^"]*)" and password "([^"]*)"$') { username, password ->
     to LoginPage
     at LoginPage
-    page.login()
+    page.login(username, password)
+    at ListPage
 }
 
 And(~'^I open the create course page$') {->
-    to CreatePage
-    at CreatePage
+    page.toCreatePage()
 }
 
-When(~'^I add "([^"]*)"$') { String courseTitle ->
-    assert false
+When(~'^I add a course:$') { table ->
+    page.addCourse(table.raw()[1])
 }
 
-Then(~'^I see enroll member page$') {->
-    assert false
+Then(~'^I see enroll member page for "([^"]*)"$') { String courseTitle ->
+    at EnrolPage
+    page.courseTitle == courseTitle
 }

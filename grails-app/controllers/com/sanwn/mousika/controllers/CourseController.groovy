@@ -1,10 +1,7 @@
 package com.sanwn.mousika.controllers
 
-import com.sanwn.mousika.domain.Course
-import com.sanwn.mousika.domain.CourseMember
-import com.sanwn.mousika.domain.Role
-import com.sanwn.mousika.domain.User
-import grails.converters.deep.JSON
+import com.sanwn.mousika.domain.*
+import grails.converters.JSON
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -52,6 +49,11 @@ class CourseController {
     def save() {
         params.startDate = params.date('startDate')
         def courseInstance = new Course(params)
+        for (i in 0..courseInstance.numberOfWeeks) {
+            def section = new CourseSection(sequence: i + 1)
+            courseInstance.addToSections(section)
+        }
+
         if (!courseInstance.save(flush: true)) {
             log.error("添加课程${courseInstance.title}失败:${courseInstance.errors.fieldError.defaultMessage}")
             render(view: "create", model: [courseInstance: courseInstance])
@@ -163,5 +165,11 @@ class CourseController {
         render(contentType: "text/json") {
             members as JSON
         }
+    }
+
+    def addResource() {
+        def contentType = params.itemContentType
+        log.info("contentType is $contentType")
+        redirect(controller: contentType, action: 'create')
     }
 }

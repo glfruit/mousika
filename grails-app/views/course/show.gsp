@@ -1,5 +1,3 @@
-<%@ page import="com.sanwn.mousika.domain.Course" %>
-<!DOCTYPE html>
 <html>
     <head>
         <meta name="layout" content="dojo">
@@ -48,88 +46,62 @@
                 <h4 id="myModalLabel">添加活动或资源</h4>
             </div>
 
-            <div class="modal-body">
-                <form class="form-horizontal">
-                    <div>活动</div>
-                    <div class="control-group">
-                        <label class="control-label" for="assignmentItem">作业</label>
-                        <div class="controls">
-                            <input type="radio" name="activityItem" id="assignmentItem" >
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="examItem">测验</label>
-                        <div class="controls">
-                            <input type="radio" name="activityItem" id="examItem" >
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="glossaryItem">词汇表</label>
-                        <div class="controls">
-                            <input type="radio" name="activityItem" id="glossaryItem" >
-                        </div>
-                    </div>
-                    <div>资源</div>
-                    <div class="control-group">
-                        <label class="control-label" for="fileItem">文件</label>
-                        <div class="controls">
-                            <input type="radio" name="activityItem" id="fileItem" >
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="pageItem">页面</label>
-                        <div class="controls">
-                            <input type="radio" name="activityItem" id="pageItem" >
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="labelItem">标签</label>
-                        <div class="controls">
-                            <input type="radio" name="activityItem" id="labelItem" >
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="urlItem">URL</label>
-                        <div class="controls">
-                            <input type="radio" name="activityItem" id="urlItem" >
-                        </div>
-                    </div>
-                </form>
-                <form method="post" action="UploadFile.php" id="myForm"
-                      enctype="multipart/form-data">
-                    <input name="uploadedfile" multiple="true" type="file"
-                           data-dojo-type="dojox.form.Uploader"
-                           label="Select Some Files" id="uploader"/>
-                    <input type="submit" label="Submit"
-                           data-dojo-type="dijit.form.Button"/>
-                </form>
-            </div>
+        <div class="modal-body">
+            <g:form class="form-horizontal" action="addResource">
+                <label class="radio">
+                    <input type="radio" name="itemContentType"
+                           value="assignment" checked>作业<i
+                        class="icon-question-sign"></i>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="itemContentType"
+                           value="quiz">测验<i class="icon-question-sign"></i>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="itemContentType"
+                           value="vocabulary">词汇表<i
+                        class="icon-question-sign"></i>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="itemContentType"
+                           value="file">文件<i class="icon-question-sign"></i>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="itemContentType"
+                           value="page">页面<i class="icon-question-sign"></i>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="itemContentType"
+                           value="label">标签<i class="icon-question-sign"></i>
+                </label>
+                <label class="radio">
+                    <input type="radio" name="itemContentType"
+                           value="url">URL<i class="icon-question-sign"></i>
+                </label>
+                <!--
+                    <form method="post" action="UploadFile.php" id="myForm"
+                          enctype="multipart/form-data">
+                        <input name="uploadedfile" multiple="true" type="file"
+                               data-dojo-type="dojox.form.Uploader"
+                               label="Select Some Files" id="uploader"/>
+                        <input type="submit" label="Submit"
+                               data-dojo-type="dijit.form.Button"/>
+                    </form>
+                    -->
+                </div>
 
-            <div class="modal-footer">
-                <button id="do-add" class="btn btn-primary">添加</button>
-                <button id="add-done" class="btn" data-dismiss="modal"
-                        aria-hidden="true">关闭</button>
-            </div>
+                <div class="modal-footer">
+                    <g:submitButton name="addResourceBtn"
+                                    class="btn btn-primary" value="添加"/>
+                    <button id="add-done" class="btn" data-dismiss="modal"
+                            aria-hidden="true">关闭</button>
+                </div>
+            </g:form>
         </div>
         <g:each in="${0..<courseInstance?.numberOfWeeks}" var="n">
-            <div style="border: 1px solid #E1E1E8;margin-bottom: 10px;margin-top: 10px;">
-                <h4 style="padding-left: 10px;color: #E1E1E8;"><g:formatDate
-                        date="${courseInstance.startDate + n * 7}"
-                        format="yyyy-MM-dd"/>
-                    -<g:formatDate
-                        date="${courseInstance.startDate + n * 7 + 6}"
-                        format="yyyy-MM-dd"/></h4>
-
-                <div class="pagination pagination-right">
-                    <a href="#addActivityOrResourceModal" role="button"
-                       data-toggle="modal"
-                       style="text-align: right;margin-right: 5px;">
-                        <span>
-                            <i class="icon-plus"></i> 添加一个活动或资源
-                        </span>
-                    </a>
-                </div>
-            </div>
+            <g:render template="section"
+                      model="[startDate: courseInstance.startDate,
+                              section: courseInstance.sections[n], order: n]"/>
         </g:each>
         <div style="border: black solid 1px;">
             <ol data-dojo-type="dojo.dnd.Source"

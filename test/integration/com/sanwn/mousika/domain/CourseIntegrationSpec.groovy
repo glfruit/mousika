@@ -42,4 +42,22 @@ class CourseIntegrationSpec extends IntegrationSpec {
         owned.size() == 1
 
     }
+
+    def "add new sections"() {
+        setup:
+        def course = new Course(code: "test", title: "test",startDate: new Date())
+        def section = new CourseSection(sequence: 1,title: 'section one')
+
+        when:
+        course.addToSections(section)
+        course.save(flush: true)
+
+        then:
+        course.hasErrors() == false
+        course.id != null
+        course.sections.size() == 1
+        course.sections[0].id != null
+        course.sections[0].sequence == 1
+        course.sections[0].title == 'section one'
+    }
 }

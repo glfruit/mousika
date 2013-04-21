@@ -147,6 +147,9 @@
 
                 <div class="span7">
                     <g:layoutBody/>
+                    <g:javascript library="application"/>
+                    <r:layoutResources/>
+
                 </div>
 
                 <div class="span3" style="padding-top: 20px;">
@@ -181,7 +184,5 @@
                 </p>
             </footer>
         </div>
-        <g:javascript library="application"/>
-        <r:layoutResources/>
     </body>
 </html>

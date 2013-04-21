@@ -41,8 +41,10 @@ class Course {
      */
     int numberOfWeeks
 
+    List sections
 
-    static hasMany = [courseMembers: CourseMember]
+
+    static hasMany = [courseMembers: CourseMember, sections: CourseSection]
 
 
     static constraints = {

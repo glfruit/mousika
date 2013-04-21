@@ -16,18 +16,26 @@ class PageController {
     }
 
     def create() {
-        [pageInstance: new Page(params)]
+        def section = CourseSection.findBySequence(params.sectionSeq)
+        [pageInstance: new Page(params), sectionSeq: section.sequence, courseId: section.course.id]
     }
 
     def save() {
+        def section = CourseSection.findBySequence(params.sectionSeq)
         def pageInstance = new Page(params)
-        if (!pageInstance.save(flush: true)) {
+        section.addToContents(pageInstance)
+        if (!section.save(flush: true)) {
             render(view: "create", model: [pageInstance: pageInstance])
             return
         }
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'page.label', default: 'Page'), pageInstance.id])
-        redirect(action: "show", id: pageInstance.id)
+        def returnToCourse = params.boolean(params.returnToCourse)
+        if (returnToCourse) {
+            redirect(controller: 'course', action: 'show', id: section.course.id)
+        } else {
+            redirect(action: "show", id: pageInstance.id)
+        }
     }
 
     def show(Long id) {

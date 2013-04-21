@@ -45,19 +45,38 @@
             </g:hasErrors>
             <g:form action="save" class="form-horizontal">
                 <fieldset class="form">
+                    <input type="hidden" id="sectionSeq" value="${sectionSeq}"/>
+                    <input type="hidden" id="returnToCourse" value="false"/>
                     <f:with bean="pageInstance">
+                        <g:hiddenField name="sectionSeq" id="sectionSeq"
+                                       value="${sectionSeq}"/>
+                        <g:hiddenField name="returnToCourse" id="returnToCourse" value="false"/>
                         <f:field property="title" required="true"/>
                         <f:field property="description"/>
                         <f:field property="content"/>
                     </f:with>
                 </fieldset>
                 <fieldset class="buttons">
-                    <g:submitButton name="create" class="save"
+                    <g:submitButton id="createAndShowBtn" name="create"
+                                    class="btn"
                                     value="${message(code: 'page.button.create.label', default: 'Create')}"/>
-                    <g:submitButton name="createAndReturn"
+                    <g:submitButton id="createAndReturnBtn"
+                                    name="createAndReturn" class="btn"
                                     value="创建并返回到课程"/>
+                    <a class="btn"
+                       href="${createLink(controller: 'course', action: 'show', id: courseId)}">取消</a>
                 </fieldset>
             </g:form>
+            <script>
+                require(['dojo/query'], function (query) {
+                    query('#createAndShowBtn').on('click', function () {
+                        query('#returnToCourse').attr('value', 'false');
+                    });
+                    query('#createAndReturnBtn').on('click', function () {
+                        query('#returnToCourse').attr('value', 'true');
+                    });
+                });
+            </script>
         </div>
     </body>
 </html>

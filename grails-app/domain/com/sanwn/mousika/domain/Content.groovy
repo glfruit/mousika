@@ -6,6 +6,12 @@ class Content {
 
     String title
 
+    def type = this.class.simpleName.toLowerCase()
+
+    static transients = ['type']
+
+    static belongsTo = [section: CourseSection]
+
     static constraints = {
     }
 }

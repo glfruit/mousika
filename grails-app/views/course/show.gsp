@@ -24,16 +24,48 @@
         <g:if test="${flash.message}">
             <div class="message" role="status">${flash.message}</div>
         </g:if>
-        <div style="border: 1px solid #E1E1E8;box-shadow: 30px 0 0 orange inset; padding-right: 10px;">
-            <p>新闻讨论区</p>
 
-            <a href="#addActivityOrResourceModal" role="button"
-               data-toggle="modal"
-               style="text-align: right;margin-right: 5px;">
-                <span>
-                    <i class="icon-plus"></i> 添加一个活动或资源
-                </span>
-            </a>
+        <div class="row-fluid"
+             style="border: 1px solid #E1E1E8;margin-bottom: 10px;margin-top: 10px;">
+            <div class="span1"></div>
+
+            <div class="span10" style="background-color: #FAFAFA;">
+                <h4 style="padding-left: 10px;color: #777777;">课程标题部分</h4>
+                <ul data-dojo-type="dojo.dnd.Source"
+                    data-dojo-props="accept: ['content']"
+                    style="list-style: none;height:100px;"
+                    id="titleSection">
+                    <li class="dojoDndItem" style="list-style: none;"
+                        dndType="content">
+                        <div style="display: inline;">
+                            <div style="float: left; padding-right: 3em;">
+                                <p>新闻讨论区</p>
+                                <span class="resource-link-details"></span>
+                            </div>
+                            <span class="commands">
+                                <a href="#"><i class="icon-pencil"></i></a>
+                                <a href="#" style="cursor: move;"><i
+                                        class="icon-move"></i></a>
+                                <a href="#"><i class="icon-eye-open"></i></a>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="pagination pagination-right">
+                    <a id="titleSectionLink" href="#addActivityOrResourceModal"
+                       role="button"
+                       data-toggle="modal"
+                       class="addContent"
+                       style="text-align: right;margin-right: 5px;">
+                        <span>
+                            <i class="icon-plus"></i> 添加一个活动或资源
+                        </span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="span1"></div>
         </div>
 
         <div class="modal hide fade" id="addActivityOrResourceModal"
@@ -48,6 +80,7 @@
 
         <div class="modal-body">
             <g:form class="form-horizontal" action="addResource">
+                <input type="hidden" id="sectionSeq" name="sectionSeq"/>
                 <label class="radio">
                     <input type="radio" name="itemContentType"
                            value="assignment" checked>作业<i
@@ -103,37 +136,14 @@
                       model="['startDate': courseInstance.startDate,
                               'section': courseInstance.sections[n], 'order': n]"/>
         </g:each>
-        <div style="border: black solid 1px;">
-            <ol data-dojo-type="dojo.dnd.Source"
-                data-dojo-props="accept: ['item']" id="wishlistNode">
-                <li class="dojoDndItem" dndType="item">Wrist watch</li>
-                <li class="dojoDndItem" dndType="item">Life jacket</li>
-                <li class="dojoDndItem" dndType="item">
-                    <div style="float: left;padding-right: 10px;">
-                        <a href="#">Docu</a>
-                        <span>Doc Type</span>
-                    </div>
-                    <span class="commands">
-                        <a href="#"><g:img file="editstring.svg"/></a>
-                        <a href="#" style="cursor: move;"><i
-                                class="icon-move"></i></a>
-                        <a href="#"><g:img file="hide.svg"/></a>
-                    </span>
-                </li>
-                <li class="dojoDndItem" dndType="item">Vintage microphone</li>
-                <li class="dojoDndItem" dndType="item">TIE fighter</li>
-            </ol>
-        </div>
-
-        <div style="height: 300px;">
-            <ol data-dojo-type="dojo.dnd.Source"
-                data-dojo-props="accept: ['item']"
-                style="height:300px;border: 1px solid #aaa;">
-
-            </ol>
-        </div>
         <script>
-            require(['dojo/dnd/Source', 'dojox/form/Uploader', 'dojox/form/uploader/plugins/IFrame', 'bootstrap/Modal']);
+            require(['dojo/query', 'dojo/dnd/Source', 'dojox/form/Uploader', 'dojox/form/uploader/plugins/IFrame', 'bootstrap/Modal'], function (query) {
+                query(".addContent").on('click', function (e) {
+                    var csid = query(e.target).parent().attr('id');
+                    csid = /csl(\d+)/.exec(csid)[1];
+                    query('#sectionSeq').attr('value', csid);
+                });
+            });
         </script>
     </body>
 </html>

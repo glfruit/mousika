@@ -15,4 +15,8 @@ class CourseSection {
 
     static constraints = {
     }
+
+    static mapping = {
+        contents sort: 'sequence', order: 'asc'
+    }
 }

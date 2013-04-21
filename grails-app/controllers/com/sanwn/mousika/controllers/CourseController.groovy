@@ -178,7 +178,6 @@ class CourseController {
 
     def addResource() {
         def contentType = params.itemContentType
-        log.info("contentType is $contentType")
-        redirect(controller: contentType, action: 'create')
+        redirect(controller: contentType, action: 'create', params: [sectionSeq: params.sectionSeq])
     }
 }

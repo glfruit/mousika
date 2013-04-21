@@ -100,8 +100,8 @@
         </div>
         <g:each in="${0..<courseInstance?.numberOfWeeks}" var="n">
             <g:render template="section"
-                      model="[startDate: courseInstance.startDate,
-                              section: courseInstance.sections[n], order: n]"/>
+                      model="['startDate': courseInstance.startDate,
+                              'section': courseInstance.sections[n], 'order': n]"/>
         </g:each>
         <div style="border: black solid 1px;">
             <ol data-dojo-type="dojo.dnd.Source"

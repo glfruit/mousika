@@ -49,9 +49,10 @@ class CourseController {
 
     def save() {
         params.startDate = params.date('startDate')
+        def startDate = params.startDate
         def courseInstance = new Course(params)
         for (i in 0..courseInstance.numberOfWeeks) {
-            def section = new CourseSection(sequence: i + 1)
+            def section = new CourseSection(sequence: i + 1, title: (startDate + i * 7).toString() + "-" + (startDate + i * 7 + 6).toString()) //TODO:重构
             courseInstance.addToSections(section)
         }
 

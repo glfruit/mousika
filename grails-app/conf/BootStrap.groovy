@@ -1,5 +1,6 @@
 import com.sanwn.mousika.domain.Role
 import com.sanwn.mousika.domain.User
+import grails.converters.JSON
 import org.apache.shiro.crypto.hash.Sha256Hash
 
 class BootStrap {
@@ -33,6 +34,7 @@ class BootStrap {
 
         user = new User(username: "test1", fullname: "彭启华", email: "ppller25@126.com", passwordHash: new Sha256Hash("test").toHex())
         user.save()
+
     }
     def destroy = {
     }

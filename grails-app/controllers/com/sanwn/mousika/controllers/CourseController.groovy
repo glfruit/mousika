@@ -1,13 +1,14 @@
 package com.sanwn.mousika.controllers
 
 import com.sanwn.mousika.domain.*
-import grails.converters.JSON
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
 
 class CourseController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def gsonBuilder
 
     def index() {
         redirect(action: "list", params: params)
@@ -162,9 +163,16 @@ class CourseController {
     def listMembers(Long id) {
         def course = Course.get(id)
         def members = course.courseMembers.user
-        render(contentType: "text/json") {
-            members as JSON
+        def json = members.collect { member ->
+            [
+                    fullname: member.fullname,
+                    email: member.email,
+                    lastAccessed: member.lastAccessed,
+                    roles: member.roles.collect { [id: it.id, name: it.name] }
+            ]
         }
+        def gson = gsonBuilder.create()
+        render contentType: "text/json", text: gson.toJson(json)
     }
 
     def addResource() {

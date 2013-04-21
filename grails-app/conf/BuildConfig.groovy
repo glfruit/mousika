@@ -63,6 +63,7 @@ grails.project.dependency.resolution = {
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.4"
 //        compile ":dojo:1.7.2.0"
+        compile ':gson:1.1.4'
         compile ":twitter-bootstrap:2.3.0"
         compile ":searchable:0.6.4"
         compile ":taggable:1.0.1"
@@ -82,6 +83,6 @@ grails.project.dependency.resolution = {
         test ":geb:$gebVersion"
         test ":cucumber:0.8.0"
         test ":code-coverage:1.2.6"
-        test ":build-test-data:2.0.4"
+        test ":build-test-data:2.0.5"
     }
 }

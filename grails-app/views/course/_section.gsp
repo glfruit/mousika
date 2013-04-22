@@ -5,14 +5,14 @@
     <g:set var="today" value="${new Date()}"/>
     <div
             style="width:5%;display:table-cell;background: none repeat scroll 0% 0% ${today >= beginDate && today <= endDate ? 'rgb(255,217,145)' : '#FFFFFF'};">
-        <g:if test="${section.sequence != -1}">
+        <g:if test="${section.sequence != 0}">
             <i class="icon-move"
                style="position:relative;top:5px;left:10px;"></i>
         </g:if>
     </div>
 
     <div style="width:90%;display:table-cell;background-color: #FAFAFA;">
-        <g:if test="${section.sequence != -1}">
+        <g:if test="${section.sequence != 0}">
             <h4 style="padding-left: 10px;color: #777777;">
                 <g:formatDate
                         date="${beginDate}"
@@ -25,7 +25,7 @@
             data-dojo-props="accept: ['content']"
             style="list-style: none;height:100px;"
             id="courseSection${order + 1}">
-            <g:if test="${section.sequence == -1}">
+            <g:if test="${section.sequence == 0}">
                 <li class="dojoDndItem" dndType="content">
                     <p>新闻讨论区</p>
                 </li>
@@ -51,7 +51,7 @@
         </ul>
 
         <div class="pagination pagination-right">
-            <a id="csl${order + 1}" href="#addActivityOrResourceModal"
+            <a id="csl${order}" href="#addActivityOrResourceModal"
                role="button"
                data-toggle="modal"
                class="addContent"

@@ -25,49 +25,6 @@
             <div class="message" role="status">${flash.message}</div>
         </g:if>
 
-        <div class="row-fluid"
-             style="border: 1px solid #E1E1E8;margin-bottom: 10px;margin-top: 10px;">
-            <div class="span1"></div>
-
-            <div class="span10" style="background-color: #FAFAFA;">
-                <h4 style="padding-left: 10px;color: #777777;">课程标题部分</h4>
-                <ul data-dojo-type="dojo.dnd.Source"
-                    data-dojo-props="accept: ['content']"
-                    style="list-style: none;height:100px;"
-                    id="titleSection">
-                    <li class="dojoDndItem" style="list-style: none;"
-                        dndType="content">
-                        <div style="display: inline;">
-                            <div style="float: left; padding-right: 3em;">
-                                <p>新闻讨论区</p>
-                                <span class="resource-link-details"></span>
-                            </div>
-                            <span class="commands">
-                                <a href="#"><i class="icon-pencil"></i></a>
-                                <a href="#" style="cursor: move;"><i
-                                        class="icon-move"></i></a>
-                                <a href="#"><i class="icon-eye-open"></i></a>
-                            </span>
-                        </div>
-                    </li>
-                </ul>
-
-                <div class="pagination pagination-right">
-                    <a id="titleSectionLink" href="#addActivityOrResourceModal"
-                       role="button"
-                       data-toggle="modal"
-                       class="addContent"
-                       style="text-align: right;margin-right: 5px;">
-                        <span>
-                            <i class="icon-plus"></i> 添加一个活动或资源
-                        </span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="span1"></div>
-        </div>
-
         <div class="modal hide fade" id="addActivityOrResourceModal"
              tabindex="-1" role="dialog"
              aria-labelledby="activityOrResourceLabel" aria-hidden="true">
@@ -131,7 +88,7 @@
                 </div>
             </g:form>
         </div>
-        <g:each in="${0..<courseInstance?.numberOfWeeks}" var="n">
+        <g:each in="${0..<courseInstance?.numberOfWeeks+1}" var="n">
             <g:render template="section"
                       model="['startDate': courseInstance.startDate,
                               'section': courseInstance.sections[n], 'order': n]"/>

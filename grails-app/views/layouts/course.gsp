@@ -20,7 +20,7 @@
               href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"
               type="text/css"/>
         <link rel="stylesheet"
-              href="${resource(dir: 'css', file: 'main.css')}"
+              href="${resource(dir: 'css', file: 'mousika.css')}"
               type="text/css"/>
         <style type="text/css">
         body {

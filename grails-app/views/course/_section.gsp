@@ -1,5 +1,4 @@
-<div
-        style="display:table;border: 1px solid #E1E1E8;margin-bottom: 10px;margin-top: 10px;width:100%;">
+<div class="course-section">
     <g:set var="beginDate" value="${startDate + (order - 1) * 7}"/>
     <g:set var="endDate" value="${beginDate + 6}"/>
     <g:set var="today" value="${new Date()}"/>

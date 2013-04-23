@@ -1,6 +1,5 @@
 <html>
     <head>
-        <meta name="layout" content="dojo">
         <g:set var="entityName"
                value="${message(code: 'course.label', default: 'Course')}"/>
         <title><g:message code="default.list.label"

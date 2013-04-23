@@ -108,6 +108,9 @@
                         </td>
                     </tr>
                 </g:each>
+                <tr colspan="4"><a class="btn"
+                                   href="${createLink(action: 'list')}">返回到课程</a>
+                </tr>
             </tbody>
         </table>
         <script type="text/javascript">

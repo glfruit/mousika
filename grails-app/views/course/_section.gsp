@@ -32,12 +32,17 @@
             <g:each in="${section.contents}" var="content">
                 <li class="dojoDndItem" dndType="content">
                     <div style="display: inline;">
-                        <div style="float: left; padding-right: 3em;">
+                    <div style="float: left; padding-right: 3em;">
+                        <g:if test="${content.type != 'label'}">
                             <a href="${createLink(controller: content.type, action: 'show', id: content.id)}">
                                 ${content.title}
                             </a>
                             <span class="resource-link-details"></span>
-                        </div>
+                            </div>
+                        </g:if>
+                        <g:else>
+                            ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(content.labelContent)}
+                        </g:else>
                         <span class="commands">
                             <a href="#"><i class="icon-pencil"></i></a>
                             <a href="#" style="cursor: move;"><i
@@ -45,6 +50,7 @@
                             <a href="#"><i class="icon-eye-open"></i></a>
                         </span>
                     </div>
+                    <div style="clear: both"></div>
                 </li>
             </g:each>
         </ul>

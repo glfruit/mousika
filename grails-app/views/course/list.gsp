@@ -33,7 +33,7 @@
                                 </g:link>
                             </h3>
 
-                            <p>教师：${teachers[i].user.fullname}</p>
+                            <p>教师：${teachers[i]?.user?.fullname}</p>
                         </li>
                         <li class="span6">
                             <g:set var="desc"

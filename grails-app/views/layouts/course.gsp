@@ -117,18 +117,18 @@
                     <h4 style="border-bottom: 1px solid #000;color: #777777;">
                         <g:message code="label.app.menu.nav"/>
                     </h4>
-                    <shiro:hasAnyRole in="[教师, 系统管理员, 课程负责人]">
+                    <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
                         <div>
                             <p id="courseAdminTitle" style="cursor: pointer;"><i
                                     id="titleIcon"
                                     class="icon-chevron-right"></i><span>课程管理</span>
                             </p>
                             <ul id="courseAdmin" style="list-style: none;">
-                                <li><i class="icon-edit"></i>打开编辑</li>
-                                <li><i class="icon-pencil"></i>编辑设置</li>
-                                <li><i class="icon-user"></i>成员</li>
-                                <li><i class="icon-list"></i> 成绩</li>
-                                <li><i class="icon-arrow-up"></i> 导入</li>
+                                <li><i class="icon-edit"></i><span style="padding-left: 5px;">打开编辑</span></li>
+                                <li><i class="icon-pencil"></i><span style="padding-left: 5px;">编辑设置</span></li>
+                                <li><i class="icon-user"></i><span style="padding-left: 5px;">成员</span></li>
+                                <li><i class="icon-list"></i><span style="padding-left: 5px;">成绩</span></li>
+                                <li><i class="icon-arrow-up"></i><span style="padding-left: 5px;">导入</span></li>
                             </ul>
                         </div>
                         <script>

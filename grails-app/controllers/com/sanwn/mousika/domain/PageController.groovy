@@ -30,7 +30,7 @@ class PageController {
         }
 
         flash.message = message(code: 'default.created.message', args: [message(code: 'page.label', default: 'Page'), pageInstance.id])
-        def returnToCourse = params.boolean(params.returnToCourse)
+        def returnToCourse = params.boolean('returnToCourse')
         if (returnToCourse) {
             redirect(controller: 'course', action: 'show', id: section.course.id)
         } else {

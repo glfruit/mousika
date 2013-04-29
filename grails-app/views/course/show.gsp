@@ -87,19 +87,27 @@
                 </div>
             </g:form>
         </div>
-        <g:each in="${0..<courseInstance?.numberOfWeeks+1}" var="n">
+        <g:each in="${0..<courseInstance?.numberOfWeeks + 1}" var="n">
             <g:render template="section"
                       model="['startDate': courseInstance.startDate,
                               'section': courseInstance.sections[n], 'order': n]"/>
         </g:each>
         <script>
-            require(['dojo/query', 'dojo/dnd/Source', 'dojox/form/Uploader', 'dojox/form/uploader/plugins/IFrame', 'bootstrap/Modal'], function (query) {
-                query(".addContent").on('click', function (e) {
-                    var csid = query(e.target).parent().attr('id');
-                    csid = /csl(\d+)/.exec(csid)[1];
-                    query('#sectionSeq').attr('value', csid);
-                });
-            });
+            require(['dojo/query', 'dojo/topic', 'dojo/dnd/Source', 'dojox/form/Uploader', 'dojox/form/uploader/plugins/IFrame', 'bootstrap/Modal'],
+                    function (query, topic) {
+                        query(".addContent").on('click', function (e) {
+                            var csid = query(e.target).parent().attr('id');
+                            csid = /csl(\d+)/.exec(csid)[1];
+                            query('#sectionSeq').attr('value', csid);
+                        });
+                        topic.subscribe("/dnd/drop", function (source, nodes, copy, target) {
+                            if (source == target) {
+                                alert("Internal Drop!");
+                            } else {
+                                alert("Drop is done!");
+                            }
+                        });
+                    });
         </script>
     </body>
 </html>

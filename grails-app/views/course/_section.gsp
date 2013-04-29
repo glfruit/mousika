@@ -22,6 +22,7 @@
         </g:if>
         <ul data-dojo-type="dojo.dnd.Source"
             data-dojo-props="accept: ['content']"
+            class="dojoDndSource"
             style="list-style: none;height:100px;"
             id="courseSection${order + 1}">
             <g:if test="${section.sequence == 0}">
@@ -50,6 +51,7 @@
                             <a href="#"><i class="icon-eye-open"></i></a>
                         </span>
                     </div>
+
                     <div style="clear: both"></div>
                 </li>
             </g:each>

@@ -50,7 +50,8 @@
                     <f:with bean="pageInstance">
                         <g:hiddenField name="sectionSeq" id="sectionSeq"
                                        value="${sectionSeq}"/>
-                        <g:hiddenField name="returnToCourse" id="returnToCourse" value="false"/>
+                        <g:hiddenField name="returnToCourse" id="returnToCourse"
+                                       value="false"/>
                         <f:field property="title" required="true"/>
                         <f:field property="description"/>
                         <f:field property="content"/>
@@ -64,7 +65,7 @@
                                     name="createAndReturn" class="btn"
                                     value="创建并返回到课程"/>
                     <a class="btn"
-                       href="${createLink(controller: 'course', action: 'show', id: courseId)}">取消</a>
+                       href="${createLink(controller: 'course', action: 'show', id: courseId)}">${message(code: 'default.cancel.label')}</a>
                 </fieldset>
             </g:form>
             <script>

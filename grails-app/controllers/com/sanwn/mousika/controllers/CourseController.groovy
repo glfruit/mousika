@@ -43,6 +43,30 @@ class CourseController {
         [courseInstanceList: courses, courseInstanceTotal: count, teachers: teachers]
     }
 
+    def listPublic() {
+        params.max = 10
+        params.sort = 'title'
+        params.offset = 0
+        def courses = Course.findAllByGuestVisible(true, params)
+        withFormat {
+            html courses: courses
+            json {
+                def results = courses.collect { course ->
+                    [
+                            id: course.id,
+                            title: course.title,
+                            teacher: course.courseMembers.find { memeber -> memeber.role.name == "教师" },
+                            description: course.description
+                    ]
+                }
+                results.each {
+                    it.teacher = it.teacher ? it.teacher.user.fullname : ''
+                }
+                render(contentType: 'text/json', text: gsonBuilder.create().toJson(results))
+            }
+        }
+    }
+
     def create() {
         [courseInstance: new Course(params)]
     }

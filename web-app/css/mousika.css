@@ -18,3 +18,9 @@
 .current {
     background: none repeat scroll rgb(255, 217, 145);
 }
+
+.course-intro {
+    border: 1px solid #777777;
+    padding-left: 10px;
+    padding-right: 10px;
+}

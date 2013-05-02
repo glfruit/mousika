@@ -20,31 +20,41 @@
                     date="${endDate}"
                     format="yyyy-MM-dd"/></h4>
         </g:if>
+        <g:set var="courseSectionId" value="courseSection${section.sequence}"/>
         <ul data-dojo-type="dojo.dnd.Source"
-            data-dojo-props="accept: ['content']"
+            data-dojo-props="accept: ['content'], withHandles: true, autoSync: true"
+            class="dojoDndSource sectionContent"
             style="list-style: none;height:100px;"
-            id="courseSection${order + 1}">
-            <g:if test="${section.sequence == 0}">
-                <li class="dojoDndItem" dndType="content">
-                    <p>新闻讨论区</p>
-                </li>
-            </g:if>
-            <g:each in="${section.contents}" var="content">
-                <li class="dojoDndItem" dndType="content">
+            id="${courseSectionId}">
+            %{--<g:if test="${section.sequence == 0}">--}%
+                %{--<li class="dojoDndItem" dndType="content">--}%
+                    %{--<p>新闻讨论区</p>--}%
+                %{--</li>--}%
+            %{--</g:if>--}%
+            <g:each in="${section.contents}" var="content" status="s">
+                <li id="${courseSectionId}item${s}"
+                    class="dojoDndItem" dndType="content">
                     <div style="display: inline;">
-                        <div style="float: left; padding-right: 3em;">
+                    <div style="float: left; padding-right: 3em;">
+                        <g:if test="${content.type != 'label'}">
                             <a href="${createLink(controller: content.type, action: 'show', id: content.id)}">
                                 ${content.title}
                             </a>
                             <span class="resource-link-details"></span>
-                        </div>
+                            </div>
+                        </g:if>
+                        <g:else>
+                            ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(content.labelContent)}
+                        </g:else>
                         <span class="commands">
                             <a href="#"><i class="icon-pencil"></i></a>
                             <a href="#" style="cursor: move;"><i
-                                    class="icon-move"></i></a>
+                                    class="icon-move dojoDndHandle"></i></a>
                             <a href="#"><i class="icon-eye-open"></i></a>
                         </span>
                     </div>
+
+                    <div style="clear: both"></div>
                 </li>
             </g:each>
         </ul>

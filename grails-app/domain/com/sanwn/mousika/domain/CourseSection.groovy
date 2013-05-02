@@ -9,6 +9,8 @@ class CourseSection {
 
     String title
 
+    SortedSet<Content> contents
+
     static belongsTo = [course: Course]
 
     static hasMany = [contents: Content]
@@ -17,6 +19,5 @@ class CourseSection {
     }
 
     static mapping = {
-        contents sort: 'sequence', order: 'asc'
     }
 }

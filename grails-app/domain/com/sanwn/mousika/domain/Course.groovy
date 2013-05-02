@@ -55,5 +55,6 @@ class Course {
 
     static mapping = {
         description column: "description", sqlType: "text"
+        sections sort: "sequence", order: "asc"
     }
 }

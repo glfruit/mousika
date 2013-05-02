@@ -117,35 +117,48 @@
                     <h4 style="border-bottom: 1px solid #000;color: #777777;">
                         <g:message code="label.app.menu.nav"/>
                     </h4>
-                    <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
-                        <div>
-                            <p id="courseAdminTitle" style="cursor: pointer;"><i
-                                    id="titleIcon"
-                                    class="icon-chevron-right"></i><span>课程管理</span>
-                            </p>
-                            <ul id="courseAdmin" style="list-style: none;">
-                                <li><i class="icon-edit"></i><span style="padding-left: 5px;">打开编辑</span></li>
-                                <li><i class="icon-pencil"></i><span style="padding-left: 5px;">编辑设置</span></li>
-                                <li><i class="icon-user"></i><span style="padding-left: 5px;">成员</span></li>
-                                <li><i class="icon-list"></i><span style="padding-left: 5px;">成绩</span></li>
-                                <li><i class="icon-arrow-up"></i><span style="padding-left: 5px;">导入</span></li>
-                            </ul>
-                        </div>
-                        <script>
-                            require(['dojo/on', 'dojo/dom', 'dojo/dom-style', 'dojo/dom-class'], function (on, dom, domStyle, domClass) {
-                                on(dom.byId('courseAdminTitle'), "click", function () {
-                                    if (domClass.contains("titleIcon", "icon-chevron-right")) {
-                                        domClass.replace("titleIcon", "icon-chevron-down", "icon-chevron-right");
-                                    } else {
-                                        domClass.replace("titleIcon", "icon-chevron-right", "icon-chevron-down");
-                                    }
-                                    var display = domStyle.get(dom.byId('courseAdmin'), 'display');
-                                    display = display == "none" ? "block" : "none";
-                                    domStyle.set(dom.byId('courseAdmin'), 'display', display);
+                    <g:if test="${controllerName == 'course' && actionName == 'show'}">
+                        <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
+                            <div>
+                                <p id="courseAdminTitle"
+                                   style="cursor: pointer;"><i
+                                        id="titleIcon"
+                                        class="icon-chevron-right"></i><span>课程管理</span>
+                                </p>
+                                <ul id="courseAdmin" style="list-style: none;">
+                                    <li><i class="icon-edit"></i><span
+                                            style="padding-left: 5px;">打开编辑</span>
+                                    </li>
+                                    <li><i class="icon-pencil"></i><span
+                                            style="padding-left: 5px;">编辑设置</span>
+                                    </li>
+                                    <li><i class="icon-user"></i><span
+                                            style="padding-left: 5px;">成员</span>
+                                    </li>
+                                    <li><i class="icon-list"></i><span
+                                            style="padding-left: 5px;">成绩</span>
+                                    </li>
+                                    <li><i class="icon-arrow-up"></i><span
+                                            style="padding-left: 5px;">导入</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <script>
+                                require(['dojo/on', 'dojo/dom', 'dojo/dom-style', 'dojo/dom-class'], function (on, dom, domStyle, domClass) {
+                                    on(dom.byId('courseAdminTitle'), "click", function () {
+                                        if (domClass.contains("titleIcon", "icon-chevron-right")) {
+                                            domClass.replace("titleIcon", "icon-chevron-down", "icon-chevron-right");
+                                        } else {
+                                            domClass.replace("titleIcon", "icon-chevron-right", "icon-chevron-down");
+                                        }
+                                        var display = domStyle.get(dom.byId('courseAdmin'), 'display');
+                                        display = display == "none" ? "block" : "none";
+                                        domStyle.set(dom.byId('courseAdmin'), 'display', display);
+                                    });
                                 });
-                            });
-                        </script>
-                    </shiro:hasAnyRole>
+                            </script>
+                        </shiro:hasAnyRole>
+                    </g:if>
                 </div>
 
                 <div class="span7">

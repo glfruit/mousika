@@ -21,7 +21,7 @@
             ${courseInstance?.title}
         </h4>
         <g:if test="${flash.message}">
-            <div class="message" role="status">${flash.message}</div>
+            <div class="text-success" role="status">${flash.message}</div>
         </g:if>
 
         <div class="modal hide fade" id="addActivityOrResourceModal"
@@ -93,18 +93,71 @@
                               'section': courseInstance.sections[n], 'order': n]"/>
         </g:each>
         <script>
-            require(['dojo/query', 'dojo/topic', 'dojo/dnd/Source', 'dojox/form/Uploader', 'dojox/form/uploader/plugins/IFrame', 'bootstrap/Modal'],
-                    function (query, topic) {
+            require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/dnd/Source', 'bootstrap/Modal', 'dojo/domReady!'],
+                    function (query, topic, request, domAttr) {
                         query(".addContent").on('click', function (e) {
                             var csid = query(e.target).parent().attr('id');
                             csid = /csl(\d+)/.exec(csid)[1];
                             query('#sectionSeq').attr('value', csid);
                         });
                         topic.subscribe("/dnd/drop", function (source, nodes, copy, target) {
+                            var current = target.current;
+                            if (current != null) {
+                                var clazz = domAttr.get(current, 'class');
+                                console.log(clazz);
+                            }
                             if (source == target) {
-                                alert("Internal Drop!");
+                                var node = nodes[0];
+                                var nodeId = node.id.match(/.*(\d+)$/)[1];
+                                var pos = current.id.match(/.*(\d+)$/)[1];
+                                if (nodeId != pos) {
+                                    var sectionSeq = source.id.match(/.*(\d+)$/)[1];
+                                    require(['dojo/request'], function (request) {
+                                        request.post("${request.contextPath}/courseSection/updateSeq",
+                                                {
+                                                    data: {
+                                                        courseId: "${courseInstance.id}",
+                                                        sourceSeq: sectionSeq,
+                                                        internal: true,
+                                                        oldPos: nodeId,
+                                                        newPos: pos
+                                                    }
+                                                }).then(function (response) {
+                                                    require(['dojo/json'], function (json) {
+                                                        if (!json.parse(response).success) {
+                                                            alert('更新失败！');
+                                                        }
+                                                    });
+                                                });
+                                    });
+                                }
                             } else {
-                                alert("Drop is done!");
+                                var nodeId = nodes[0].id.match(/.*(\d+)$/)[1], pos;
+                                var sourceSectionSeq = source.id.match(/.*(\d+)$/)[1];
+                                var targetSectionSeq = target.id.match(/.*(\d+)$/)[1];
+                                if (current == null) {
+                                    pos = target.getAllNodes().length;
+                                } else {
+                                    pos = current.id.match(/.*(\d+)$/)[1];
+                                }
+                                require(['dojo/request'], function (request) {
+                                    request.post("${request.contextPath}/courseSection/updateSeq",
+                                            {
+                                                data: {
+                                                    courseId: "${courseInstance.id}",
+                                                    sourceSeq: sourceSectionSeq,
+                                                    targetSeq: targetSectionSeq,
+                                                    oldPos: nodeId,
+                                                    newPos: pos
+                                                }
+                                            }).then(function (response) {
+                                                require(['dojo/json'], function (json) {
+                                                    if (!json.parse(response).success) {
+                                                        alert('更新失败！'); //TODO: 1. 美化对话框； 2. 撤消拖动
+                                                    }
+                                                });
+                                            });
+                                });
                             }
                         });
                     });

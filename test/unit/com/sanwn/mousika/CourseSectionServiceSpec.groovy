@@ -1,5 +1,9 @@
-package com.sanwn.mousika.domain
+package com.sanwn.mousika
 
+import com.sanwn.mousika.domain.Course
+import com.sanwn.mousika.domain.CourseSection
+import com.sanwn.mousika.domain.CourseSectionService
+import com.sanwn.mousika.domain.Page
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestFor
 import spock.lang.Specification

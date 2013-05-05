@@ -1,5 +1,6 @@
-package com.sanwn.mousika.controllers
+package com.sanwn.mousika
 
+import com.sanwn.mousika.controllers.CourseSectionController
 import com.sanwn.mousika.domain.*
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.Mock

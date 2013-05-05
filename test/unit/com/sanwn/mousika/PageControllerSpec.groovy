@@ -1,4 +1,4 @@
-package com.sanwn.mousika.controllers
+package com.sanwn.mousika
 
 import com.sanwn.mousika.domain.*
 import grails.test.mixin.Mock

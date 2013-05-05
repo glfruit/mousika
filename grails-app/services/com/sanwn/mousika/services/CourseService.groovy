@@ -11,7 +11,7 @@ class CourseException extends RuntimeException {
 
 class CourseService {
 
-    boolean transactional = true
+    static transactional = true
 
     def createCourse() {
         def course = new Course()
@@ -20,5 +20,9 @@ class CourseService {
         } else {
             throw new CourseException(message: "Error creating course ${course.title}")
         }
+    }
+
+    def moveSection() {
+
     }
 }

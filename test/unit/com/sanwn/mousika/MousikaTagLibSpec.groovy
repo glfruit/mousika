@@ -1,4 +1,4 @@
-package mousika
+package com.sanwn.mousika
 
 import com.sanwn.mousika.grails.MousikaTagLib
 import grails.test.mixin.TestFor

@@ -20,6 +20,7 @@ class PageControllerSpec extends Specification {
         def course = new Course(title: "title", code: "code", description: "description", startDate: new Date()).save()
         def section = new CourseSection(course: course, sequence: 0, title: "PageTest").save()
         course.addToSections(section)
+        params.courseId = course.id
         params.sectionSeq = 0
         params.title = "Page title"
         params.content = "Page content"

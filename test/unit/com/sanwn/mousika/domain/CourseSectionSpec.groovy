@@ -32,9 +32,9 @@ class CourseSectionSpec extends Specification {
 
         then:
         contents.size() == 3
-        3.times {
-            contents[it].sequence == it
-            contents[it].title == titles[it]
+        contents.eachWithIndex { content, pos ->
+            content.sequence == pos
+            content.title == titles[pos]
         }
     }
 }

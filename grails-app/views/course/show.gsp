@@ -37,6 +37,8 @@
         <div class="modal-body">
             <g:form class="form-horizontal" action="addResource">
                 <input type="hidden" id="sectionSeq" name="sectionSeq"/>
+                <input type="hidden" id="courseId" name="courseId"
+                       value="${courseInstance.id}"/>
                 <label class="radio">
                     <input type="radio" name="itemContentType"
                            value="assignment" checked>作业<i

@@ -36,11 +36,15 @@ class CourseSectionService {
         if (sourceSection == null) {
             throw new CourseSectionException(message: "单元序号为${sourceSectionSeq}的课程单元不存在")
         }
-        def movedContent = Content.findBySectionAndSequence(sourceSection, oldPos)
+        def movedContent = sourceSection.contents.find {
+            it.sequence == oldPos
+        }
         if (movedContent == null) {
             throw new CourseSectionException(message: "序号为${oldPos}的内容不存在", courseSection: sourceSection)
         }
-        def sourceContents = Content.findAllBySectionAndSequenceGreaterThan(sourceSection, oldPos)
+        def sourceContents = sourceSection.contents.findAll {
+            it.sequence > oldPos
+        }
         sourceContents.each {
             it.sequence = it.sequence - 1
         }
@@ -48,7 +52,9 @@ class CourseSectionService {
         if (targetSection == null) {
             throw new CourseSectionException(message: "单元序号为${targetSectionSeq}的课程单元不存在")
         }
-        def targetContents = Content.findAllBySectionAndSequenceNotLessThan(targetSection, newPos)
+        def targetContents = targetSection.contents.findAll {
+            it.sequence >= newPos
+        }
         targetContents.each {
             it.sequence = it.sequence + 1
         }

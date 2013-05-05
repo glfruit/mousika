@@ -22,6 +22,7 @@ class CourseControllerSpec extends Specification {
     def "should fail with an invalid course"() {
         setup:
         messageSource.addMessage("date.startDate.format", Locale.default, "yyyy-MM-dd")
+        params.startDate = '2013-05-04'
         request.addPreferredLocale(Locale.default)
 
         when:

@@ -28,6 +28,7 @@
             <g:form action="save">
                 <g:render template="/uploader"/>
                 <fieldset class="form">
+                    <g:hiddenField name="sectionSeq" value="${sectionSeq}"/>
                     <g:render template="form"/>
                 </fieldset>
                 <fieldset class="buttons">

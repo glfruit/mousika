@@ -1,5 +1,6 @@
-package com.sanwn.mousika.controllers
+package com.sanwn.mousika
 
+import com.sanwn.mousika.controllers.CourseController
 import com.sanwn.mousika.domain.*
 import grails.plugin.gson.test.GsonUnitTestMixin
 import grails.test.mixin.Mock
@@ -22,6 +23,7 @@ class CourseControllerSpec extends Specification {
     def "should fail with an invalid course"() {
         setup:
         messageSource.addMessage("date.startDate.format", Locale.default, "yyyy-MM-dd")
+        params.startDate = '2013-05-04'
         request.addPreferredLocale(Locale.default)
 
         when:

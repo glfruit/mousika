@@ -1,5 +1,7 @@
 package com.sanwn.mousika
 
+import com.sanwn.mousika.domain.Course
+import com.sanwn.mousika.domain.CourseSection
 import org.springframework.dao.DataIntegrityViolationException
 
 class FileResourceController {
@@ -16,20 +18,23 @@ class FileResourceController {
     }
 
     def create() {
-        [fileResourceInstance: new FileResource(params)]
+        [fileResourceInstance: new FileResource(params), sectionSeq: params.sectionSeq, courseId: params.courseId]
     }
 
     def upload() {
+        def course = Course.get(params.courseId)
+        def section = CourseSection.findByCourseAndSequence(course, params.sectionSeq)
         def uploadedFile = request.getFile('qqfile')
         def filename = uploadedFile.originalFilename
-        def fileResource = new FileResource(title: filename)
-        if (!fileResource.save(flush: true)) {
+        def fileResource = new FileResource(title: filename, section: section)
+        section.addToContents(fileResource)
+        if (!section.save(flush: true)) {
             log.error("文件信息保存错误：${fileResource.errors.toString()}")
             render contentType: "text/plain", text: '{"success":false}}'
             return
         }
         log.info("尝试上传文件[${filename}]")
-        uploadedFile.transferTo(new File(new Date().toTimestamp()))
+        uploadedFile.transferTo(new File(new Date().toTimestamp().toString()))
         render contentType: "text/plain", text: '{"success":true}'
     }
 

@@ -16,12 +16,12 @@ class PageController {
     }
 
     def create() {
-        def section = CourseSection.findBySequence(params.sectionSeq)
-        [pageInstance: new Page(params), sectionSeq: section.sequence, courseId: section.course.id]
+        [pageInstance: new Page(params), sectionSeq: params.sectionSeq, courseId: params.courseId]
     }
 
     def save() {
-        def section = CourseSection.findBySequence(params.sectionSeq)
+        def course = Course.get(params.courseId)
+        def section = CourseSection.findByCourseAndSequence(course, params.sectionSeq)
         def pageInstance = new Page(params)
         section.addToContents(pageInstance)
         if (!section.save(flush: true)) {

@@ -1,4 +1,4 @@
-package mousika
+package com.sanwn.mousika
 
 import com.sanwn.mousika.grails.MousikaTagLib
 import grails.test.mixin.TestFor
@@ -12,11 +12,11 @@ class MousikaTagLibSpec extends Specification {
 
     def "output copyright info"() {
         setup:
-        messageSource.addMessage("default.company.name", request.locale, "深圳三栖科技有限公司")
+        messageSource.addMessage("default.company.name", request.locale, "清远华彦科技有限公司")
         when:
         def copy = applyTemplate('<mousika:copyright />')
 
         then:
-        copy == "&copy; 深圳三栖科技有限公司 2013"
+        copy == "&copy; 清远华彦科技有限公司 2013"
     }
 }

@@ -45,9 +45,9 @@
             </g:hasErrors>
             <g:form action="save" class="form-horizontal">
                 <fieldset class="form">
-                    <input type="hidden" id="sectionSeq" value="${sectionSeq}"/>
-                    <input type="hidden" id="returnToCourse" value="false"/>
                     <f:with bean="pageInstance">
+                        <g:hiddenField name="courseId" id="courseId"
+                                       value="${courseId}"/>
                         <g:hiddenField name="sectionSeq" id="sectionSeq"
                                        value="${sectionSeq}"/>
                         <g:hiddenField name="returnToCourse" id="returnToCourse"
@@ -69,12 +69,12 @@
                 </fieldset>
             </g:form>
             <script>
-                require(['dojo/query'], function (query) {
+                require(['dojo/query','dojo/dom-attr'], function (query,domAttr) {
                     query('#createAndShowBtn').on('click', function () {
-                        query('#returnToCourse').attr('value', 'false');
+                        domAttr.set(query('#returnToCourse'),'value','false');
                     });
                     query('#createAndReturnBtn').on('click', function () {
-                        query('#returnToCourse').attr('value', 'true');
+                        domAttr.set(query('#returnToCourse','value','true'));
                     });
                 });
             </script>

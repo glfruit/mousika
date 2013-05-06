@@ -1,5 +1,6 @@
-package com.sanwn.mousika.domain
+package com.sanwn.mousika
 
+import com.sanwn.mousika.domain.Course
 import grails.test.mixin.Mock
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin

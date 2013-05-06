@@ -1,0 +1,11 @@
+{
+    "name": "mousika",
+    "version": "1.0",
+    "dependencies": {
+        "dojo": "~1.8.3",
+        "dijit": "~1.8.3",
+        "dojox": "~1.8.3"
+    },
+    "description": "Dojo core is a powerful, lightweight library that makes common tasks quicker and easier. Animate elements, manipulate the DOM, and query with easy CSS syntax, all without sacrificing performance.",
+    "dojoBuild": "mousika.profile.js"
+}

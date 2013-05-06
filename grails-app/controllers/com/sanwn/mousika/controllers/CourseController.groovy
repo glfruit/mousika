@@ -74,11 +74,12 @@ class CourseController {
     def save() {
         params.startDate = params.date('startDate')
         def startDate = params.startDate
+        println "============StartDate is ${startDate}=================="
         def courseInstance = new Course(params)
         def section = new CourseSection(sequence: 0, title: '')
         courseInstance.addToSections(section)
         for (i in 0..courseInstance.numberOfWeeks) {
-            section = new CourseSection(sequence: i + 1, title: (startDate + i * 7).toString() + "-" + (startDate + i * 7 + 6).toString()) //TODO:重构
+            section = new CourseSection(sequence: i + 1, title: (startDate + i * 7).toString() + "-" + (startDate + i * 7 + 6).toString()) //TODO:重构;第一个章节添加一个默认新闻讨论区
             courseInstance.addToSections(section)
         }
 
@@ -204,6 +205,6 @@ class CourseController {
 
     def addResource() {
         def contentType = params.itemContentType
-        redirect(controller: contentType, action: 'create', params: [sectionSeq: params.sectionSeq])
+        redirect(controller: contentType, action: 'create', params: [sectionSeq: params.sectionSeq, courseId: params.courseId])
     }
 }

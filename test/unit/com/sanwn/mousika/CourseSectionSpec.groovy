@@ -1,5 +1,9 @@
-package com.sanwn.mousika.domain
+package com.sanwn.mousika
 
+import com.sanwn.mousika.domain.Content
+import com.sanwn.mousika.domain.Course
+import com.sanwn.mousika.domain.CourseSection
+import com.sanwn.mousika.domain.Page
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -32,9 +36,9 @@ class CourseSectionSpec extends Specification {
 
         then:
         contents.size() == 3
-        3.times {
-            contents[it].sequence == it
-            contents[it].title == titles[it]
+        contents.eachWithIndex { content, pos ->
+            content.sequence == pos
+            content.title == titles[pos]
         }
     }
 }

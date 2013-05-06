@@ -22,7 +22,10 @@ class CourseService {
         }
     }
 
-    def moveSection() {
-
+    def moveSection(sourceSection, targetSection) {
+        def oldSeq = sourceSection.sequence
+        def newSeq = targetSection.sequence
+        targetSection.sequence = oldSeq
+        sourceSection.sequence = newSeq
     }
 }

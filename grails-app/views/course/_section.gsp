@@ -1,12 +1,14 @@
-<div class="course-section">
+<g:set var="courseSectionId" value="courseSection${section.sequence}"/>
+<div id="${courseSectionId}" class="dojoDndItem course-section"
+     dndType="section">
     <g:set var="beginDate" value="${startDate + (order - 1) * 7}"/>
     <g:set var="endDate" value="${beginDate + 6}"/>
     <g:set var="today" value="${new Date()}"/>
     <div
             style="width:5%;display:table-cell;background: none repeat scroll 0% 0% ${today >= beginDate && today <= endDate ? 'rgb(255,217,145)' : '#FFFFFF'};">
         <g:if test="${section.sequence != 0}">
-            <i class="icon-move"
-               style="position:relative;top:5px;left:10px;"></i>
+            <i class="icon-move dojoDndHandle"
+               style="position:relative;top:5px;left:10px;cursor: move;"></i>
         </g:if>
     </div>
 
@@ -20,17 +22,16 @@
                     date="${endDate}"
                     format="yyyy-MM-dd"/></h4>
         </g:if>
-        <g:set var="courseSectionId" value="courseSection${section.sequence}"/>
         <ul data-dojo-type="dojo.dnd.Source"
             data-dojo-props="accept: ['content'], withHandles: true, autoSync: true"
             class="dojoDndSource sectionContent"
             style="list-style: none;height:100px;"
             id="${courseSectionId}">
-            %{--<g:if test="${section.sequence == 0}">--}%
-                %{--<li class="dojoDndItem" dndType="content">--}%
-                    %{--<p>新闻讨论区</p>--}%
-                %{--</li>--}%
-            %{--</g:if>--}%
+        %{--<g:if test="${section.sequence == 0}">--}%
+        %{--<li class="dojoDndItem" dndType="content">--}%
+        %{--<p>新闻讨论区</p>--}%
+        %{--</li>--}%
+        %{--</g:if>--}%
             <g:each in="${section.contents}" var="content" status="s">
                 <li id="${courseSectionId}item${s}"
                     class="dojoDndItem" dndType="content">

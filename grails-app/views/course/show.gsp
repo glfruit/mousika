@@ -89,11 +89,16 @@
                 </div>
             </g:form>
         </div>
-        <g:each in="${0..<courseInstance?.numberOfWeeks + 1}" var="n">
-            <g:render template="section"
-                      model="['startDate': courseInstance.startDate,
-                              'section': courseInstance.sections[n], 'order': n]"/>
-        </g:each>
+
+        <div data-dojo-type="dojo.dnd.Source"
+             data-dojo-props="accept: ['section'], withHandles: true, autoSync: true"
+             class="dojoDndSource">
+            <g:each in="${0..<courseInstance?.numberOfWeeks + 1}" var="n">
+                <g:render template="section"
+                          model="['startDate': courseInstance.startDate,
+                                  'section': courseInstance.sections[n], 'order': n]"/>
+            </g:each>
+        </div>
         <script>
             require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/dnd/Source', 'bootstrap/Modal', 'dojo/domReady!'],
                     function (query, topic, request, domAttr) {
@@ -103,6 +108,30 @@
                             query('#sectionSeq').attr('value', csid);
                         });
                         topic.subscribe("/dnd/drop", function (source, nodes, copy, target) {
+                            var type = domAttr.get(nodes[0], 'dndType');
+                            if (type == 'section') {
+                                var oldSection = nodes[0].id.match(/^courseSection(\d+)$/)[1];
+                                var targetSection = target.current.id.match(/^courseSection(\d+)$/)[1];
+                                require(['dojo/request'], function (request) {
+                                    request.post("${request.contextPath}/courseSection/updateSeq",
+                                            {
+                                                data: {
+                                                    moveSection: true,
+                                                    courseId: "${courseInstance.id}",
+                                                    oldSection: oldSection,
+                                                    targetSection: targetSection
+                                                }
+                                            }).then(function (response) {
+                                                require(['dojo/json'], function (json) {
+                                                    if (!json.parse(response).success) {
+                                                        alert('更新失败！');
+                                                    }
+                                                });
+                                            })
+                                });
+                                return;
+                            }
+
                             var current = target.current;
                             if (current != null) {
                                 var clazz = domAttr.get(current, 'class');

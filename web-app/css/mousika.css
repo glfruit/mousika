@@ -24,3 +24,7 @@
     padding-left: 10px;
     padding-right: 10px;
 }
+
+.required {
+    color: red;
+}

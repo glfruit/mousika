@@ -1,9 +1,10 @@
 <div class="control-group">
-    <label class="control-label" for="${property}">${label}</label>
+    <label class="control-label ${required ? 'required' : ''}"
+           for="${property}">${label}<g:if test="required">*</g:if></label>
 
     <div class="controls">
         <g:if test="${type == Date}">
-            <div id="datePickerDiv" class="input-append date"
+            <div class="input-append date"
                  data-date-format="yyyy-mm-dd">
                 <input type="text" name="${property}" value="${value}"
                        readonly="true"/>

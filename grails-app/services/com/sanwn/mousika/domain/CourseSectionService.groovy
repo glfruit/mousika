@@ -9,7 +9,9 @@ class CourseSectionService {
         if (course == null) {
             throw new CourseSectionException(message: "指定ID为${courseId}的课程不存在")
         }
-        def section = CourseSection.findByCourseAndSequence(course, sectionSeq)
+        def section = CourseSection.where {
+            course == course && sequence == sectionSeq
+        }.find()
         if (section == null) {
             throw new CourseSectionException(message: "单元序号为${sectionSeq}的课程单元不存在")
         }

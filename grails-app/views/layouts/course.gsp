@@ -130,7 +130,7 @@
                                             style="padding-left: 5px;">打开编辑</span>
                                     </li>
                                     <li><i class="icon-pencil"></i><span
-                                            style="padding-left: 5px;">编辑设置</span>
+                                            style="padding-left: 5px;"><a href="${createLink(action: 'edit', id: courseInstance.id)}">编辑设置</a></span>
                                     </li>
                                     <li><i class="icon-user"></i><span
                                             style="padding-left: 5px;">成员</span>

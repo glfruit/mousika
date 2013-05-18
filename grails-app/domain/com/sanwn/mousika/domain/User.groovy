@@ -10,12 +10,14 @@ class User {
     String fullname
     String email
 
+    Date dateCreated
     Date lastAccessed
 
     static hasMany = [roles: Role, permissions: String]
 
     static constraints = {
-        username(nullable: false, blank: false, unique: true)
+        username blank: false, unique: true, size: 6..20
+        fullname blank: false
         lastAccessed nullable: true
     }
 

@@ -25,17 +25,17 @@ class BootStrap {
                     studentRole.addToPermissions("course:list,show")
                     studentRole.save()
 
-                    def user = new User(username: "admin", fullname: "无名氏", email: "ppller25@126.com", passwordHash: new Sha256Hash("admin").toHex())
+                    def user = new User(username: "admin", fullname: "无名氏", email: "ppller25@126.com", dateCreated: new Date(), passwordHash: new Sha256Hash("admin").toHex())
                     user.addToRoles(adminRole)
                     user.save()
 
-                    user = new User(username: "glix", fullname: "李果", email: "glfruit80@gmail.com", passwordHash: new Sha256Hash("test").toHex())
+                    user = new User(username: "glix", fullname: "李果", email: "glfruit80@gmail.com", dateCreated: new Date(), passwordHash: new Sha256Hash("test").toHex())
                     user.save()
 
-                    user = new User(username: "linda", fullname: "李彦熹", email: "linda@123.com", passwordHash: new Sha256Hash("test").toHex())
+                    user = new User(username: "linda", fullname: "李彦熹", email: "linda@123.com", dateCreated: new Date(), passwordHash: new Sha256Hash("test").toHex())
                     user.save()
 
-                    user = new User(username: "test1", fullname: "彭启华", email: "ppller25@126.com", passwordHash: new Sha256Hash("test").toHex())
+                    user = new User(username: "test1", fullname: "彭启华", email: "ppller25@126.com", dateCreated: new Date(), passwordHash: new Sha256Hash("test").toHex())
                     user.save()
                 }
             }

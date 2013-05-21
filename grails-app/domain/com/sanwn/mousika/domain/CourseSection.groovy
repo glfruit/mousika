@@ -9,7 +9,7 @@ class CourseSection {
 
     String title
 
-    SortedSet<Content> contents
+    List<Content> contents
 
     static belongsTo = [course: Course]
 
@@ -19,5 +19,7 @@ class CourseSection {
     }
 
     static mapping = {
+        sort sequence: 'asc'
+        contents sort: 'sequence'
     }
 }

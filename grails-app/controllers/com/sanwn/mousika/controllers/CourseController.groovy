@@ -47,7 +47,11 @@ class CourseController {
         params.max = 10
         params.sort = 'title'
         params.offset = 0
-        def courses = Course.findAllByGuestVisible(true, params)
+        def courses
+        if (SecurityUtils.subject.authenticated) {
+            courses = Course.list(params)
+        } else
+            courses = Course.findAllByGuestVisible(true, params)
         withFormat {
             html courses: courses
             json {
@@ -74,7 +78,6 @@ class CourseController {
     def save() {
         params.startDate = params.date('startDate')
         def startDate = params.startDate
-        println "============StartDate is ${startDate}=================="
         def courseInstance = new Course(params)
         def section = new CourseSection(sequence: 0, title: '')
         courseInstance.addToSections(section)

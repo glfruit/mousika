@@ -1,5 +1,7 @@
 package com.sanwn.mousika.domain
 
+import com.sanwn.mousika.Profile
+
 class User {
 
     static searchable = true
@@ -8,17 +10,17 @@ class User {
     String passwordHash
 
     String fullname
-    String email
 
     Date dateCreated
-    Date lastAccessed
 
     static hasMany = [roles: Role, permissions: String]
+
+    static hasOne = [profile: Profile]
 
     static constraints = {
         username blank: false, unique: true, size: 6..20
         fullname blank: false
-        lastAccessed nullable: true
+        profile nullable: true
     }
 
     static mapping = {

@@ -1,6 +1,6 @@
 package com.sanwn.mousika.domain
 
-class Content implements Comparable {
+class Content {
 
     int sequence
 
@@ -20,10 +20,5 @@ class Content implements Comparable {
 
     static mapping = {
         description column: "description", sqlType: "text"
-    }
-
-    @Override
-    int compareTo(Object o) {
-        return sequence - o.sequence
     }
 }

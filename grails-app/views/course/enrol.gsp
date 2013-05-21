@@ -42,9 +42,9 @@
                     <g:each in="${users}" var="u" status="i">
                         <tr>
                             <td>${i + 1}</td>
-                            <td>img</td>
+                            <td>${u.profile?.photo}</td>
                             <td>${u.fullname}</td>
-                            <td>${u.email}</td>
+                            <td>${u.profile?.email}</td>
                             <td>
                                 <g:form id="userForm${i + 1}" controller="user"
                                         action="assign">

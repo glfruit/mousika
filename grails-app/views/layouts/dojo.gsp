@@ -121,6 +121,14 @@
             <div class="row-fluid">
                 <div class="span2">
                     <h4 style="border-bottom: 1px solid #000;color: #777777;">导航</h4>
+                    <shiro:hasRole name="系统管理员">
+                        <div data-dojo-type="dijit/TitlePane"
+                             data-dojo-props="title: '系统管理'"
+                             style="padding-bottom: 10px;">
+                            <p><a href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
+                            </p>
+                        </div>
+                    </shiro:hasRole>
                     <shiro:hasRole name="教师">
                         <div>
                             <p id="courseAdminTitle" style="cursor: pointer;"><i

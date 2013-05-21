@@ -13,7 +13,7 @@ class Assignment extends Content {
      * 文件：file
      * 离线：offline
      */
-    String style
+    String style = 'online'
 
     /**
      * 作业开始日期
@@ -39,5 +39,6 @@ class Assignment extends Content {
         filePath nullable: true, blank: false
         availableFrom nullable: true
         dueDate nullable: true
+        lateSubmitAllowed nullable: true
     }
 }

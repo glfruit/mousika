@@ -71,7 +71,8 @@
 
                         <span class="property-value"
                               aria-labelledby="description-label">
-                            ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(pageInstance.content)}
+                            ${pageInstance.content}
+                            %{--${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(pageInstance.content)}--}%
                         </span>
 
                     </li>

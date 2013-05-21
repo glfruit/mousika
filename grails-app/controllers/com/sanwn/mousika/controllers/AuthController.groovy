@@ -1,5 +1,6 @@
 package com.sanwn.mousika.controllers
 
+import com.sanwn.mousika.Profile
 import com.sanwn.mousika.domain.User
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
@@ -9,6 +10,8 @@ import org.apache.shiro.web.util.WebUtils
 class AuthController {
 
     def shiroSecurityManager
+
+    def userService
 
     def index = { redirect(action: "login", params: params) }
 
@@ -41,7 +44,10 @@ class AuthController {
             // password is incorrect.
             log.info("用户[${params.username}]尝试登录")
             SecurityUtils.subject.login(authToken)
-            User.findByUsername(params.username).lastAccessed = new Date()
+            def u = User.where {
+                username == params.username
+            }.find()
+            userService.createOrUpdateProfileOf(u)
 
             log.info "Redirecting to '${targetUri}'."
             redirect(uri: targetUri)

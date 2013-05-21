@@ -20,9 +20,10 @@
 }
 
 .course-intro {
-    border: 1px solid #777777;
+    border: 1px solid #DDDDDD;
     padding-left: 10px;
     padding-right: 10px;
+    margin: 10px 0px;
 }
 
 .required {

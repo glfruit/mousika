@@ -197,8 +197,8 @@ class CourseController {
         def json = members.collect { member ->
             [
                     fullname: member.fullname,
-                    email: member.email,
-                    lastAccessed: member.lastAccessed,
+                    email: member.profile?.email,
+                    lastAccessed: member.profile?.lastAccessed,
                     roles: member.roles.collect { [id: it.id, name: it.name] }
             ]
         }

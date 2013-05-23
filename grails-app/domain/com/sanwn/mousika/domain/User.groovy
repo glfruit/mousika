@@ -18,7 +18,7 @@ class User {
     static hasOne = [profile: Profile]
 
     static constraints = {
-        username blank: false, unique: true, size: 6..20
+        username blank: false, unique: true, size: 5..20
         fullname blank: false
         profile nullable: true
     }

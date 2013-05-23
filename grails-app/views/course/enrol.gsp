@@ -98,8 +98,8 @@
                 <g:each in="${members}" var="member">
                     <tr>
                         <td>${member.fullname}</td>
-                        <td>${member.email}</td>
-                        <td><g:formatDate date="${member.lastAccessed}"
+                        <td>${member.profile?.email}</td>
+                        <td><g:formatDate date="${member.profile?.lastAccessed}"
                                           format="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
                             <g:each in="${member.roles}" var="role">

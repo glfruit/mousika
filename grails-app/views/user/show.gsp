@@ -13,9 +13,9 @@
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
             <div class="well">
-                <p><span style="font: bolder;">电子邮件：</span>${userInstance.email}</p>
+                <p><span style="font: bolder;">电子邮件：</span>${userInstance.profile?.email}</p>
 
-                <p>上次访问时间：${userInstance.lastAccessed ?: 'N/A'}</p>
+                <p>上次访问时间：${userInstance.profile?.lastAccessed ?: 'N/A'}</p>
             </div>
             <g:link controller="message" action="create">发送消息</g:link>
         </div>

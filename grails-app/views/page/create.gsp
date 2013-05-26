@@ -69,12 +69,12 @@
                 </fieldset>
             </g:form>
             <script>
-                require(['dojo/query','dojo/dom-attr'], function (query,domAttr) {
+                require(['dojo/query', 'dojo/dom-attr'], function (query, domAttr) {
                     query('#createAndShowBtn').on('click', function () {
-                        domAttr.set(query('#returnToCourse'),'value','false');
+                        domAttr.set(query('#returnToCourse')[0], 'value', 'false');
                     });
                     query('#createAndReturnBtn').on('click', function () {
-                        domAttr.set(query('#returnToCourse','value','true'));
+                        domAttr.set(query('#returnToCourse')[0], 'value', 'true');
                     });
                 });
             </script>

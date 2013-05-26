@@ -6,7 +6,7 @@
         <g:if test="${type == Date}">
             <div class="input-append date"
                  data-date-format="yyyy-mm-dd">
-                <input type="text" name="${property}" value="${value}"
+                <input type="text" name="${property}" value="${formatDate(date:value,type:'date',style:'medium')}"
                        readonly="true"/>
                 <span class="add-on"><i class="icon-th"></i></span>
             </div>

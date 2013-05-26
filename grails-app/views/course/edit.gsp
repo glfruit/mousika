@@ -2,10 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <g:set var="entityName"
-               value="${message(code: 'course.label', default: 'Course')}"/>
-        <title><g:message code="default.edit.label"
-                          args="[entityName]"/></title>
+        <title><g:message code="course.edit.label"/></title>
         <g:javascript src="../tiny_mce/tiny_mce.js"/>
         <r:script>
             tinyMCE.init({
@@ -28,8 +25,7 @@
     </head>
 
     <body>
-        <div id="edit-course" class="content scaffold-edit" role="main">
-            <h1><g:message code="default.edit.label" args="[entityName]"/></h1>
+        <div id="edit-course" class="content scaffold-create" role="main">
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -41,30 +37,31 @@
                     </g:eachError>
                 </ul>
             </g:hasErrors>
-            <g:form method="post">
-                <g:hiddenField name="id" value="${courseInstance?.id}"/>
-                <g:hiddenField name="version"
-                               value="${courseInstance?.version}"/>
-                <fieldset class="form">
-                    <f:with bean="courseInstance">
-                        <f:field property="code"/>
-                        <f:field property="title"/>
-                        <f:field property="description"/>
-                        <f:field property="startDate"/>
-                        <f:field property="numberOfWeeks"/>
-                        <f:field property="available"/>
-                        <f:field property="guestVisible"/>
-                    </f:with>
-                </fieldset>
-                <fieldset class="buttons">
-                    <g:actionSubmit class="save" action="update"
-                                    value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-                    <g:actionSubmit class="delete" action="delete"
-                                    value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-                                    formnovalidate=""
-                                    onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
-                </fieldset>
+            <g:form id="create-course-form" action="save"
+                    class="form-horizontal">
+                <f:with bean="courseInstance">
+                    <f:field property="code"/>
+                    <f:field property="title"/>
+                    <f:field property="description"/>
+                    <f:field property="startDate"/>
+                    <f:field property="numberOfWeeks"/>
+                    <f:field property="available"/>
+                    <f:field property="guestVisible"/>
+                </f:with>
+                <div class="control-group pagination-centered">
+                    <g:actionSubmit action="update" class="btn btn-primary"
+                                    value="${message(code: 'default.button.update.label')}"/>
+                    <a class="btn" href="${createLink(action: 'list')}">取消</a>
+                </div>
             </g:form>
         </div>
+        <script>
+            require(['dojo/query', 'bootstrap/Datepicker'], function (query) {
+                query(".date").datepicker({
+                    format: 'yyyy-mm-dd',
+                    weekStart: 1
+                });
+            });
+        </script>
     </body>
 </html>

@@ -21,12 +21,14 @@ class CourseSectionService {
         }
         def targetContent = Content.findBySectionAndSequence(section, newPos)
         if (targetContent == null) {
-            if (targetContent == null) {
-                throw new CourseSectionException(message: "序号为${newPos}的内容不存在", courseSection: section)
-            }
+            throw new CourseSectionException(message: "序号为${newPos}的内容不存在", courseSection: section)
         }
-        targetContent.sequence = oldPos
+        targetContent.sequence = -1
         content.sequence = newPos
+        targetContent.sequence = oldPos
+        if(!targetContent.save() || !content.save()) {
+            throw new CourseSectionException(message: "更新内容序列时出错",courseSection: section)
+        }
     }
 
     def moveContentBetweenSections(courseId, sourceSectionSeq, targetSectionSeq, oldPos, newPos) {

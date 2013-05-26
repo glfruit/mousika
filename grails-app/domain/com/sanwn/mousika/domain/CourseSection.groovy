@@ -9,8 +9,6 @@ class CourseSection {
 
     String title
 
-    List<Content> contents
-
     static belongsTo = [course: Course]
 
     static hasMany = [contents: Content]

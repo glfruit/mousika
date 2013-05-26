@@ -70,6 +70,10 @@ grails.project.dependency.resolution = {
         compile ":platform-core:1.0.RC5"
         compile ":fields:1.3"
 
+        compile ':heroku:1.0.1'
+        compile ':cloud-support:1.0.8'
+
+
         build ":tomcat:$grailsVersion"
 
         runtime ":database-migration:1.2.1"

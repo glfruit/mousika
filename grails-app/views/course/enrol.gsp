@@ -164,7 +164,7 @@
                                             arrayUtil.forEach(users, function (user) {
                                                 var tr = domConstruct.create('tr', null, query('#userRows')[0]);
                                                 domConstruct.create("td", {innerHTML: user.fullname}, tr);
-                                                domConstruct.create("td", {innerHTML: user.email}, tr);
+                                                domConstruct.create("td", {innerHTML: user.profile ? user.profile.email : ''}, tr);
                                                 var lastAccessed = 'N/A';
                                                 if (user.lastAccessed) {
                                                     lastAccessed = locale.format(user.lastAccessed, {

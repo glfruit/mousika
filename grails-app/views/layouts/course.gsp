@@ -125,7 +125,7 @@
                         </p>
                     </div>
                 </shiro:hasRole>
-                <g:if test="${controllerName == 'course' && actionName == 'show'}">
+                <g:if test="${controllerName == 'course' && (actionName == 'show' || actionName == 'edit')}">
                     <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
                         <div>
                             <p id="courseAdminTitle"

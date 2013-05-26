@@ -135,7 +135,10 @@
                             <ul id="courseAdmin" style="list-style: none;">
                                 <li id="turn-edit-on-or-off"><i
                                         class="icon-edit"></i><a href="#"
-                                                                 style="padding-left: 5px;">打开编辑</a>
+                                                                 style="padding-left: 5px;"><span
+                                            class="edit-course-region hide">打开编辑</span>
+                                    <span class="edit-course-region">关闭编辑</span>
+                                </a>
                                 </li>
                                 <li><i class="icon-pencil"></i><span
                                         style="padding-left: 5px;"><a
@@ -190,8 +193,7 @@
             <script>
                 require(['dojo/query', 'dojo/dom-class'], function (query, domClass) {
                     query('#turn-edit-on-or-off').on('click', function () {
-//                        alert("hi");
-                        query("a[href='#addActivityOrResourceModal']").forEach(function (node) {
+                        query(".edit-course-region").forEach(function (node) {
                             domClass.toggle(node, 'hide');
                         });
                     });

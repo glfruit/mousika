@@ -13,7 +13,7 @@
 <div
         style="width:5%;display:table-cell;background: none repeat scroll 0% 0% ${today >= beginDate && today <= endDate ? 'rgb(255,217,145)' : '#FFFFFF'};">
     <g:if test="${section.sequence != 0}">
-        <i class="icon-move dojoDndHandle"
+        <i class="edit-course-region icon-move dojoDndHandle"
            style="position:relative;top:5px;left:10px;cursor: move;"></i>
     </g:if>
 </div>
@@ -42,23 +42,26 @@
             <li id="${courseSectionId}item${s}"
                 class="dojoDndItem" dndType="content">
                 <div style="display: inline;">
-                <div style="float: left; padding-right: 3em;">
-                    <g:if test="${content.type != 'label'}">
-                        <a href="${createLink(controller: content.type, action: 'show', id: content.id)}">
-                            ${content.title}
-                        </a>
-                        <span class="resource-link-details"></span>
-                        </div>
-                    </g:if>
-                    <g:else>
-                        ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(content.labelContent)}
-                    </g:else>
-                    <span class="commands">
-                        <a href="#"><i class="icon-pencil"></i></a>
-                        <a href="#" style="cursor: move;"><i
-                                class="icon-move dojoDndHandle"></i></a>
-                        <a href="#"><i class="icon-eye-open"></i></a>
-                    </span>
+                    <div style="float: left; padding-right: 3em;">
+                        <g:if test="${content.type != 'label'}">
+                            <a href="${createLink(controller: content.type, action: 'show', id: content.id)}">
+                                ${content.title}
+                            </a>
+                            <span class="resource-link-details"></span>
+                        </g:if>
+                        <g:else>
+                            ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(content.labelContent)}
+                        </g:else>
+                    </div>
+
+                    <div class="edit-course-region">
+                        <span class="commands">
+                            <a href="#"><i class="icon-pencil"></i></a>
+                            <a href="#" style="cursor: move;"><i
+                                    class="icon-move dojoDndHandle"></i></a>
+                            <a href="#"><i class="icon-eye-open"></i></a>
+                        </span>
+                    </div>
                 </div>
 
                 <div style="clear: both"></div>
@@ -66,7 +69,7 @@
         </g:each>
     </ul>
 
-    <div class="pagination pagination-right">
+    <div class="pagination pagination-right edit-course-region">
         <a id="csl${order}" href="#addActivityOrResourceModal"
            role="button"
            data-toggle="modal"

@@ -40,7 +40,7 @@
 	<key>ColumnAlign</key>
 	<integer>1</integer>
 	<key>ColumnSpacing</key>
-	<real>36</real>
+	<real>56.692913055419922</real>
 	<key>CreationDate</key>
 	<string>2013-03-23 07:09:43 +0000</string>
 	<key>Creator</key>
@@ -53,7 +53,7 @@
 	<array>
 		<dict>
 			<key>Bounds</key>
-			<string>{{79.593375572318081, 440.29765061517941}, {40, 8.2981410731596092}}</string>
+			<string>{{80.425163036161834, 443.06479134550045}, {40, 8.2981410731596092}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -104,7 +104,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{68.119368565017268, 427.18492178570273}, {60, 8.2981410731596092}}</string>
+			<string>{{70.425163036161834, 427.18492178570273}, {60, 8.2981410731596092}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -155,7 +155,7 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{68.119375839943046, 411.30505137554951}, {60, 8.2981410731596092}}</string>
+			<string>{{70.425163036161834, 411.30505137554951}, {60, 8.2981410731596092}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>FontInfo</key>
@@ -683,11 +683,11 @@
 		</dict>
 		<dict>
 			<key>Bounds</key>
-			<string>{{59.818544186654748, 360.09672207540126}, {6.6410512924194336, 6.6410512924194336}}</string>
+			<string>{{59.818543477717249, 309.66546827042447}, {6.6410512924194336, 6.6410512924194336}}</string>
 			<key>Class</key>
 			<string>ShapedGraphic</string>
 			<key>ID</key>
-			<integer>69549</integer>
+			<integer>69564</integer>
 			<key>Rotation</key>
 			<real>90</real>
 			<key>Shape</key>
@@ -3574,7 +3574,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-05-21 23:04:17 +0000</string>
+	<string>2013-05-26 08:20:09 +0000</string>
 	<key>Modifier</key>
 	<string>glix</string>
 	<key>NotesVisible</key>
@@ -3635,7 +3635,7 @@
 	<key>RowAlign</key>
 	<integer>1</integer>
 	<key>RowSpacing</key>
-	<real>36</real>
+	<real>28.346456527709961</real>
 	<key>SheetTitle</key>
 	<string>版面 1</string>
 	<key>SmartAlignmentGuidesActive</key>

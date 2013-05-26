@@ -51,7 +51,8 @@
                 <div class="control-group pagination-centered">
                     <g:actionSubmit action="update" class="btn btn-primary"
                                     value="${message(code: 'default.button.update.label')}"/>
-                    <a class="btn" href="${createLink(action: 'list')}">取消</a>
+                    <a class="btn"
+                       href="${createLink(action: 'show', id: courseInstance.id)}">取消</a>
                 </div>
             </g:form>
         </div>

@@ -146,7 +146,9 @@
                                 </span>
                                 </li>
                                 <li><i class="icon-user"></i><span
-                                        style="padding-left: 5px;">成员</span>
+                                        style="padding-left: 5px;"><a
+                                            href="${createLink(action: 'listMembers', id: courseInstance.id)}">成员</a>
+                                </span>
                                 </li>
                                 <li><i class="icon-list"></i><span
                                         style="padding-left: 5px;">成绩</span>

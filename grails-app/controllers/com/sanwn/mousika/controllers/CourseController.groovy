@@ -194,16 +194,23 @@ class CourseController {
     def listMembers(Long id) {
         def course = Course.get(id)
         def members = course.courseMembers.user
-        def json = members.collect { member ->
-            [
-                    fullname: member.fullname,
-                    email: member.profile?.email,
-                    lastAccessed: member.profile?.lastAccessed,
-                    roles: member.roles.collect { [id: it.id, name: it.name] }
-            ]
+        withFormat {
+            html {
+                [members: members, courseId: course.id]
+            }
+            json {
+                def json = members.collect { member ->
+                    [
+                            fullname: member.fullname,
+                            email: member.profile?.email,
+                            lastAccessed: member.profile?.lastAccessed,
+                            roles: member.roles.collect { [id: it.id, name: it.name] }
+                    ]
+                }
+                def gson = gsonBuilder.create()
+                render contentType: "text/json", text: gson.toJson(json)
+            }
         }
-        def gson = gsonBuilder.create()
-        render contentType: "text/json", text: gson.toJson(json)
     }
 
     def addResource() {

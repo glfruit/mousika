@@ -157,7 +157,11 @@
                     });
                     query("#enrol-done").on("click", function () {
                         require(['dojo/request'], function (request) {
-                            request.post("${request.contextPath}/course/listMembers/${params.id}").then(function (response) {
+                            request.post("${request.contextPath}/course/listMembers/${params.id}",{
+                                headers: {
+                                    'Accept' : 'application/json'
+                                }
+                            }).then(function (response) {
                                 require(['dojo/dom', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/json', 'dojo/query', 'dojo/date/locale'],
                                         function (dom, domConstruct, arrayUtil, json, query, locale) {
                                             var users = json.parse(response);
@@ -174,7 +178,7 @@
                                                 domConstruct.create("td", {innerHTML: lastAccessed}, tr);
                                                 var roles = '';
                                                 arrayUtil.forEach(user.roles, function (role) {
-                                                    roles = roles + role.name + '<i class="icon-remove></i>"'
+                                                    roles = roles + role.name + '<i class="icon-remove"></i>'
                                                 });
                                                 domConstruct.create("td", {innerHTML: roles}, tr);
                                             });

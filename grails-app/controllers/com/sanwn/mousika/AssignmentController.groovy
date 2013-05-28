@@ -1,6 +1,10 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.CourseSection
+import com.sanwn.mousika.domain.Course
+
+class AssignmentCommand {
+
+}
 
 class AssignmentController {
 
@@ -11,31 +15,40 @@ class AssignmentController {
     }
 
     def save() {
-        params.availableFrom = params.date('availableFrom')
-        params.dueDate = params.date('dueDate')
+        def enableAvailableFrom = params.boolean('enableAvailableFrom')
+        def enableDueDate = params.boolean('enableDueDate')
+        if (enableAvailableFrom) {
+            params.availableFrom = params.date('availableFrom')
+        } else {
+            params.remove('availableFrom')
+        }
+        if (enableDueDate) {
+            params.dueDate = params.date('dueDate')
+        } else {
+            params.remove('dueDate')
+        }
+
         def assignment = new Assignment(params)
+        def courseId = params.long('courseId')
+        def sectionSeq = params.int('sectionSeq')
         try {
-            def courseId = params.courseId
-            def sectionSeq = params.sectionSeq
-            def section = CourseSection.where {
-                course.id == courseId && sequence == sectionSeq
-            }.find()
-            section.addToContents(assignment)
-            section.save(flush: true)
-        } catch (AssignmentException e) {
-            flash.message = e.message
+            assignmentService.createAssignment(courseId, sectionSeq, assignment)
+        } catch (AssignmentException ae) {
+            flash.message = ae.message
+            render(view: 'create', model: [assignment: assignment, courseId:courseId,sectionSeq: sectionSeq])
+            return
+        } catch (Exception e) {
+            log.error("未知的异常", e)
+            flash.message = '系统内部错误'
             render(view: 'create', model: [assignment: assignment])
             return
         }
         def returnToCourse = params.boolean('returnToCourse')
         if (returnToCourse) {
-            def courseId = params.courseId
-            def sectionSeq = params.sectionSeq
-            def section = CourseSection.where {
-                course.id == courseId && sequence == sectionSeq
+            def course = Course.where {
+                id == courseId
             }.find()
-            section.addToContents(assignment)
-            redirect(controller: 'course', action: 'show', id: section.course.id)
+            redirect(controller: 'course', action: 'show', id: course.id)
         } else {
             redirect(action: 'show', id: assignment.id)
         }

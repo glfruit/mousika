@@ -9,7 +9,9 @@ class CourseSectionService {
         if (course == null) {
             throw new CourseSectionException(message: "指定ID为${courseId}的课程不存在")
         }
-        def section = CourseSection.findByCourseAndSequence(course, sectionSeq)
+        def section = CourseSection.where {
+            course == course && sequence == sectionSeq
+        }.find()
         if (section == null) {
             throw new CourseSectionException(message: "单元序号为${sectionSeq}的课程单元不存在")
         }
@@ -19,12 +21,14 @@ class CourseSectionService {
         }
         def targetContent = Content.findBySectionAndSequence(section, newPos)
         if (targetContent == null) {
-            if (targetContent == null) {
-                throw new CourseSectionException(message: "序号为${newPos}的内容不存在", courseSection: section)
-            }
+            throw new CourseSectionException(message: "序号为${newPos}的内容不存在", courseSection: section)
         }
-        targetContent.sequence = oldPos
+        targetContent.sequence = -1
         content.sequence = newPos
+        targetContent.sequence = oldPos
+        if(!targetContent.save() || !content.save()) {
+            throw new CourseSectionException(message: "更新内容序列时出错",courseSection: section)
+        }
     }
 
     def moveContentBetweenSections(courseId, sourceSectionSeq, targetSectionSeq, oldPos, newPos) {

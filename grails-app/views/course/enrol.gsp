@@ -42,9 +42,9 @@
                     <g:each in="${users}" var="u" status="i">
                         <tr>
                             <td>${i + 1}</td>
-                            <td>img</td>
+                            <td>${u.profile?.photo}</td>
                             <td>${u.fullname}</td>
-                            <td>${u.email}</td>
+                            <td>${u.profile?.email}</td>
                             <td>
                                 <g:form id="userForm${i + 1}" controller="user"
                                         action="assign">
@@ -98,8 +98,8 @@
                 <g:each in="${members}" var="member">
                     <tr>
                         <td>${member.fullname}</td>
-                        <td>${member.email}</td>
-                        <td><g:formatDate date="${member.lastAccessed}"
+                        <td>${member.profile?.email}</td>
+                        <td><g:formatDate date="${member.profile?.lastAccessed}"
                                           format="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
                             <g:each in="${member.roles}" var="role">
@@ -157,14 +157,18 @@
                     });
                     query("#enrol-done").on("click", function () {
                         require(['dojo/request'], function (request) {
-                            request.post("${request.contextPath}/course/listMembers/${params.id}").then(function (response) {
+                            request.post("${request.contextPath}/course/listMembers/${params.id}",{
+                                headers: {
+                                    'Accept' : 'application/json'
+                                }
+                            }).then(function (response) {
                                 require(['dojo/dom', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/json', 'dojo/query', 'dojo/date/locale'],
                                         function (dom, domConstruct, arrayUtil, json, query, locale) {
                                             var users = json.parse(response);
                                             arrayUtil.forEach(users, function (user) {
                                                 var tr = domConstruct.create('tr', null, query('#userRows')[0]);
                                                 domConstruct.create("td", {innerHTML: user.fullname}, tr);
-                                                domConstruct.create("td", {innerHTML: user.email}, tr);
+                                                domConstruct.create("td", {innerHTML: user.profile ? user.profile.email : ''}, tr);
                                                 var lastAccessed = 'N/A';
                                                 if (user.lastAccessed) {
                                                     lastAccessed = locale.format(user.lastAccessed, {
@@ -174,7 +178,7 @@
                                                 domConstruct.create("td", {innerHTML: lastAccessed}, tr);
                                                 var roles = '';
                                                 arrayUtil.forEach(user.roles, function (role) {
-                                                    roles = roles + role.name + '<i class="icon-remove></i>"'
+                                                    roles = roles + role.name + '<i class="icon-remove"></i>'
                                                 });
                                                 domConstruct.create("td", {innerHTML: roles}, tr);
                                             });

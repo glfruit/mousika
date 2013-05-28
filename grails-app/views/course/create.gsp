@@ -68,7 +68,7 @@
         </div>
         <script>
             require(['dojo/query', 'bootstrap/Datepicker'], function (query) {
-                query("#datePickerDiv").datepicker({
+                query(".date").datepicker({
                     format: 'yyyy-mm-dd',
                     weekStart: 1
                 });

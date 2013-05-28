@@ -10,12 +10,31 @@ import spock.lang.Specification
 @TestFor(Page)
 class PageSpec extends Specification {
 
-	def setup() {
-	}
+    def setup() {
+        mockForConstraintsTests(Page, [new Page()])
+    }
 
-	def cleanup() {
-	}
+    def cleanup() {
+    }
 
-	void "test something"() {
-	}
+//    void "test something"() {
+//        given:
+//        def page = new Page("$field", val)
+//
+//        then:
+//
+//        where:
+//
+//    }
+
+    void validateConstraints(obj, field, error) {
+        def validated = obj.validate()
+        if (error && error != 'valid') {
+            assert !validated
+            assert obj.errors[field]
+            assert error == obj.errors[field]
+        } else {
+            assert !obj.errors[field]
+        }
+    }
 }

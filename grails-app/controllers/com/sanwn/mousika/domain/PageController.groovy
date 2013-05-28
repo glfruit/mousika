@@ -1,10 +1,13 @@
 package com.sanwn.mousika.domain
 
+import com.sanwn.mousika.PageException
 import org.springframework.dao.DataIntegrityViolationException
 
 class PageController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def pageService
 
     def index() {
         redirect(action: "list", params: params)
@@ -20,21 +23,25 @@ class PageController {
     }
 
     def save() {
-        def course = Course.get(params.courseId)
-        def section = CourseSection.findByCourseAndSequence(course, params.sectionSeq)
-        def pageInstance = new Page(params)
-        section.addToContents(pageInstance)
-        if (!section.save(flush: true)) {
-            render(view: "create", model: [pageInstance: pageInstance])
+        def page
+        try {
+            def courseId = params.long('courseId')
+            def sectionSeq = params.int('sectionSeq')
+            page = pageService.createPage(courseId, sectionSeq, new Page(params))
+            def returnToCourse = params.boolean('returnToCourse')
+            if (returnToCourse) {
+                redirect(controller: 'course', action: 'show', id: params.courseId)
+            } else {
+                redirect(action: "show", id: page.id)
+            }
+        } catch (PageException pe) {
+            flash.message = pe.message
+            render(view: "create", model: [pageInstance: page])
             return
-        }
-
-        flash.message = message(code: 'default.created.message', args: [message(code: 'page.label', default: 'Page'), pageInstance.id])
-        def returnToCourse = params.boolean('returnToCourse')
-        if (returnToCourse) {
-            redirect(controller: 'course', action: 'show', id: section.course.id)
-        } else {
-            redirect(action: "show", id: pageInstance.id)
+        } catch (Exception e) {
+            flash.message = "内部错误"
+            log.error("未知异常:", e)
+            render(view: "create", model: [pageInstance: page])
         }
     }
 

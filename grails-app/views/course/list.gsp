@@ -23,7 +23,7 @@
             <g:each in="${courseInstanceList}" status="i"
                     var="courseInstance">
                 <section
-                        style="border: 1px solid #777777;padding-left: 10px;padding-right: 10px;">
+                        style="border: 1px solid #A0A0A0;padding-left: 10px;padding-right: 10px;margin-top:10px;margin-bottom: 10px;">
                     <ul class="thumbnails">
                         <li class="span5">
                             <h3>
@@ -33,7 +33,8 @@
                                 </g:link>
                             </h3>
 
-                            <p>教师：${teachers[i]?.user?.fullname}</p>
+                            <p>教师：<g:link controller="user" action="show"
+                                          id="${teachers[i]?.user?.id}">${teachers[i]?.user?.fullname}</g:link></p>
                         </li>
                         <li class="span6">
                             <g:set var="desc"

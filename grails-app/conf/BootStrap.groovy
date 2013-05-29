@@ -1,5 +1,5 @@
-import com.sanwn.mousika.domain.Role
-import com.sanwn.mousika.domain.User
+import com.sanwn.mousika.Role
+import com.sanwn.mousika.User
 import org.apache.shiro.crypto.hash.Sha256Hash
 
 class BootStrap {

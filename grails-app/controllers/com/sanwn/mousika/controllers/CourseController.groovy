@@ -1,5 +1,10 @@
 package com.sanwn.mousika.controllers
 
+import com.sanwn.mousika.Course
+import com.sanwn.mousika.CourseMember
+import com.sanwn.mousika.CourseSection
+import com.sanwn.mousika.Role
+import com.sanwn.mousika.User
 import com.sanwn.mousika.domain.*
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException

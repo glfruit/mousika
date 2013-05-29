@@ -1,6 +1,6 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.CourseSection
+import com.sanwn.mousika.CourseSection
 import org.springframework.dao.DataIntegrityViolationException
 
 class LabelController {

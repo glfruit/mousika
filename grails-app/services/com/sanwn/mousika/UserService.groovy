@@ -1,6 +1,6 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.User
+import com.sanwn.mousika.User
 
 class UserException extends RuntimeException {
 

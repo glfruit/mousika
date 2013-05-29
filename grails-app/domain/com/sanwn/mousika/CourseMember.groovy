@@ -1,4 +1,4 @@
-package com.sanwn.mousika.domain
+package com.sanwn.mousika
 
 /**
  * 表示一门课程中的成员

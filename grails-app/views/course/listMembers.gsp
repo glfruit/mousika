@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Role; com.sanwn.mousika.domain.Course" %>
+<%@ page import="com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Role; com.sanwn.mousika.Course" %>
 
 <!DOCTYPE html>
 <html>

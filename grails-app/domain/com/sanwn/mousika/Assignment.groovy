@@ -1,6 +1,6 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.Content
+import com.sanwn.mousika.Content
 
 /**
  * 代表作业的概念

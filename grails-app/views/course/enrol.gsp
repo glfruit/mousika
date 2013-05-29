@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Role; com.sanwn.mousika.domain.Course" %>
+<%@ page import="com.sanwn.mousika.Role; com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Role; com.sanwn.mousika.Course" %>
 
 <!DOCTYPE html>
 <html>
@@ -36,7 +36,7 @@
             </div>
 
             <div class="modal-body">
-                分配角色：<g:select id="roleList" name="role" from="${Role.list()}"
+                分配角色：<g:select id="roleList" name="role" from="${com.sanwn.mousika.Role.list()}"
                                optionKey="id" optionValue="name"/>
                 <table class="table table-striped">
                     <g:each in="${users}" var="u" status="i">

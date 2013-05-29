@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.domain.Role; org.apache.commons.lang.StringEscapeUtils; com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Course" %>
+<%@ page import="com.sanwn.mousika.Role; com.sanwn.mousika.domain.Role; org.apache.commons.lang.StringEscapeUtils; com.sanwn.mousika.domain.User; com.sanwn.mousika.Course" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -9,7 +9,7 @@
     </head>
 
     <body>
-        <g:if test="${org.apache.shiro.SecurityUtils.subject.hasRoles([Role.ADMIN])}">
+        <g:if test="${org.apache.shiro.SecurityUtils.subject.hasRoles([com.sanwn.mousika.Role.ADMIN])}">
             <h4 style="border-bottom: 1px solid #000;color: #777777;">
                 <g:message code="label.course.list"/>
             </h4>

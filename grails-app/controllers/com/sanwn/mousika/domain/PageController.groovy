@@ -1,5 +1,6 @@
 package com.sanwn.mousika.domain
 
+import com.sanwn.mousika.Page
 import com.sanwn.mousika.PageException
 import org.springframework.dao.DataIntegrityViolationException
 

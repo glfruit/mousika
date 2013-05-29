@@ -1,6 +1,6 @@
-import com.sanwn.mousika.domain.Course
-import com.sanwn.mousika.domain.CourseMember
-import com.sanwn.mousika.domain.CourseSection
+import com.sanwn.mousika.Course
+import com.sanwn.mousika.CourseMember
+import com.sanwn.mousika.CourseSection
 
 include 'UserFixture'
 

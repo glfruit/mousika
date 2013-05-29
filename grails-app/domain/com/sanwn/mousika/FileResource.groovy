@@ -1,6 +1,6 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.Content
+import com.sanwn.mousika.Content
 
 class FileResource extends Content {
 

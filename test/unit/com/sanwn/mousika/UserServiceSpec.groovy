@@ -12,11 +12,11 @@ import spock.lang.Specification
 @Mock(User)
 class UserServiceSpec extends Specification {
 
-    def "create and save a valid new user"() {
-        given: "a new user info is provided"
-        def user = new User()
-
-        when: "a new user is created by the service"
-        def newUser = service.createUser("username", "password")
-    }
+//    def "create and save a valid new user"() {
+//        given: "a new user info is provided"
+//        def user = new User()
+//
+//        when: "a new user is created by the service"
+//        def newUser = service.createUser("username", "password")
+//    }
 }

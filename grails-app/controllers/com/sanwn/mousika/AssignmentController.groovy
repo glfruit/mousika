@@ -1,6 +1,6 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.Course
+import com.sanwn.mousika.Course
 
 class AssignmentCommand {
 

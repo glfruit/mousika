@@ -1,4 +1,4 @@
-package com.sanwn.mousika.domain
+package com.sanwn.mousika
 
 /**
  * 代表一门课程的一个教学单元

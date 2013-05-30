@@ -13,13 +13,17 @@ class ResourceControllerSpec extends Specification {
 
     def "create a page resource"() {
         given:
-        def user = User.build(username: 'pageuser')
-        controller.userService = [
-                getCurrentUser: { return user }
-        ] as UserService
         params.type = 'page'
         params.title = 'page title'
         params.content = 'This is a page'
+
+        def user = User.build(username: 'pageuser')
+        controller.resourceService = [
+                createResource: { type, title, description, params ->
+                    return Resource.build(type: type, title: title, description: description,
+                            items: [content: params.content], createdBy: user)
+                }
+        ] as ResourceService
 
         when:
         controller.save()

@@ -13,6 +13,11 @@ class Resource {
     String title
 
     /**
+     * 资源类型
+     */
+    String type
+
+    /**
      * 资源描述
      */
     String description
@@ -29,6 +34,7 @@ class Resource {
     }
 
     static mapping = {
+        table 'mousika_resources'
         items type: HstoreType
     }
 }

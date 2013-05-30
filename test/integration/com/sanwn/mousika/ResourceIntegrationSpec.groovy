@@ -9,7 +9,8 @@ class ResourceIntegrationSpec extends IntegrationSpec {
     def "create a valid resource"() {
         given:
         def fixture = fixtureLoader.load("UserFixture")
-        def resource = new Resource(title: 'a title', description: 'some description', createdBy: fixture.user, items: ['content': 'This is a page'])
+        def resource = new Resource(title: 'a title', description: 'some description', type: 'page',
+                createdBy: fixture.user, items: ['content': 'This is a page'])
 
         when:
         resource.save()

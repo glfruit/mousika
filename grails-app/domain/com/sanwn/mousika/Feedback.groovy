@@ -1,6 +1,6 @@
 package com.sanwn.mousika
 
-class FileResource extends Content {
+class Feedback {
 
     static constraints = {
     }

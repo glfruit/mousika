@@ -64,10 +64,10 @@ grails.project.dependency.resolution = {
         //runtime ":yui-minify-resources:0.1.4"
 //        compile ":dojo:1.7.2.0"
         compile ':gson:1.1.4'
-        compile ":twitter-bootstrap:2.3.0"
+        compile ":twitter-bootstrap:2.3.2"
         compile ":searchable:0.6.4"
         compile ":taggable:1.0.1"
-        compile ":platform-core:1.0.RC5"
+//        compile ":platform-core:1.0.RC5"
         compile ":fields:1.3"
 
         compile ':heroku:1.0.1'
@@ -76,7 +76,7 @@ grails.project.dependency.resolution = {
 
         build ":tomcat:$grailsVersion"
 
-        runtime ":database-migration:1.2.1"
+        runtime ":database-migration:1.3.3"
         compile ':cache:1.0.1'
         compile ":shiro:1.2.0-SNAPSHOT"
         compile ":codenarc:0.18.1"

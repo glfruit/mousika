@@ -22,22 +22,18 @@
                 plugin_preview_height: "600"
             });
         </r:script>
-        <g:set var="entityName"
-               value="${message(code: 'page.label', default: 'Page')}"/>
-        <title><g:message code="default.create.label"
-                          args="[entityName]"/></title>
+        <title><g:message code="resource.create.label"/></title>
     </head>
 
     <body>
-        <div id="create-page" class="content scaffold-create" role="main">
-            <h3><g:message code="page.create.label"
-                           args="[entityName]"/></h3>
+        <div id="create-resource" class="content scaffold-create" role="main">
+            <h3><g:message code="resource.create.label"/></h3>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
-            <g:hasErrors bean="${pageInstance}">
+            <g:hasErrors bean="${resource}">
                 <ul class="errors" role="alert">
-                    <g:eachError bean="${pageInstance}" var="error">
+                    <g:eachError bean="${resource}" var="error">
                         <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message
                                 error="${error}"/></li>
                     </g:eachError>
@@ -45,7 +41,7 @@
             </g:hasErrors>
             <g:form action="save" class="form-horizontal">
                 <fieldset class="form">
-                    <f:with bean="pageInstance">
+                    <f:with bean="resource">
                         <g:hiddenField name="courseId" id="courseId"
                                        value="${courseId}"/>
                         <g:hiddenField name="sectionSeq" id="sectionSeq"
@@ -54,7 +50,7 @@
                                        value="false"/>
                         <f:field property="title" required="true"/>
                         <f:field property="description"/>
-                        <f:field property="content"/>
+                        <g:render template="${type}"/>
                     </f:with>
                 </fieldset>
                 <fieldset class="buttons">

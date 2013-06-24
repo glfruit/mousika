@@ -122,34 +122,28 @@
                 <div class="span2">
                     <h4 style="border-bottom: 1px solid #000;color: #777777;">导航</h4>
                     <shiro:hasRole name="系统管理员">
-                        <div>
-                            <p id="courseAdminTitle" style="cursor: pointer;"><i
-                                    id="titleIcon"
-                                    class="icon-chevron-right"></i><span>个人信息管理</span>
+                        <div data-dojo-type="dijit/TitlePane"
+                             data-dojo-props="title: '系统管理'"
+                             style="padding-bottom: 10px;">
+                            <p><i class="icon-user"></i> <a
+                                    href="${createLink(controller: 'user', action: 'list')}">用户列表</a>
                             </p>
-                            <ul id="courseAdmin" style="list-style: none;">
-                                <li><i class="icon-edit"></i>编辑个人信息</li>
-                                <li><i class="icon-pencil"></i>编辑设置</li>
-                                <li><i class="icon-user"></i>成员</li>
-                                <li><i class="icon-list"></i> 成绩</li>
-                                <li><i class="icon-arrow-up"></i> 导入</li>
-                            </ul>
+
+                            <p>
+                                <i class="icon-lock"></i>
+                                <a href="${createLink(controller: 'user', action: 'privilege')}">权限管理</a>
+                            </p>
                         </div>
-                        <script>
-                            require(['dojo/on', 'dojo/dom', 'dojo/dom-style', 'dojo/dom-class'], function (on, dom, domStyle, domClass) {
-                                on(dom.byId('courseAdminTitle'), "click", function () {
-                                    if (domClass.contains("titleIcon", "icon-chevron-right")) {
-                                        domClass.replace("titleIcon", "icon-chevron-down", "icon-chevron-right");
-                                    } else {
-                                        domClass.replace("titleIcon", "icon-chevron-right", "icon-chevron-down");
-                                    }
-                                    var display = domStyle.get(dom.byId('courseAdmin'), 'display');
-                                    display = display == "none" ? "block" : "none";
-                                    domStyle.set(dom.byId('courseAdmin'), 'display', display);
-                                });
-                            });
-                        </script>
                     </shiro:hasRole>
+                    <g:if test="${actionName == 'show'}">
+                        <shiro:authenticated>
+                            <div data-dojo-type="dijit/TitlePane"
+                                 data-dojo-props="title:'个人信息管理'">
+                                <p><a href="${createLink()}基本信息</p>
+                                <p>更改密码</p>
+                            </div>
+                        </shiro:authenticated>
+                    </g:if>
                 </div>
 
                 <div class="span7">

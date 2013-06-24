@@ -61,13 +61,6 @@
         require(['dojo/parser', 'dijit/dijit', 'dijit/Calendar', 'dijit/TitlePane']);
     </script>
 %{--<r:require module="ember"/>--}%
-    <shiro:hasRole name="教师">
-        <style type="text/css">
-        #courseAdmin {
-            display: none;
-        }
-        </style>
-    </shiro:hasRole>
     <g:layoutHead/>
     <r:layoutResources/>
 </head>
@@ -117,15 +110,6 @@
                 <h4 style="border-bottom: 1px solid #000;color: #777777;">
                     <g:message code="label.app.menu.nav"/>
                 </h4>
-                <shiro:hasRole name="系统管理员">
-                    <div data-dojo-type="dijit/TitlePane"
-                         data-dojo-props="title: '系统管理'"
-                         style="padding-bottom: 10px;">
-                        <p><i class="icon-user"></i> <a
-                                href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
-                        </p>
-                    </div>
-                </shiro:hasRole>
                 <g:if test="${controllerName == 'course' && (actionName == 'show')}">
                     <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
                         <div id="course-admin-panel"
@@ -159,7 +143,31 @@
                             </ul>
                         </div>
                     </shiro:hasAnyRole>
+                    <shiro:hasRole name="教师">
+                        <div data-dojo-type="dijit/TitlePane"
+                             data-dojo-props="title: '我的个人文件'"
+                             style="padding-bottom: 10px;">
+                            <p>
+                                <g:if test="${fileRepository?.items?.size() > 0}">
+                                     <!-- TODO -->
+                                </g:if>
+                                <g:else>
+                                    没有任何文件
+                                </g:else>
+                            </p>
+                            <button class="btn">管理我的个人文件</button>
+                        </div>
+                    </shiro:hasRole>
                 </g:if>
+                <shiro:hasRole name="系统管理员">
+                    <div data-dojo-type="dijit/TitlePane"
+                         data-dojo-props="title: '系统管理'"
+                         style="padding-bottom: 10px;">
+                        <p><i class="icon-user"></i> <a
+                                href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
+                        </p>
+                    </div>
+                </shiro:hasRole>
             </div>
 
             <div class="span7">

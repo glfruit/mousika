@@ -10,6 +10,8 @@
         <div id="list-user" class="content scaffold-show" role="main">
             <h4 style="text-align: center;"><g:message
                     code="user.list.label"/></h4>
+            <g:link action="create" class="btn pull-right">批量添加用户</g:link>
+            <g:link action="create" class="btn pull-right">添加用户</g:link>
             <table class="table">
                 <thead>
                     <tr>
@@ -25,7 +27,7 @@
                         <tr>
                             <td>${user.username}</td>
                             <td>${user.fullname}</td>
-                            <td>${user.email}</td>
+                            <td>${user.profile?.email}</td>
                             <td><g:formatDate format="yyyy-MM-dd HH:mm:ss"
                                               date="${user.profile?.firstAccessed}"/></td>
                             <td><g:formatDate format="yyyy-MM-dd HH:mm:ss"

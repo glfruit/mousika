@@ -4,6 +4,8 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 
 class BootStrap {
 
+    def searchableService
+
     def init = { servletContext ->
         environments {
             development {
@@ -14,7 +16,11 @@ class BootStrap {
                     adminRole.save(failOnError: true)
 
                     def teacherRole = new Role(name: "教师")
-                    teacherRole.addToPermissions("course:index,list,show,admin,save,edit,update")
+                    teacherRole.addToPermissions("course:*")
+                    teacherRole.addToPermissions("assignment:*")
+                    teacherRole.addToPermissions("page:*")
+                    teacherRole.addToPermissions("feedback:*")
+                    teacherRole.addToPermissions("attempt:show")
                     teacherRole.save(failOnError: true)
 
                     def courseMgrRole = new Role(name: "课程负责人")
@@ -22,7 +28,10 @@ class BootStrap {
                     courseMgrRole.save(failOnError: true)
 
                     def studentRole = new Role(name: "学生")
-                    studentRole.addToPermissions("course:list,show")
+                    studentRole.addToPermissions("course:index,list")
+                    studentRole.addToPermissions("assignment:show")
+                    studentRole.addToPermissions("attempt:create,update")
+                    studentRole.addToPermissions("feedback:show")
                     studentRole.save(failOnError: true)
 
                     def user = new User(username: "admin", fullname: "无名氏", email: "ppller25@126.com", dateCreated: new Date(), passwordHash: new Sha256Hash("admin").toHex())
@@ -40,6 +49,11 @@ class BootStrap {
                 }
             }
         }
+        println "Performing bulk index"
+        searchableService.reindex()
+        println "Starting mirror service"
+        searchableService.startMirroring()
+
     }
     def destroy = {
     }

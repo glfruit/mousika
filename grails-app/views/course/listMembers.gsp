@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Role; com.sanwn.mousika.Course" %>
+<%@ page import="com.sanwn.mousika.User; com.sanwn.mousika.Role; com.sanwn.mousika.Course" %>
 
 <!DOCTYPE html>
 <html>
@@ -25,6 +25,7 @@
         </h4>
         <table class="table">
             <thead>
+                <th>用户名</th>
                 <th>姓名</th>
                 <th>电子邮件</th>
                 <th>最后访问时间</th>
@@ -33,6 +34,7 @@
             <tbody id="userRows">
                 <g:each in="${members}" var="member">
                     <tr>
+                        <td>${member.username}</td>
                         <td>${member.fullname}</td>
                         <td>${member.profile?.email}</td>
                         <td><g:formatDate date="${member.profile?.lastAccessed}"

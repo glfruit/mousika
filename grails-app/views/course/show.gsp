@@ -1,9 +1,6 @@
 <html>
 <head>
-    <g:set var="entityName"
-           value="${message(code: 'course.label', default: 'Course')}"/>
-    <title><g:message code="default.list.label"
-                      args="[entityName]"/></title>
+    <title>${courseInstance?.title}</title>
     <style>
     .commands {
         white-space: nowrap;
@@ -100,107 +97,107 @@
         </g:each>
     </div>
     <script>
-        require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/dnd/Source', 'bootstrap/Modal', 'dojo/domReady!'],
+        require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on','dojo/dnd/Source', 'bootstrap/Modal', 'dojo/domReady!'],
                 function (query, topic, request, domAttr) {
                     query(".addContent").on('click', function (e) {
                         var csid = query(e.target).parent().attr('id');
                         csid = /csl(\d+)/.exec(csid)[1];
                         query('#sectionSeq').attr('value', csid);
                     });
-                    topic.subscribe("/dnd/drop", function (source, nodes, copy, target) {
-                        var type = domAttr.get(nodes[0], 'dndType');
-                        if (type == 'section') {
-                            var oldId = nodes[0].id;
-                            var current = target.current;
-                            var targetId = current.id;
-                            var oldSection = oldId.match(/^courseSection(\d+)$/)[1];
-                            var targetSection = targetId.match(/^courseSection(\d+)$/)[1];
-                            require(['dojo/request'], function (request) {
-                                request.post("${request.contextPath}/courseSection/updateSeq",
-                                        {
-                                            data: {
-                                                moveSection: true,
-                                                courseId: "${courseInstance.id}",
-                                                oldSection: oldSection,
-                                                targetSection: targetSection
-                                            }
-                                        }).then(function (response) {
-                                            require(['dojo/json'], function (json) {
-                                                if (!json.parse(response).success) {
-                                                    alert('更新失败！');
-                                                } else {
-                                                    domAttr.set(nodes[0], 'id', targetId);
-                                                    domAttr.set(current, 'id', oldId);
-                                                }
-                                            });
-                                        })
-                            });
-                            return;
-                        }
+                    %{--topic.subscribe("/dnd/drop", function (source, nodes, copy, target) {--}%
+                        %{--var type = domAttr.get(nodes[0], 'dndType');--}%
+                        %{--if (type == 'section') {--}%
+                            %{--var oldId = nodes[0].id;--}%
+                            %{--var current = target.current;--}%
+                            %{--var targetId = current.id;--}%
+                            %{--var oldSection = oldId.match(/^courseSection(\d+)$/)[1];--}%
+                            %{--var targetSection = targetId.match(/^courseSection(\d+)$/)[1];--}%
+                            %{--require(['dojo/request'], function (request) {--}%
+                                %{--request.post("${request.contextPath}/courseSection/updateSeq",--}%
+                                        %{--{--}%
+                                            %{--data: {--}%
+                                                %{--moveSection: true,--}%
+                                                %{--courseId: "${courseInstance.id}",--}%
+                                                %{--oldSection: oldSection,--}%
+                                                %{--targetSection: targetSection--}%
+                                            %{--}--}%
+                                        %{--}).then(function (response) {--}%
+                                            %{--require(['dojo/json'], function (json) {--}%
+                                                %{--if (!json.parse(response).success) {--}%
+                                                    %{--alert('更新失败！');--}%
+                                                %{--} else {--}%
+                                                    %{--domAttr.set(nodes[0], 'id', targetId);--}%
+                                                    %{--domAttr.set(current, 'id', oldId);--}%
+                                                %{--}--}%
+                                            %{--});--}%
+                                        %{--})--}%
+                            %{--});--}%
+                            %{--return;--}%
+                        %{--}--}%
 
-                        var current = target.current;
-                        if (current != null) {
-                            var clazz = domAttr.get(current, 'class');
-                            console.log(clazz);
-                        }
-                        if (source == target) {
-                            var node = nodes[0];
-                            var nodeId = node.id.match(/.*(\d+)$/)[1];
-                            var pos = current.id.match(/.*(\d+)$/)[1];
-                            if (nodeId != pos) {
-                                var sectionSeq = source.id.match(/.*(\d+)$/)[1];
-                                require(['dojo/request'], function (request) {
-                                    request.post("${request.contextPath}/courseSection/updateSeq",
-                                            {
-                                                data: {
-                                                    courseId: "${courseInstance.id}",
-                                                    sourceSeq: sectionSeq,
-                                                    internal: true,
-                                                    oldPos: nodeId,
-                                                    newPos: pos
-                                                }
-                                            }).then(function (response) {
-                                                require(['dojo/json'], function (json) {
-                                                    if (!json.parse(response).success) {
-                                                        alert('更新失败！');
-                                                    } else {
+                        %{--var current = target.current;--}%
+                        %{--if (current != null) {--}%
+                            %{--var clazz = domAttr.get(current, 'class');--}%
+                            %{--console.log(clazz);--}%
+                        %{--}--}%
+                        %{--if (source == target) {--}%
+                            %{--var node = nodes[0];--}%
+                            %{--var nodeId = node.id.match(/.*(\d+)$/)[1];--}%
+                            %{--var pos = current.id.match(/.*(\d+)$/)[1];--}%
+                            %{--if (nodeId != pos) {--}%
+                                %{--var sectionSeq = source.id.match(/.*(\d+)$/)[1];--}%
+                                %{--require(['dojo/request'], function (request) {--}%
+                                    %{--request.post("${request.contextPath}/courseSection/updateSeq",--}%
+                                            %{--{--}%
+                                                %{--data: {--}%
+                                                    %{--courseId: "${courseInstance.id}",--}%
+                                                    %{--sourceSeq: sectionSeq,--}%
+                                                    %{--internal: true,--}%
+                                                    %{--oldPos: nodeId,--}%
+                                                    %{--newPos: pos--}%
+                                                %{--}--}%
+                                            %{--}).then(function (response) {--}%
+                                                %{--require(['dojo/json'], function (json) {--}%
+                                                    %{--if (!json.parse(response).success) {--}%
+                                                        %{--alert('更新失败！');--}%
+                                                    %{--} else {--}%
 
-                                                    }
-                                                });
-                                            });
-                                });
-                            }
-                        } else {
-                            var nodeId = nodes[0].id.match(/.*(\d+)$/)[1], pos;
-                            var sourceSectionSeq = source.id.match(/.*(\d+)$/)[1];
-                            var targetSectionSeq = target.id.match(/.*(\d+)$/)[1];
-                            if (current == null) {
-                                pos = target.getAllNodes().length;
-                            } else {
-                                pos = current.id.match(/.*(\d+)$/)[1];
-                            }
-                            require(['dojo/request'], function (request) {
-                                request.post("${request.contextPath}/courseSection/updateSeq",
-                                        {
-                                            data: {
-                                                courseId: "${courseInstance.id}",
-                                                sourceSeq: sourceSectionSeq,
-                                                targetSeq: targetSectionSeq,
-                                                oldPos: nodeId,
-                                                newPos: pos
-                                            }
-                                        }).then(function (response) {
-                                            require(['dojo/json'], function (json) {
-                                                if (!json.parse(response).success) {
-                                                    alert('更新失败！'); //TODO: 1. 美化对话框； 2. 撤消拖动
-                                                } else {
+                                                    %{--}--}%
+                                                %{--});--}%
+                                            %{--});--}%
+                                %{--});--}%
+                            %{--}--}%
+                        %{--} else {--}%
+                            %{--var nodeId = nodes[0].id.match(/.*(\d+)$/)[1], pos;--}%
+                            %{--var sourceSectionSeq = source.id.match(/.*(\d+)$/)[1];--}%
+                            %{--var targetSectionSeq = target.id.match(/.*(\d+)$/)[1];--}%
+                            %{--if (current == null) {--}%
+                                %{--pos = target.getAllNodes().length;--}%
+                            %{--} else {--}%
+                                %{--pos = current.id.match(/.*(\d+)$/)[1];--}%
+                            %{--}--}%
+                            %{--require(['dojo/request'], function (request) {--}%
+                                %{--request.post("${request.contextPath}/courseSection/updateSeq",--}%
+                                        %{--{--}%
+                                            %{--data: {--}%
+                                                %{--courseId: "${courseInstance.id}",--}%
+                                                %{--sourceSeq: sourceSectionSeq,--}%
+                                                %{--targetSeq: targetSectionSeq,--}%
+                                                %{--oldPos: nodeId,--}%
+                                                %{--newPos: pos--}%
+                                            %{--}--}%
+                                        %{--}).then(function (response) {--}%
+                                            %{--require(['dojo/json'], function (json) {--}%
+                                                %{--if (!json.parse(response).success) {--}%
+                                                    %{--alert('更新失败！'); //TODO: 1. 美化对话框； 2. 撤消拖动--}%
+                                                %{--} else {--}%
 
-                                                }
-                                            });
-                                        });
-                            });
-                        }
-                    });
+                                                %{--}--}%
+                                            %{--});--}%
+                                        %{--});--}%
+                            %{--});--}%
+                        %{--}--}%
+                    %{--});--}%
                 });
     </script>
 </body>

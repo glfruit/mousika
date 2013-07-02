@@ -1,5 +1,7 @@
 package com.sanwn.mousika.domain
 
+import com.sanwn.mousika.Role
+import com.sanwn.mousika.User
 import org.springframework.dao.DataIntegrityViolationException
 
 class UserController {

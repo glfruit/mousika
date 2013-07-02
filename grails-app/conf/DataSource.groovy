@@ -13,7 +13,7 @@ hibernate {
 environments {
     development {
         dataSource {
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+            dbCreate = "update" // one of 'create', 'create-drop', 'update', 'validate', ''
             url = "jdbc:postgresql://localhost/mousika_dev"
             logSql = false
         }
@@ -21,8 +21,9 @@ environments {
     test {
         dataSource {
             dbCreate = "create-drop"
-            url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000"
-            driverClassName = "org.h2.Driver"
+            url = "jdbc:postgresql://localhost/mousika_test"
+            username = "mousika_test"
+            password = "mousika_test"
         }
     }
     production {

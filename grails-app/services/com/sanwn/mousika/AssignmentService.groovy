@@ -1,7 +1,7 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.Content
-import com.sanwn.mousika.domain.CourseSection
+import com.sanwn.mousika.Content
+import com.sanwn.mousika.CourseSection
 
 class AssignmentException extends RuntimeException {
 

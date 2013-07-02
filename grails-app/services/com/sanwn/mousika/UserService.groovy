@@ -1,6 +1,6 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.User
+import org.apache.shiro.SecurityUtils
 
 class UserException extends RuntimeException {
 
@@ -10,6 +10,14 @@ class UserException extends RuntimeException {
 }
 
 class UserService {
+
+    def User getCurrentUser() {
+        def username = SecurityUtils.getSubject().principal
+        def user = User.where {
+            username == username
+        }.find()
+        return user
+    }
 
     def createOrUpdateProfileOf(User u) {
         def profile = u.profile

@@ -1,5 +1,6 @@
 package com.sanwn.mousika.domain
 
+import com.sanwn.mousika.User
 import org.apache.shiro.authc.AccountException
 import org.apache.shiro.authc.IncorrectCredentialsException
 import org.apache.shiro.authc.UnknownAccountException

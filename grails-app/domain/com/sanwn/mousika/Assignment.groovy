@@ -1,7 +1,4 @@
 package com.sanwn.mousika
-
-import com.sanwn.mousika.domain.Content
-
 /**
  * 代表作业的概念
  */
@@ -41,4 +38,6 @@ class Assignment extends Content {
         dueDate nullable: true
         lateSubmitAllowed nullable: true
     }
+
+    static hasMany = [attempts: Attempt]
 }

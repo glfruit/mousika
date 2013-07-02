@@ -1,4 +1,4 @@
-package com.sanwn.mousika.domain
+package com.sanwn.mousika
 
 /**
  * 代表系统中的一个日历事件

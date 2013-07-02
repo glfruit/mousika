@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.domain.User; com.sanwn.mousika.domain.Role; com.sanwn.mousika.domain.Course" %>
+<%@ page import="com.sanwn.mousika.Role; com.sanwn.mousika.User; com.sanwn.mousika.Course" %>
 
 <!DOCTYPE html>
 <html>
@@ -36,7 +36,8 @@
             </div>
 
             <div class="modal-body">
-                分配角色：<g:select id="roleList" name="role" from="${Role.list()}"
+                分配角色：<g:select id="roleList" name="role"
+                               from="${com.sanwn.mousika.Role.list()}"
                                optionKey="id" optionValue="name"/>
                 <table class="table table-striped">
                     <g:each in="${users}" var="u" status="i">
@@ -157,33 +158,33 @@
                     });
                     query("#enrol-done").on("click", function () {
                         require(['dojo/request'], function (request) {
-                            request.post("${request.contextPath}/course/listMembers/${params.id}",{
+                            request.post("${request.contextPath}/course/listMembers/${params.id}", {
                                 headers: {
-                                    'Accept' : 'application/json'
+                                    'Accept': 'application/json'
                                 }
                             }).then(function (response) {
-                                require(['dojo/dom', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/json', 'dojo/query', 'dojo/date/locale'],
-                                        function (dom, domConstruct, arrayUtil, json, query, locale) {
-                                            var users = json.parse(response);
-                                            arrayUtil.forEach(users, function (user) {
-                                                var tr = domConstruct.create('tr', null, query('#userRows')[0]);
-                                                domConstruct.create("td", {innerHTML: user.fullname}, tr);
-                                                domConstruct.create("td", {innerHTML: user.profile ? user.profile.email : ''}, tr);
-                                                var lastAccessed = 'N/A';
-                                                if (user.lastAccessed) {
-                                                    lastAccessed = locale.format(user.lastAccessed, {
-                                                        datePattern: 'yyyy-MM-dd hh:mm:ss'
+                                        require(['dojo/dom', 'dojo/dom-construct', 'dojo/_base/array', 'dojo/json', 'dojo/query', 'dojo/date/locale'],
+                                                function (dom, domConstruct, arrayUtil, json, query, locale) {
+                                                    var users = json.parse(response);
+                                                    arrayUtil.forEach(users, function (user) {
+                                                        var tr = domConstruct.create('tr', null, query('#userRows')[0]);
+                                                        domConstruct.create("td", {innerHTML: user.fullname}, tr);
+                                                        domConstruct.create("td", {innerHTML: user.profile ? user.profile.email : ''}, tr);
+                                                        var lastAccessed = 'N/A';
+                                                        if (user.lastAccessed) {
+                                                            lastAccessed = locale.format(user.lastAccessed, {
+                                                                datePattern: 'yyyy-MM-dd hh:mm:ss'
+                                                            });
+                                                        }
+                                                        domConstruct.create("td", {innerHTML: lastAccessed}, tr);
+                                                        var roles = '';
+                                                        arrayUtil.forEach(user.roles, function (role) {
+                                                            roles = roles + role.name + '<i class="icon-remove"></i>'
+                                                        });
+                                                        domConstruct.create("td", {innerHTML: roles}, tr);
                                                     });
-                                                }
-                                                domConstruct.create("td", {innerHTML: lastAccessed}, tr);
-                                                var roles = '';
-                                                arrayUtil.forEach(user.roles, function (role) {
-                                                    roles = roles + role.name + '<i class="icon-remove"></i>'
                                                 });
-                                                domConstruct.create("td", {innerHTML: roles}, tr);
-                                            });
-                                        });
-                            });
+                                    });
                         });
                     });
                 });

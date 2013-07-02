@@ -1,5 +1,9 @@
 package com.sanwn.mousika.domain
 
+import com.sanwn.mousika.Content
+import com.sanwn.mousika.Course
+import com.sanwn.mousika.CourseSection
+
 class CourseSectionService {
 
     static transactional = true

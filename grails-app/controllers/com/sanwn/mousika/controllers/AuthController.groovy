@@ -1,7 +1,7 @@
 package com.sanwn.mousika.controllers
 
 import com.sanwn.mousika.Profile
-import com.sanwn.mousika.domain.User
+import com.sanwn.mousika.User
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken

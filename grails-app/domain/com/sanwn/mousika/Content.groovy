@@ -1,4 +1,4 @@
-package com.sanwn.mousika.domain
+package com.sanwn.mousika
 
 class Content {
 

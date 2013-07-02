@@ -1,5 +1,5 @@
-import com.sanwn.mousika.domain.Role
-import com.sanwn.mousika.domain.User
+import com.sanwn.mousika.Role
+import com.sanwn.mousika.User
 
 build {
     role(Role, name: 'admin')

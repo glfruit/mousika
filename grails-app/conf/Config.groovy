@@ -64,7 +64,7 @@ grails.views.javascript.library="dojo"
 environments {
     development {
         grails.logging.jul.usebridge = true
-        grails.resources.debug = true
+        grails.resources.debug = false
     }
     production {
         grails.logging.jul.usebridge = false
@@ -105,3 +105,7 @@ log4j = {
            'org.hibernate',
            'net.sf.ehcache.hibernate'
 }
+
+// disable searchable operations, will be enabled in Bootstrap.groovy
+mirrorChanges = false
+bulkIndexOnStartup = false

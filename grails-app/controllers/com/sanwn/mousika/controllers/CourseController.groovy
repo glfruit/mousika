@@ -1,6 +1,6 @@
 package com.sanwn.mousika.controllers
 
-import com.sanwn.mousika.domain.*
+import com.sanwn.mousika.*
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
 
@@ -178,11 +178,14 @@ class CourseController {
                 userCount: userCount, pages: userCount / params.max + 1, offset: params.offset]
     }
 
-    def assign(Long id) {
-        def course = Course.get(id)
+    def assign(Long courseId) {
+        def course = Course.get(courseId)
         def user = User.get(params.uid)
         def role = Role.get(params.rid)
         user.addToRoles(role)
+        if ("学生" == role.name) {
+            user.addToPermissions("course:show:${courseId}")
+        }
         def member = new CourseMember(user: user, role: role)
         course.addToCourseMembers(member)
         course.save(flush: true)
@@ -193,7 +196,9 @@ class CourseController {
 
     def listMembers(Long id) {
         def course = Course.get(id)
-        def members = course.courseMembers.user
+        def members = CourseMember.where {
+            course.id == id
+        }.order('role').order('user').list().user
         withFormat {
             html {
                 [members: members, courseId: course.id]
@@ -201,6 +206,7 @@ class CourseController {
             json {
                 def json = members.collect { member ->
                     [
+                            username: member.username,
                             fullname: member.fullname,
                             email: member.profile?.email,
                             lastAccessed: member.profile?.lastAccessed,

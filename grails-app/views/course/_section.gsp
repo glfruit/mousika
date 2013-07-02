@@ -3,7 +3,7 @@
     <div id="${courseSectionId}" class="course-section">
 </g:if>
 <g:else>
-    <div id="${courseSectionId}"
+    <div id="${courseSectionId}" data-dojo-id="${courseSectionId}"
      class="dojoDndItem course-section"
      dndType="section">
 </g:else>
@@ -32,7 +32,7 @@
         data-dojo-props="accept: ['content'], withHandles: true, autoSync: true"
         class="dojoDndSource sectionContent"
         style="list-style: none;height:100px;"
-        id="list${courseSectionId}">
+        id="list${courseSectionId}" data-dojo-id="list${courseSectionId}">
     %{--<g:if test="${section.sequence == 0}">--}%
     %{--<li class="dojoDndItem" dndType="content">--}%
     %{--<p>新闻讨论区</p>--}%

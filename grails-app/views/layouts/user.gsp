@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="zh-CN" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="zh-CN" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="zh-CN" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]>    <html lang="zh-CN" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="zh-CN" class="no-js"><!--<![endif]-->
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title><g:message
+                code="default.app.title"/><shiro:isNotLoggedIn>-${message(code: 'label.login')}</shiro:isNotLoggedIn></title>
+        <link rel="stylesheet"
+              href="${resource(dir: 'js/lib/dijit/themes/tundra', file: 'tundra.css')}"
+              type="text/css"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet"
+              href="${resource(dir: 'css', file: 'bootstrap.css')}"
+              type="text/css"/>
+        <link rel="stylesheet"
+              href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"
+              type="text/css"/>
+        <link rel="stylesheet"
+              href="${resource(dir: 'css', file: 'mousika.css')}"
+              type="text/css"/>
+        <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+
+        .tundra table.dijitCalendarContainer {
+            width: 300px;
+            margin: 10px auto;
+        }
+
+        #formatted {
+            text-align: center;
+        }
+        </style>
+        <script type="text/javascript">
+            dojoConfig = {
+                tlmSiblingOfDojo: false,
+                packages: [
+                    {
+                        name: 'bootstrap', location: "${request.contextPath}/js/lib/dojo-bootstrap"
+                    }
+                ],
+                has: {
+                    "dojo-firebug": true,
+                    "dojo-debug-messages": true,
+                    "config-tlmSiblingOfDojo": true
+                },
+                async: true,
+                parseOnLoad: true
+            };
+        </script>
+        <script type="text/javascript"
+                src="${resource(dir: 'js/lib/dojo', file: 'dojo.js')}"></script>
+        <script type="text/javascript">
+            require(['dojo/parser', 'dijit/dijit', 'dijit/Calendar', 'dijit/TitlePane']);
+        </script>
+    %{--<r:require module="ember"/>--}%
+        <shiro:hasRole name="教师">
+            <style type="text/css">
+            #courseAdmin {
+                display: none;
+            }
+            </style>
+        </shiro:hasRole>
+        <g:layoutHead/>
+        <r:layoutResources/>
+    </head>
+
+    <body class="tundra">
+        <div class="navbar navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <button type="button" class="btn btn-navbar"
+                            data-toggle="collapse" data-target=".nav-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="brand"
+                       href="${createLink(controller: 'course', action: 'list')}"><g:message
+                            code="default.app.title"/></a>
+
+                    <shiro:authenticated>
+                        <div class="pull-right">
+                            您好,<shiro:principal/><%=link(action: 'signOut', controller: 'auth') { '（注销）' }%>
+                        </div>
+                    </shiro:authenticated>
+                    <shiro:notAuthenticated>
+                        <g:form class="navbar-form pull-right"
+                                controller="auth" action="signIn">
+                            <g:if test="${flash.message}">
+                                <p class="span2"
+                                   style="color: red;padding-top:10px;">${flash.message}</p>
+                            </g:if>
+                            <input type="hidden" name="targetUri"
+                                   value="${targetUri}"/>
+                            <input class="span2" type="text"
+                                   id="username"
+                                   name="username" value="${username}"
+                                   placeholder="<g:message
+                                           code='label.login.username'/>">
+                            <input class="span2" type="password"
+                                   id="password"
+                                   name="password" value=""
+                                   placeholder="<g:message
+                                           code='label.login.password'/>">
+                            <button type="submit" class="btn login"><g:message
+                                    code="label.login"/></button>
+                        </g:form>
+                    </shiro:notAuthenticated>
+                </div><!--/.nav-collapse -->
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span2">
+                    <h4 style="border-bottom: 1px solid #000;color: #777777;">导航</h4>
+                    <shiro:hasRole name="系统管理员">
+                        <div data-dojo-type="dijit/TitlePane"
+                             data-dojo-props="title: '系统管理'"
+                             style="padding-bottom: 10px;">
+                            <p><i class="icon-user"></i> <a
+                                    href="${createLink(controller: 'user', action: 'list')}">用户列表</a>
+                            </p>
+
+                            <p>
+                                <i class="icon-lock"></i>
+                                <a href="${createLink(controller: 'user', action: 'privilege')}">权限管理</a>
+                            </p>
+                        </div>
+                    </shiro:hasRole>
+                    <g:if test="${actionName == 'show'}">
+                        <shiro:authenticated>
+                            <div data-dojo-type="dijit/TitlePane"
+                                 data-dojo-props="title:'个人信息管理'">
+                                <p><a href="${createLink()}基本信息</p>
+                                <p>更改密码</p>
+                            </div>
+                        </shiro:authenticated>
+                    </g:if>
+                </div>
+
+                <div class="span7">
+                    <g:layoutBody/>
+                    <g:javascript library="application"/>
+                    <r:layoutResources/>
+                </div>
+
+                <div class="span3" style="padding-top: 20px;">
+                    <div id="tp2" data-dojo-type="dijit/TitlePane"
+                         data-dojo-props="title: '新闻通知'"
+                         style="padding-bottom: 10px;">
+                        <p>新增课程《计算机网络基础》</p>
+
+                        <p>《Java程序设计》课程授课地点更改通知</p>
+                    </div>
+
+                    <div>
+                        <div data-dojo-type="dijit/Calendar">
+                            <script type="dojo/method"
+                                    data-dojo-event="onChange"
+                                    data-dojo-args="value">
+                                require(["dojo/dom", "dojo/date/locale","dojo/on"], function(dom, locale,on){
+                                dom.byId('formatted').innerHTML = locale.format(value, {formatLength: 'full', selector:'date',locale:'zh'});
+                                });
+                            </script>
+                        </div>
+
+                        <p id="formatted"></p>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <footer>
+                <p class="text-center">
+                    <mousika:copyright/>
+                </p>
+            </footer>
+        </div>
+    </body>
+</html>

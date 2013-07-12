@@ -1,0 +1,12 @@
+import com.sanwn.mousika.Course
+import com.sanwn.mousika.CourseMember
+import com.sanwn.mousika.CourseSection
+
+include 'UserFixture'
+
+build {
+    member(CourseMember, user: user, role: role)
+    course(Course, courseMembers: [member])
+    section(CourseSection, course: course)
+}
+

@@ -15,3 +15,5 @@ out/
 *.lock
 target/
 .idea/
+chromedriver.log
+.DS_Store

@@ -1,0 +1,1 @@
+<f:field property="items?.content"/>

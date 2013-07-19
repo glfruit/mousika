@@ -1,7 +1,5 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.Course
-import com.sanwn.mousika.CourseSection
 import org.springframework.dao.DataIntegrityViolationException
 
 class FileResourceController {

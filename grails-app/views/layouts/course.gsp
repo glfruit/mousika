@@ -60,7 +60,7 @@
     <script type="text/javascript">
         require(['dojo/parser', 'dijit/dijit', 'dijit/Calendar', 'dijit/TitlePane']);
     </script>
-%{--<r:require module="ember"/>--}%
+    %{--<r:require module="ember"/>--}%
     <g:layoutHead/>
     <r:layoutResources/>
 </head>
@@ -144,21 +144,6 @@
                         </div>
                     </shiro:hasAnyRole>
                 </g:if>
-                <shiro:hasRole name="教师">
-                    <div data-dojo-type="dijit/TitlePane"
-                         data-dojo-props="title: '我的个人文件'"
-                         style="padding-bottom: 10px;">
-                        <p>
-                            <g:if test="${fileRepository?.items?.size() > 0}">
-                                <!-- TODO -->
-                            </g:if>
-                            <g:else>
-                                没有任何文件
-                            </g:else>
-                        </p>
-                        <button class="btn">管理我的个人文件</button>
-                    </div>
-                </shiro:hasRole>
                 <shiro:hasRole name="系统管理员">
                     <div data-dojo-type="dijit/TitlePane"
                          data-dojo-props="title: '系统管理'"
@@ -168,6 +153,19 @@
                         </p>
                     </div>
                 </shiro:hasRole>
+                <div data-dojo-type="dijit/TitlePane"
+                     data-dojo-props="title: '我的个人文件'"
+                     style="padding-bottom: 10px;">
+                    <p>
+                        <g:if test="${fileRepository?.items?.size() > 0}">
+                            <!-- TODO -->
+                        </g:if>
+                        <g:else>
+                            没有任何文件
+                        </g:else>
+                    </p>
+                    <a class="btn" href="${createLink(controller: 'fileRepository', action: 'list')}">管理我的个人文件</a>
+                </div>
             </div>
 
             <div class="span7">

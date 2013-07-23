@@ -18,7 +18,7 @@
 	http://docs.cksource.com/CKFinder_2.x/Developers_Guide/Java/Configuration/baseURL_and_baseDir
 	-->
 	<baseDir></baseDir>
-	<baseURL>/CKFinderJava/userfiles/</baseURL>
+	<baseURL>/userfiles/</baseURL>
 	<licenseKey></licenseKey>
 	<licenseName></licenseName>
 	<!--
@@ -192,5 +192,5 @@
 			<params></params>
 		</plugin>
 	</plugins>
-	<basePathBuilderImpl>com.ckfinder.connector.configuration.ConfigurationPathBuilder</basePathBuilderImpl>
+	<basePathBuilderImpl>com.sanwn.mousika.ckfinder.MousikaPathBuilder</basePathBuilderImpl>
 </config>

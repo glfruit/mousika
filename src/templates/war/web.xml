@@ -77,10 +77,14 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>ConnectorServlet</servlet-name>
-        <servlet-class>com.ckfinder.connector.ConnectorServlet</servlet-class>
+        <servlet-class>com.sanwn.mousika.ckfinder.MousikaServlet</servlet-class>
         <init-param>
             <param-name>XMLConfig</param-name>
             <param-value>/WEB-INF/config.xml</param-value>
+        </init-param>
+        <init-param>
+            <param-name>configuration</param-name>
+            <param-value>com.sanwn.mousika.ckfinder.MousikaConfiguration</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

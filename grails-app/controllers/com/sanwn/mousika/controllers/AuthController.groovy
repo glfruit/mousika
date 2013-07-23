@@ -1,7 +1,6 @@
 package com.sanwn.mousika.controllers
 
-import com.sanwn.mousika.Profile
-import com.sanwn.mousika.User
+import com.sanwn.mousika.*
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.authc.AuthenticationException
 import org.apache.shiro.authc.UsernamePasswordToken
@@ -50,7 +49,11 @@ class AuthController {
             userService.createOrUpdateProfileOf(u)
 
             log.info "Redirecting to '${targetUri}'."
-            redirect(uri: targetUri)
+            if ( SecurityUtils.subject.hasRole(Role.STUDENT)){
+                redirect(uri: "/student")
+            }else{
+                redirect(uri: targetUri)
+            }
         }
         catch (AuthenticationException ex) {
             // Authentication failed, so display the appropriate message

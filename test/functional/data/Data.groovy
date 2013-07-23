@@ -27,6 +27,8 @@ class Data {
 
         def studentRole = new Role(name: "学生")
         studentRole.addToPermissions("course:list,show")
+        studentRole.addToPermissions("student:index,list,create,show,save,edit,update,myWorks,regCourse,regCourseList")
+
         studentRole.save()
 
         def user = new User(username: "admin", fullname: "无名氏", email: "ppller25@126.com", passwordHash: new Sha256Hash("admin").toHex())
@@ -40,6 +42,10 @@ class Data {
         user.save()
 
         user = new User(username: "test1", fullname: "彭启华", email: "ppller25@126.com", passwordHash: new Sha256Hash("test").toHex())
+        user.save()
+
+        user = new User(username: "lql", fullname: "aliang", email: "lql@126.com", passwordHash: new Sha256Hash("test").toHex())
+        user.addToRoles(studentRole)
         user.save()
     }
 }

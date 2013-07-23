@@ -12,6 +12,8 @@ class StudentController {
 
     def courses, myCourses
 
+    def user
+
     def index() {
         redirect(action: "myWorks", params: params)
     }
@@ -124,7 +126,7 @@ class StudentController {
         }
 
         for(Course c:notRegCoures){
-            if(c.courseMembers!=null&&c.courseMembers.size()>0) {
+            if(c.courseMembers?.size()>0) {
                 for(CourseMember cm:c.courseMembers.toArray()){
                     if(cm.user.id==user.id)
                         notRegCoures.remove(c)

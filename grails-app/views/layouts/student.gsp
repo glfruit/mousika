@@ -142,7 +142,7 @@
                              data-dojo-props="title: '我的活动'"
                              style="padding-bottom: 10px;">
                             <p>
-                                <g:link controller="student" action="regCourseList" class="btn create">注册课程</g:link>&nbsp;
+                                <g:link controller="student" action="regCourseList" class="btn create">注册课程</g:link>
                                 <g:link controller="student" action="regCourseList" class="btn create">我的作业</g:link>
                             <p>
                             </p>

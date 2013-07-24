@@ -69,12 +69,13 @@ grails.project.dependency.resolution = {
         compile ":taggable:1.0.1"
 //        compile ":platform-core:1.0.RC5"
         compile ":fields:1.3"
+        compile ":ckeditor:3.6.3.0"
 
         compile ':heroku:1.0.1'
         compile ':cloud-support:1.0.8'
 
-
-        build ":tomcat:$grailsVersion"
+        build ':jetty:2.0.3'
+//        build ":tomcat:$grailsVersion"
 
         runtime ":database-migration:1.3.3"
         compile ':cache:1.0.1'

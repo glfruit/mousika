@@ -93,6 +93,7 @@ log4j = {
     }
 
     info 'grails.app'
+    info 'org.eclipse.jetty'
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts

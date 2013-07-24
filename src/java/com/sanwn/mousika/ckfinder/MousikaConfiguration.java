@@ -1,6 +1,7 @@
 package com.sanwn.mousika.ckfinder;
 
 import com.ckfinder.connector.configuration.Configuration;
+import org.apache.shiro.SecurityUtils;
 
 import javax.servlet.ServletConfig;
 
@@ -20,6 +21,7 @@ public class MousikaConfiguration extends Configuration {
 
     @Override
     public String getBaseURL() {
-        return this.baseURL + "glfruit";
+        String principal = (String) SecurityUtils.getSubject().getPrincipal();
+        return this.baseURL + principal;
     }
 }

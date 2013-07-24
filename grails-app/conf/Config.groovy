@@ -107,6 +107,21 @@ log4j = {
            'net.sf.ehcache.hibernate'
 }
 
+ckeditor {
+//    config = "/js/myckconfig.js"
+    defaultFileBrowser = "ofm"
+    upload {
+        link {
+            browser = true
+            upload = true
+        }
+        image {
+            browser = true
+            upload = true
+        }
+    }
+}
+
 // disable searchable operations, will be enabled in Bootstrap.groovy
 mirrorChanges = false
 bulkIndexOnStartup = false

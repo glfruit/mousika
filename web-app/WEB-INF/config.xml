@@ -192,5 +192,5 @@
 			<params></params>
 		</plugin>
 	</plugins>
-	<basePathBuilderImpl>com.sanwn.mousika.ckfinder.MousikaPathBuilder</basePathBuilderImpl>
+	<basePathBuilderImpl>com.ckfinder.connector.configuration.ConfigurationPathBuilder</basePathBuilderImpl>
 </config>

@@ -52,7 +52,7 @@
             </label>
             <label class="radio">
                 <input type="radio" name="itemContentType"
-                       value="file">文件<i class="icon-question-sign"></i>
+                       value="fileResource">文件<i class="icon-question-sign"></i>
             </label>
             <label class="radio">
                 <input type="radio" name="itemContentType"

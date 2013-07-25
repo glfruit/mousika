@@ -3,6 +3,7 @@ package com.sanwn.mousika.domain
 import com.sanwn.mousika.Role
 import com.sanwn.mousika.User
 import org.springframework.dao.DataIntegrityViolationException
+import org.apache.shiro.crypto.hash.Sha256Hash
 
 class UserController {
 
@@ -23,6 +24,10 @@ class UserController {
 
     def save() {
         def userInstance = new User(params)
+
+        //初始化密码，密码与用户名相同
+        userInstance.setPasswordHash(new Sha256Hash(userInstance.getUsername()).toString())
+
         if (!userInstance.save(flush: true)) {
             render(view: "create", model: [userInstance: userInstance])
             return

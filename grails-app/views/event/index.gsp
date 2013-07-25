@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.domain.Role; org.apache.commons.lang.StringEscapeUtils; com.sanwn.mousika.domain.User; com.sanwn.mousika.Course" %>
+<%@ page import="com.sanwn.mousika.Role; org.apache.commons.lang.StringEscapeUtils; com.sanwn.mousika.User; com.sanwn.mousika.Course" %>
 <!DOCTYPE html>
 <html>
     <head>

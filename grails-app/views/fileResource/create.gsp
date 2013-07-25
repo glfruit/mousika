@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main">
+        <meta name="layout" content="course">
         <g:set var="entityName"
                value="${message(code: 'fileResource.label', default: 'FileResource')}"/>
         <title><g:message code="default.create.label"

@@ -17,3 +17,4 @@ target/
 .idea/
 chromedriver.log
 .DS_Store
+web-app/userfiles/

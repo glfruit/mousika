@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="dojo">
+        <meta name="layout" content="course">
         <g:javascript src="../tiny_mce/tiny_mce.js"/>
         <r:script>
             tinyMCE.init({

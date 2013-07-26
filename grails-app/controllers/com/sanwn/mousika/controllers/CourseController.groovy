@@ -223,4 +223,15 @@ class CourseController {
         def contentType = params.itemContentType
         redirect(controller: contentType, action: 'create', params: [sectionSeq: params.sectionSeq, courseId: params.courseId])
     }
+
+    def listMaterials(Long id) {
+        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_TYPE, FileRepository.REPOSITORY_TYPE_COURSE)
+        def course = Course.get(id)
+        if (!course) {
+            throw new IllegalArgumentException("未找到id为${id}的课程")
+        }
+        def code = course.code
+        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH,code)
+        redirect(controller: 'fileRepository', action: 'list')
+    }
 }

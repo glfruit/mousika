@@ -1,8 +1,5 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.Content
-import com.sanwn.mousika.CourseSection
-
 class AssignmentException extends RuntimeException {
 
     String message
@@ -15,7 +12,7 @@ class AssignmentService {
     static transactional = true
 
     def createAssignment(Long courseId, int sectionSeq, Assignment assignment) {
-        CourseSection section = CourseSection.where {
+        CourseUnit section = CourseUnit.where {
             course.id == courseId && sequence == sectionSeq
         }.find()
         if (section == null) {
@@ -23,7 +20,7 @@ class AssignmentService {
         }
         def sequence = Content.countBySection(section)
         assignment.sequence = sequence
-        section.addToContents(assignment)
+        section.addToItems(assignment)
         if (!assignment.validate() || !section.save()) {
             throw new AssignmentException(message: "创建作业错误", assignment: assignment)
         }

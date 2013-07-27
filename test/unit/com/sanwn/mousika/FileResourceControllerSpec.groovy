@@ -1,26 +1,23 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.Content
-import com.sanwn.mousika.domain.Course
-import com.sanwn.mousika.domain.CourseSection
 import grails.buildtestdata.mixin.Build
 import grails.test.mixin.TestFor
 import org.codehaus.groovy.grails.plugins.testing.GrailsMockMultipartFile
 import spock.lang.Specification
 
 @TestFor(FileResourceController)
-@Build([Course, CourseSection, Content, FileResource])
+@Build([Course, CourseUnit, Content, FileResource])
 class FileResourceControllerSpec extends Specification {
 
     def "upload a valid file"() {
         given:
         def course = Course.build()
-        def section = CourseSection.build()
-        course.addToSections(section)
+        def unit = CourseUnit.build()
+        course.addToUnits(unit)
         course.save(failOnError: true)
 
         params.courseId = course.id
-        params.sectionSeq = section.sequence
+        params.sectionSeq = unit.sequence
         final file = new GrailsMockMultipartFile("qqfile", "qqfile".bytes)
         request.addFile(file)
 

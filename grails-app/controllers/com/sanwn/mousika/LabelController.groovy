@@ -1,6 +1,5 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.CourseSection
 import org.springframework.dao.DataIntegrityViolationException
 
 class LabelController {
@@ -17,19 +16,19 @@ class LabelController {
     }
 
     def create() {
-        def section = CourseSection.findBySequence(params.sectionSeq)
+        def section = CourseUnit.findBySequence(params.sectionSeq)
         [labelInstance: new Label(params), sectionSeq: section.sequence, courseId: section.course.id]
     }
 
     def save() {
-        def section = CourseSection.findBySequence(params.sectionSeq)
+        def section = CourseUnit.findBySequence(params.sectionSeq)
         if (section == null) {
             flash.message = message(code: 'error.missing.section')
             redirect(controller: "course", action: "list")
         } else {
             def labelInstance = new Label(params)
             labelInstance.title = ''
-            section.addToContents(labelInstance)
+            section.addToItems(labelInstance)
             if (!section.save(flush: true)) {
                 render(view: "create", model: [labelInstance: labelInstance])
                 return

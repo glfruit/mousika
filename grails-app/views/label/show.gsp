@@ -58,7 +58,7 @@
 
                         <span class="property-value"
                               aria-labelledby="section-label"><g:link
-                                controller="courseSection" action="show"
+                                controller="courseUnit" action="show"
                                 id="${labelInstance?.section?.id}">${labelInstance?.section?.encodeAsHTML()}</g:link></span>
 
                     </li>

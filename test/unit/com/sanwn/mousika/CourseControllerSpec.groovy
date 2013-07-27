@@ -1,7 +1,5 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.controllers.CourseController
-import com.sanwn.mousika.domain.*
 import grails.plugin.gson.test.GsonUnitTestMixin
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
@@ -13,7 +11,7 @@ import spock.lang.Specification
  */
 @TestFor(CourseController)
 @TestMixin(GsonUnitTestMixin)
-@Mock([Course, CourseSection, Role, User, CourseMember])
+@Mock([Course, CourseUnit, Role, User, CourseMember])
 class CourseControllerSpec extends Specification {
 
     def "should add a valid course"() {

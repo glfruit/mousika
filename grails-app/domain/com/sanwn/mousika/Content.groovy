@@ -12,7 +12,7 @@ class Content {
 
     static transients = ['type']
 
-    static belongsTo = [section: CourseSection]
+    static belongsTo = [section: CourseUnit]
 
     static constraints = {
         description nullable: true, blank: true

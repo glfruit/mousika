@@ -1,6 +1,5 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.Course
 import grails.test.mixin.Mock
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
@@ -12,6 +11,17 @@ import spock.lang.Specification
 @TestMixin(GrailsUnitTestMixin)
 @Mock(Course)
 class CourseSpec extends Specification {
+
+    def "create a valid new course"() {
+        given: "a user input valid course data"
+        def course = new Course(code: 'code', title: 'course', startDate: new Date(), numberOfWeeks: 5)
+
+        when: "the course is initiated"
+        course.init()
+
+        then: "the course should create corresponding units"
+        course.units.size() == 6
+    }
 
     def "save a valid course"() {
         given: "a valid course"

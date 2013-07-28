@@ -8,6 +8,8 @@ class PageController {
 
     def pageService
 
+    def courseUnitService
+
     def index() {
         redirect(action: "list", params: params)
     }
@@ -22,11 +24,12 @@ class PageController {
     }
 
     def save() {
-        def page
+        def page = new Page(params)
         try {
             def courseId = params.long('courseId')
             def sectionSeq = params.int('sectionSeq')
-            page = pageService.createPage(courseId, sectionSeq, new Page(params))
+            page = pageService.createPage(page)
+            courseUnitService.createUnitItem(courseId,sectionSeq,page)
             def returnToCourse = params.boolean('returnToCourse')
             if (returnToCourse) {
                 redirect(controller: 'course', action: 'show', id: params.courseId)

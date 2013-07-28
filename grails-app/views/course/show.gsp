@@ -43,15 +43,6 @@
         </label>
         <label class="radio">
             <input type="radio" name="itemContentType"
-                   value="quiz">测验<i class="icon-question-sign"></i>
-        </label>
-        <label class="radio">
-            <input type="radio" name="itemContentType"
-                   value="vocabulary">词汇表<i
-                class="icon-question-sign"></i>
-        </label>
-        <label class="radio">
-            <input type="radio" name="itemContentType"
                    value="fileResource">文件<i class="icon-question-sign"></i>
         </label>
         <label class="radio">

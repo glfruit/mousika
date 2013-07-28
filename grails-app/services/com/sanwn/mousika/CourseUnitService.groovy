@@ -9,6 +9,22 @@ class CourseUnitService {
 
     static transactional = true
 
+    def createUnitItem(Long courseId, int unitSequence, Content content) {
+        def unit = CourseUnit.where {
+            course.id == courseId && sequence == unitSequence
+        }.find()
+        if (unit == null) {
+            throw new CourseUnitException(message: "指定的课程单元不存在-课程id:${courseId};单元序号:${unitSequence}")
+        }
+        def itemSeq = unit.items.size()
+        def unitItem = new UnitItem(sequence: itemSeq, title: content.title, content: content)
+        unit.addToItems(unitItem)
+        if (unitItem.validate() && unit.save()) {
+            return unit
+        }
+        throw new CourseUnitException(message: "创建单元内容失败：${unitItem.hasErrors() ? unitItem.errors : unit.errors}")
+    }
+
     def moveContent(courseId, sectionSeq, oldPos, newPos) {
         def course = Course.get(courseId)
         if (course == null) {

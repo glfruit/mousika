@@ -33,7 +33,7 @@
             <h3><g:message code="page.create.label"
                            args="[entityName]"/></h3>
             <g:if test="${flash.message}">
-                <div class="message" role="status">${flash.message}</div>
+                <div class="message" role="status" style="color: red;">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${pageInstance}">
                 <ul class="errors" role="alert">

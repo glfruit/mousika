@@ -1,4 +1,3 @@
-<%@ page import="com.sanwn.mousika.domain.Page" %>
 <!DOCTYPE html>
 <html>
     <head>

@@ -1,7 +1,7 @@
 package com.sanwn.mousika
 
 import com.sanwn.mousika.Content
-import com.sanwn.mousika.CourseSection
+import com.sanwn.mousika.CourseUnit
 import com.sanwn.mousika.Page
 
 class PageException extends RuntimeException {

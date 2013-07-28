@@ -1,7 +1,5 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.controllers.CourseController
-import com.sanwn.mousika.domain.*
 import grails.plugin.gson.test.GsonUnitTestMixin
 import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
@@ -13,7 +11,7 @@ import spock.lang.Specification
  */
 @TestFor(CourseController)
 @TestMixin(GsonUnitTestMixin)
-@Mock([Course, CourseSection, Role, User, CourseMember])
+@Mock([Course, CourseUnit, Role, User, CourseMember])
 class CourseControllerSpec extends Specification {
 
     def "should add a valid course"() {
@@ -42,6 +40,8 @@ class CourseControllerSpec extends Specification {
         def course = new Course(title: "title", code: "code", description: "description", startDate: new Date()).save()
         def member = new CourseMember(user: user, role: role).save(validate: false)
         course.addToCourseMembers(member).save(flush: true, validate: false)
+        request.addHeader("Accept","application/json")
+        params.format = 'json'
 
         when:
         controller.listMembers(course.id)

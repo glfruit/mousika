@@ -41,10 +41,10 @@ class Course {
      */
     int numberOfWeeks
 
-    List sections
+    List units
 
 
-    static hasMany = [courseMembers: CourseMember, sections: CourseSection]
+    static hasMany = [courseMembers: CourseMember, units: CourseUnit]
 
 
     static constraints = {
@@ -55,6 +55,14 @@ class Course {
 
     static mapping = {
         description column: "description", sqlType: "text"
-        sections sort: "sequence", order: "asc"
+    }
+
+    def init() {
+        def unit = new CourseUnit(sequence: 0, title: '')
+        this.addToUnits(unit)
+        for (i in 0..numberOfWeeks-1) {
+            unit = new CourseUnit(sequence: i + 1, title: (startDate + i * 7).toString() + "-" + (startDate + i * 7 + 6).toString()) //TODO:重构;第一个章节添加一个默认新闻讨论区
+            addToUnits(unit)
+        }
     }
 }

@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.FileResource" %>
+<%@ page import="com.sanwn.mousika.CourseUnit; com.sanwn.mousika.FileResource" %>
 
 
 
@@ -7,7 +7,7 @@
 		<g:message code="fileResource.section.label" default="Section" />
 		<span class="required-indicator">*</span>
 	</label>
-	<g:select id="section" name="section.id" from="${com.sanwn.mousika.CourseSection.list()}" optionKey="id" required="" value="${fileResourceInstance?.section?.id}" class="many-to-one"/>
+	<g:select id="section" name="section.id" from="${CourseUnit.list()}" optionKey="id" required="" value="${fileResourceInstance?.section?.id}" class="many-to-one"/>
 </div>
 
 <div class="fieldcontain ${hasErrors(bean: fileResourceInstance, field: 'sequence', 'error')} required">

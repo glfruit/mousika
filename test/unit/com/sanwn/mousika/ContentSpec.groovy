@@ -1,6 +1,5 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.Content
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

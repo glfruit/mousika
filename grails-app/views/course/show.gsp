@@ -55,7 +55,7 @@
         </label>
         <label class="radio">
             <input type="radio" name="itemContentType"
-                   value="url">URL<i class="icon-question-sign"></i>
+                   value="urlResource">URL<i class="icon-question-sign"></i>
         </label>
         <!--
             <form method="post" action="UploadFile.php" id="myForm"

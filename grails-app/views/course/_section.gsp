@@ -43,12 +43,16 @@
                 class="dojoDndItem" dndType="content">
                 <div style="display: inline;">
                     <div style="float: left; padding-right: 3em;">
-                        <g:if test="${item.content.type != 'label'}">
+                        <g:if test="${item.content.type == 'urlresource'}">
+                            <a href="${item.content.location}"
+                               target="_blank">${item.title}</a>
+                        </g:if>
+                        <g:elseif test="${item.content.type != 'label'}">
                             <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id)}">
                                 ${item.title}
                             </a>
                             <span class="resource-link-details"></span>
-                        </g:if>
+                        </g:elseif>
                         <g:else>
                             ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(item.content.labelContent)}
                         </g:else>

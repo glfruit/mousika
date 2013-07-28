@@ -18,5 +18,6 @@ class CourseUnit {
 
     static mapping = {
         sort sequence: 'asc'
+        items sort: "sequence", order: "asc"
     }
 }

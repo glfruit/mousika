@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main">
+        <meta name="layout" content="course">
         <g:javascript src="../tiny_mce/tiny_mce.js"/>
         <r:script>
             tinyMCE.init({
@@ -22,18 +22,15 @@
                 plugin_preview_height: "600"
             });
         </r:script>
-        <g:set var="entityName"
-               value="${message(code: 'label.label', default: 'Label')}"/>
-        <title><g:message code="default.create.label"
-                          args="[entityName]"/></title>
+        <title><g:message code="label.create.label"/></title>
     </head>
 
     <body>
         <div id="create-label" class="content scaffold-create" role="main">
-            <h3 class="text-center"><g:message code="label.create.label"
-                           args="[entityName]"/></h3>
+            <h3><g:message code="label.create.label"/></h3>
             <g:if test="${flash.message}">
-                <div class="message" role="status">${flash.message}</div>
+                <div class="message" role="status"
+                     style="color: red;">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${labelInstance}">
                 <ul class="errors" role="alert">
@@ -45,20 +42,32 @@
             </g:hasErrors>
             <g:form action="save" class="form-horizontal">
                 <fieldset class="form">
-                    <g:hiddenField name="sectionSeq" value="${sectionSeq}"/>
                     <f:with bean="labelInstance">
-                        <f:field property="labelContent"/>
+                        <g:hiddenField name="courseId" id="courseId"
+                                       value="${courseId}"/>
+                        <g:hiddenField name="sectionSeq" id="sectionSeq"
+                                       value="${sectionSeq}"/>
+                        <f:field property="labelContent" required="true"/>
                     </f:with>
                 </fieldset>
                 <fieldset class="buttons">
-                    <div class="control-group pagination-centered">
-                        <g:submitButton name="create" class="save"
-                                        value="${message(code: 'label.create.label', default: 'Create')}"/>
-                        <a class="btn"
-                           href="${createLink(controller: 'course', action: 'show', id: courseId)}">${message(code: 'default.cancel.label')}</a>
-                    </div>
+                    <g:submitButton id="createLabelBtn" name="create"
+                                    class="btn btn-primary"
+                                    value="${message(code: 'label.button.create.label', default: 'Create')}"/>
+                    <a class="btn"
+                       href="${createLink(controller: 'course', action: 'show', id: courseId)}">${message(code: 'default.cancel.label')}</a>
                 </fieldset>
             </g:form>
+            <script>
+                require(['dojo/query', 'dojo/dom-attr'], function (query, domAttr) {
+                    query('#createAndShowBtn').on('click', function () {
+                        domAttr.set(query('#returnToCourse')[0], 'value', 'false');
+                    });
+                    query('#createAndReturnBtn').on('click', function () {
+                        domAttr.set(query('#returnToCourse')[0], 'value', 'true');
+                    });
+                });
+            </script>
         </div>
     </body>
 </html>

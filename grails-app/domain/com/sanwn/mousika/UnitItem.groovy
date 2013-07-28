@@ -13,6 +13,7 @@ class UnitItem {
 
     static belongsTo = [unit: CourseUnit]
 
-    static constraints = {
+    static mapping = {
+        sort sequence: 'asc'
     }
 }

@@ -10,6 +10,9 @@ class CourseUnitService {
     static transactional = true
 
     def createUnitItem(Long courseId, int unitSequence, Content content) {
+        if (!content.validate() || !content.save()) {
+            throw new CourseUnitException(message: "创建单元内容失败:${content.errors}")
+        }
         def unit = CourseUnit.where {
             course.id == courseId && sequence == unitSequence
         }.find()

@@ -26,7 +26,7 @@
         var uploader = new qq.FineUploader({
             element: document.getElementById('image-uploader'),
             request: {
-                endpoint: '<g:createLink controller="fileResource" action="upload"/>'
+                endpoint: '<g:createLink controller="fileResource" action="upload" params=""/>'
             },
             sizeLimit: 3145728, // 3 MB
 //            allowedExtensions: ['jpg', 'jpeg'],

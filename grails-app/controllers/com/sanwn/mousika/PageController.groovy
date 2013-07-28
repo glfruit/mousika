@@ -25,11 +25,10 @@ class PageController {
 
     def save() {
         def page = new Page(params)
+        def courseId = params.long('courseId')
+        def sectionSeq = params.int('sectionSeq')
         try {
-            def courseId = params.long('courseId')
-            def sectionSeq = params.int('sectionSeq')
-            page = pageService.createPage(page)
-            courseUnitService.createUnitItem(courseId,sectionSeq,page)
+            courseUnitService.createUnitItem(courseId, sectionSeq, page)
             def returnToCourse = params.boolean('returnToCourse')
             if (returnToCourse) {
                 redirect(controller: 'course', action: 'show', id: params.courseId)
@@ -38,12 +37,12 @@ class PageController {
             }
         } catch (PageException pe) {
             flash.message = pe.message
-            render(view: "create", model: [pageInstance: page])
+            render(view: "create", model: [pageInstance: page, courseId: courseId, sectionSeq: sectionSeq])
             return
         } catch (Exception e) {
             flash.message = "内部错误"
             log.error("未知异常:", e)
-            render(view: "create", model: [pageInstance: page])
+            render(view: "create", model: [pageInstance: page, courseId: courseId, sectionSeq: sectionSeq])
         }
     }
 

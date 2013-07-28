@@ -93,7 +93,7 @@
     <g:each in="${0..<courseInstance?.numberOfWeeks + 1}" var="n">
         <g:render template="section"
                   model="['startDate': courseInstance.startDate,
-                          'section': courseInstance.sections[n], 'order': n]"/>
+                          'section': courseInstance.units[n], 'order': n]"/>
     </g:each>
 </div>
 <script>
@@ -112,8 +112,8 @@
                         if (target == source) {
                             var oldPos = id.match(/.*(\d+)$/)[1];
                             var targetPos = target.current.id.match(/.*(\d+)$/)[1];
-                            require(['dojo/request'],function(request) {
-                                request.post("${request.contextPath}/courseSection/updateSeq",{
+                            require(['dojo/request'], function (request) {
+                                request.post("${request.contextPath}/courseSection/updateSeq", {
                                     data: {
                                         courseId: "${courseInstance.id}",
 

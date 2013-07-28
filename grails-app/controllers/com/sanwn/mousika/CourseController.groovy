@@ -177,13 +177,13 @@ class CourseController {
                 userCount: userCount, pages: userCount / params.max + 1, offset: params.offset]
     }
 
-    def assign(Long courseId) {
-        def course = Course.get(courseId)
+    def assign(Long id) {
+        def course = Course.get(id)
         def user = User.get(params.uid)
         def role = Role.get(params.rid)
         user.addToRoles(role)
         if ("学生" == role.name) {
-            user.addToPermissions("course:show:${courseId}")
+            user.addToPermissions("course:show:${id}")
         }
         def member = new CourseMember(user: user, role: role)
         course.addToCourseMembers(member)
@@ -200,11 +200,9 @@ class CourseController {
         }.order('role').order('user').list().user
         withFormat {
             html {
-                println "===============handling html request================="
                 [members: members, courseId: course.id]
             }
             json {
-                println "****************handling json request****************"
                 def json = members.collect { member ->
                     [
                             username: member.username,

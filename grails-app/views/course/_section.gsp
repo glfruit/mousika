@@ -38,19 +38,19 @@
     %{--<p>新闻讨论区</p>--}%
     %{--</li>--}%
     %{--</g:if>--}%
-        <g:each in="${section.contents}" var="content" status="s">
+        <g:each in="${section.items}" var="item" status="s">
             <li id="${courseSectionId}item${s}"
                 class="dojoDndItem" dndType="content">
                 <div style="display: inline;">
                     <div style="float: left; padding-right: 3em;">
-                        <g:if test="${content.type != 'label'}">
-                            <a href="${createLink(controller: content.type, action: 'show', id: content.id)}">
-                                ${content.title}
+                        <g:if test="${item.content.type != 'label'}">
+                            <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id)}">
+                                ${item.title}
                             </a>
                             <span class="resource-link-details"></span>
                         </g:if>
                         <g:else>
-                            ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(content.labelContent)}
+                            ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(item.content.labelContent)}
                         </g:else>
                     </div>
 

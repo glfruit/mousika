@@ -43,6 +43,12 @@
             packages: [
                 {
                     name: 'bootstrap', location: "${request.contextPath}/js/lib/dojo-bootstrap"
+                },
+                {
+                    name: 'jquery', location: "${request.contextPath}/js/lib/jquery", main: "jquery"
+                },
+                {
+                    name: 'jplayer', location: "${request.contextPath}/js/jplayer", main: "jplayer"
                 }
             ],
             has: {
@@ -117,8 +123,10 @@
                              data-dojo-props="title: '课程管理'"
                              style="padding-bottom: 10px;">
                             <ul id="courseAdmin" style="list-style: none;">
-                                <li><i class="icon-briefcase"></i><span style="padding-left: 5px;">
-                                    <a href="${createLink(action: 'listMaterials', id: courseInstance.id)}">课程资料</a></span></li>
+                                <li><i class="icon-briefcase"></i><span
+                                        style="padding-left: 5px;">
+                                    <a href="${createLink(action: 'listMaterials', id: courseInstance.id)}">课程资料</a>
+                                </span></li>
                                 <li id="turn-edit-on-or-off"><i
                                         class="icon-edit"></i><a href="#"
                                                                  style="padding-left: 5px;"><span
@@ -166,7 +174,8 @@
                             没有任何文件
                         </g:else>
                     </p>
-                    <a class="btn" href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
+                    <a class="btn"
+                       href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
                 </div>
             </div>
 

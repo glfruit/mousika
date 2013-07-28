@@ -5,7 +5,7 @@ package com.sanwn.mousika
  */
 class UnitItem {
 
-    String itemName
+    String title
 
     int sequence
 

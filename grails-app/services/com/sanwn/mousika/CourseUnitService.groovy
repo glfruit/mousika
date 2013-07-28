@@ -14,25 +14,29 @@ class CourseUnitService {
         if (course == null) {
             throw new CourseUnitException(message: "指定ID为${courseId}的课程不存在")
         }
-        def section = CourseUnit.where {
+        def unit = CourseUnit.where {
             course == course && sequence == sectionSeq
         }.find()
-        if (section == null) {
+        if (unit == null) {
             throw new CourseUnitException(message: "单元序号为${sectionSeq}的课程单元不存在")
         }
-        def content = Content.findBySectionAndSequence(section, oldPos)
-        if (content == null) {
-            throw new CourseUnitException(message: "序号为${oldPos}的内容不存在", courseSection: section)
+        def sourceUnitItem = UnitItem.where {
+            unit == unit && sequence == oldPos
+        }.find()
+        if (sourceUnitItem == null) {
+            throw new CourseUnitException(message: "序号为${oldPos}的内容不存在", courseUnit: unit)
         }
-        def targetContent = Content.findBySectionAndSequence(section, newPos)
-        if (targetContent == null) {
-            throw new CourseUnitException(message: "序号为${newPos}的内容不存在", courseSection: section)
+        def targetUnitItem = UnitItem.where {
+            unit == unit && sequence == newPos
+        }.find()
+        if (targetUnitItem == null) {
+            throw new CourseUnitException(message: "序号为${newPos}的内容不存在", courseUnit: unit)
         }
-        targetContent.sequence = -1
-        content.sequence = newPos
-        targetContent.sequence = oldPos
-        if (!targetContent.save() || !content.save()) {
-            throw new CourseUnitException(message: "更新内容序列时出错", courseSection: section)
+        targetUnitItem.sequence = -1
+        sourceUnitItem.sequence = newPos
+        targetUnitItem.sequence = oldPos
+        if (!targetUnitItem.save() || !sourceUnitItem.save()) {
+            throw new CourseUnitException(message: "更新内容序列时出错", courseUnit: unit)
         }
     }
 
@@ -41,38 +45,42 @@ class CourseUnitService {
         if (course == null) {
             throw new CourseUnitException(message: "指定ID为${courseId}的课程不存在")
         }
-        def sourceSection = CourseUnit.findByCourseAndSequence(course, sourceSectionSeq)
-        if (sourceSection == null) {
+        def sourceUnit = CourseUnit.where {
+            course == course && sequence == sourceSectionSeq
+        }.find()
+        if (sourceUnit == null) {
             throw new CourseUnitException(message: "单元序号为${sourceSectionSeq}的课程单元不存在")
         }
-        def movedContent = sourceSection.contents.find {
-            it.sequence == oldPos
-        }
+        def movedContent = UnitItem.where {
+            sequence == oldPos
+        }.find()
         if (movedContent == null) {
-            throw new CourseUnitException(message: "序号为${oldPos}的内容不存在", courseSection: sourceSection)
+            throw new CourseUnitException(message: "序号为${oldPos}的内容不存在", courseUnit: sourceUnit)
         }
-        def sourceContents = sourceSection.contents.findAll {
-            it.sequence > oldPos
-        }
+        def sourceContents = UnitItem.where {
+            sequence > oldPos
+        }.list()
         sourceContents.each {
             it.sequence = it.sequence - 1
         }
-        def targetSection = CourseUnit.findByCourseAndSequence(course, targetSectionSeq)
-        if (targetSection == null) {
+        def targetUnit = CourseUnit.where {
+            course == course && sequence == targetSectionSeq
+        }.find()
+        if (targetUnit == null) {
             throw new CourseUnitException(message: "单元序号为${targetSectionSeq}的课程单元不存在")
         }
-        def targetContents = targetSection.contents.findAll {
-            it.sequence >= newPos
-        }
+        def targetContents = UnitItem.where {
+            sequence >= newPos
+        }.list()
         targetContents.each {
             it.sequence = it.sequence + 1
         }
         movedContent.sequence = newPos
-        sourceSection.removeFromContents(movedContent)
-        targetSection.addToContents(movedContent)
+        sourceUnit.removeFromItems(movedContent)
+        targetUnit.addToItems(movedContent)
     }
 }
 class CourseUnitException extends RuntimeException {
     String message
-    CourseUnit courseSection
+    CourseUnit courseUnit
 }

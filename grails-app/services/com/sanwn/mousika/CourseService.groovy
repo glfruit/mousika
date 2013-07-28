@@ -18,11 +18,11 @@ class CourseService {
         }
     }
 
-    def moveSection(sourceSection, targetSection) {
-        def oldSeq = sourceSection.sequence
-        def newSeq = targetSection.sequence
-        targetSection.sequence = oldSeq
-        sourceSection.sequence = newSeq
+    def switchUnits(sourceUnit, targetUnit) {
+        def oldSeq = sourceUnit.sequence
+        def newSeq = targetUnit.sequence
+        targetUnit.sequence = oldSeq
+        sourceUnit.sequence = newSeq
     }
 }
 class CourseException extends RuntimeException {

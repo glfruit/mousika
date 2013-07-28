@@ -60,7 +60,7 @@ class Course {
     def init() {
         def unit = new CourseUnit(sequence: 0, title: '')
         this.addToUnits(unit)
-        for (i in 0..numberOfWeeks) {
+        for (i in 0..numberOfWeeks-1) {
             unit = new CourseUnit(sequence: i + 1, title: (startDate + i * 7).toString() + "-" + (startDate + i * 7 + 6).toString()) //TODO:重构;第一个章节添加一个默认新闻讨论区
             addToUnits(unit)
         }

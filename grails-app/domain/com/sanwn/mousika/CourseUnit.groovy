@@ -19,4 +19,10 @@ class CourseUnit {
     static mapping = {
         sort sequence: 'asc'
     }
+
+    def createUnitItem(Content content) {
+        def seq = items == null ? 0 : items.size()
+        def item = new UnitItem(sequence: seq, title: content.title, content: content)
+        addToItems(item)
+    }
 }

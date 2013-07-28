@@ -40,6 +40,8 @@ class CourseControllerSpec extends Specification {
         def course = new Course(title: "title", code: "code", description: "description", startDate: new Date()).save()
         def member = new CourseMember(user: user, role: role).save(validate: false)
         course.addToCourseMembers(member).save(flush: true, validate: false)
+        request.addHeader("Accept","application/json")
+        params.format = 'json'
 
         when:
         controller.listMembers(course.id)

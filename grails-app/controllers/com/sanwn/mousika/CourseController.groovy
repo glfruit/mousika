@@ -200,9 +200,11 @@ class CourseController {
         }.order('role').order('user').list().user
         withFormat {
             html {
+                println "===============handling html request================="
                 [members: members, courseId: course.id]
             }
             json {
+                println "****************handling json request****************"
                 def json = members.collect { member ->
                     [
                             username: member.username,

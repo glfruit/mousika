@@ -2,8 +2,6 @@ package com.sanwn.mousika
 
 class Content {
 
-    int sequence
-
     String title
 
     String description
@@ -11,8 +9,6 @@ class Content {
     def type = this.class.simpleName.toLowerCase()
 
     static transients = ['type']
-
-    static belongsTo = [section: CourseUnit]
 
     static constraints = {
         description nullable: true, blank: true

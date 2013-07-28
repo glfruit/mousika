@@ -92,7 +92,7 @@ log4j = {
         console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     }
 
-    info 'grails.app'
+//    info 'grails.app'
     info 'org.eclipse.jetty'
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP

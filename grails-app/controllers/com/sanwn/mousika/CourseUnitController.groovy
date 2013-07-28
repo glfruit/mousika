@@ -11,19 +11,21 @@ class CourseUnitController {
     def updateSeq() {
         if (params.moveSection) {
             def course = Course.get(params.long('courseId'))
-            def sourceSection = course.sections.find {
-                it.sequence == params.long('oldSection')
-            }
-            def targetSection = course.sections.find {
-                it.sequence == params.long('targetSection')
-            }
-            courseService.moveSection(sourceSection, targetSection)
+            def sourceUnit = CourseUnit.where {
+                course == course && sequence == params.long('oldSection')
+            }.find()
+            def targetUnit = CourseUnit.where {
+                course == course && sequence == params.long('targetSection')
+            }.find()
+            courseService.switchUnits(sourceUnit, targetUnit)
         } else {
             def courseId = params.long('courseId')
             def course = Course.get(courseId)
             def sourceSeq = params.long('sourceSeq')
-            def sourceSection = CourseSection.findByCourseAndSequence(course, sourceSeq)
-            if (sourceSection == null) {
+            def sourceUnit = CourseUnit.where {
+                course == course && sequence == sourceSeq
+            }.find()
+            if (sourceUnit == null) {
                 log.warn("未在课程序号为${courseId}的课程中找到序号为${sourceSeq}的课程单元")
                 render contentType: "application/json", text: '{"success":false}'
                 return

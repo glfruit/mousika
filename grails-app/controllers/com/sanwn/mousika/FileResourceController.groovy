@@ -21,7 +21,7 @@ class FileResourceController {
 
     def upload() {
         def course = Course.get(params.courseId)
-        def section = CourseSection.findByCourseAndSequence(course, params.sectionSeq)
+        def section = CourseUnit.findByCourseAndSequence(course, params.sectionSeq)
         def uploadedFile = request.getFile('qqfile')
         def filename = uploadedFile.originalFilename
         def fileResource = new FileResource(title: filename, section: section)

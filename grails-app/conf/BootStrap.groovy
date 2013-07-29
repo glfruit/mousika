@@ -34,6 +34,10 @@ class BootStrap {
                     studentRole.addToPermissions("feedback:show")
                     studentRole.save(failOnError: true)
 
+                    def teachingAffairsRole = new Role(name: "教务处")
+                    teachingAffairsRole.addToPermissions("*:*")
+                    teachingAffairsRole.save(failOnError: true)
+
                     def user = new User(username: "admin", fullname: "无名氏", email: "ppller25@126.com", dateCreated: new Date(), passwordHash: new Sha256Hash("admin").toHex())
                     user.addToRoles(adminRole)
                     user.save(failOnError: true)

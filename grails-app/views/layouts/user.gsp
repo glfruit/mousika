@@ -131,7 +131,7 @@
 
                             <p>
                                 <i class="icon-lock"></i>
-                                <a href="${createLink(controller: 'user', action: 'privilege')}">权限管理</a>
+                                <a href="${createLink(controller: 'privilege', action: 'list')}">权限管理</a>
                             </p>
                         </div>
                     </shiro:hasRole>

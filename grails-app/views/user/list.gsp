@@ -1,41 +1,59 @@
-<%@ page import="com.sanwn.mousika.Label" %>
+
+<%@ page import="com.sanwn.mousika.User" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta name="layout" content="user">
-        <title><g:message code="user.list.label"/></title>
-    </head>
+	<head>
+		<meta name="layout" content="user">
+		<g:set var="entityName" value="${message(code: 'user.label', default: 'User')}" />
+		<title><g:message code="default.list.label" args="[entityName]" /></title>
+	</head>
+	<body>
+		<a href="#list-user" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+		<div class="nav" role="navigation">
+			<ul>
+				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
+				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+			</ul>
+		</div>
+		<div id="list-user" class="content scaffold-list" role="main">
+			<h1><g:message code="default.list.label" args="[entityName]" /></h1>
+			<g:if test="${flash.message}">
+			<div class="message" role="status">${flash.message}</div>
+			</g:if>
+			<table class="table table-striped">
+				<thead>
+					<tr>
 
-    <body>
-        <div id="list-user" class="content scaffold-show" role="main">
-            <h4 style="text-align: center;"><g:message
-                    code="user.list.label"/></h4>
-            <g:link action="create" class="btn pull-right">批量添加用户</g:link>
-            <g:link action="create" class="btn pull-right">添加用户</g:link>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>用户名</th>
-                        <th>姓名</th>
-                        <th>电子邮件</th>
-                        <th>首次访问时间</th>
-                        <th>最后访问时间</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <g:each in="${userInstanceList}" var="user">
-                        <tr>
-                            <td>${user.username}</td>
-                            <td>${user.fullname}</td>
-                            <td>${user.profile?.email}</td>
-                            <td><g:formatDate format="yyyy-MM-dd HH:mm:ss"
-                                              date="${user.profile?.firstAccessed}"/></td>
-                            <td><g:formatDate format="yyyy-MM-dd HH:mm:ss"
-                                              date="${user.profile?.lastAccessed}"/></td>
-                        </tr>
-                    </g:each>
-                </tbody>
-            </table>
-        </div>
-    </body>
+						<g:sortableColumn property="username" title="${message(code: 'user.username.label', default: 'Username')}" />
+					
+						<g:sortableColumn property="fullname" title="${message(code: 'user.fullname.label', default: 'Fullname')}" />
+
+						<g:sortableColumn property="firstAccessed" title="${message(code: 'user.firstAccessed.label', default: '首次访问时间')}" />
+
+						<g:sortableColumn property="lastAccessed" title="${message(code: 'user.lastAccessed.label', default: '最后访问时间')}" />
+
+					</tr>
+				</thead>
+				<tbody>
+				<g:each in="${userInstanceList}" status="i" var="userInstance">
+					<tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
+					
+						<td><g:link action="show" id="${userInstance.id}">${fieldValue(bean: userInstance, field: "username")}</g:link></td>
+					
+						<td>${fieldValue(bean: userInstance, field: "fullname")}</td>
+
+                        <td><g:formatDate format="yyyy-MM-dd HH:mm:ss"
+                                          date="${userInstance.profile?.firstAccessed}"/></td>
+                        <td><g:formatDate format="yyyy-MM-dd HH:mm:ss"
+                                          date="${userInstance.profile?.lastAccessed}"/></td>
+					
+					</tr>
+				</g:each>
+				</tbody>
+			</table>
+			<div class="pagination">
+				<g:paginate total="${userInstanceTotal}" />
+			</div>
+		</div>
+	</body>
 </html>

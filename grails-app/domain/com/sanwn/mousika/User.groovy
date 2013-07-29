@@ -1,9 +1,6 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.Profile
-
 class User {
-
     static searchable = true
 
     String username

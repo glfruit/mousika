@@ -1,9 +1,7 @@
 package com.sanwn.mousika.domain
 
-import com.sanwn.mousika.Role
 import com.sanwn.mousika.User
 import org.springframework.dao.DataIntegrityViolationException
-import org.apache.shiro.crypto.hash.Sha256Hash
 
 class UserController {
 
@@ -24,10 +22,6 @@ class UserController {
 
     def save() {
         def userInstance = new User(params)
-
-        //初始化密码，密码与用户名相同
-        userInstance.setPasswordHash(new Sha256Hash(userInstance.getUsername()).toString())
-
         if (!userInstance.save(flush: true)) {
             render(view: "create", model: [userInstance: userInstance])
             return
@@ -70,8 +64,8 @@ class UserController {
         if (version != null) {
             if (userInstance.version > version) {
                 userInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                        [message(code: 'user.label', default: 'User')] as Object[],
-                        "Another user has updated this User while you were editing")
+                          [message(code: 'user.label', default: 'User')] as Object[],
+                          "Another user has updated this User while you were editing")
                 render(view: "edit", model: [userInstance: userInstance])
                 return
             }
@@ -104,24 +98,6 @@ class UserController {
         catch (DataIntegrityViolationException e) {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), id])
             redirect(action: "show", id: id)
-        }
-    }
-
-    def assign() {
-        log.info("trying to assign a role to user")
-        def uid = params.uid
-        def rid = params.rid
-        try {
-            def u = User.findById(uid)
-            u.addToRoles(Role.findById(rid))
-            render(contentType: "text/json") {
-                [success: true]
-            }
-        } catch (e) {
-            log.error("添加角色失败",e)
-            render(contentType: "text/json") {
-                [success: false, error: e.message]
-            }
         }
     }
 }

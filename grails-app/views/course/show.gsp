@@ -16,7 +16,7 @@
           type="text/css"/>
     <r:script>
         define.amd.jQuery = true;
-        require(["jquery","jplayer"], function ($) {
+        require(["jquery", "jplayer"], function ($) {
             $(document).ready(function () {
                 $("#jquery_jplayer_1").jPlayer({
                     ready: function () {
@@ -158,10 +158,10 @@
 <div data-dojo-type="dojo.dnd.Source"
      data-dojo-props="accept: ['section'], withHandles: true, autoSync: true"
      class="dojoDndSource">
-    <g:each in="${0..<courseInstance?.numberOfWeeks + 1}" var="n">
+    <g:each in="${courseInstance.units}" var="unit">
         <g:render template="section"
                   model="['startDate': courseInstance.startDate,
-                          'section': courseInstance.units[n], 'order': n]"/>
+                          'section': unit, 'order': unit.sequence]"/>
     </g:each>
 </div>
 <script>
@@ -172,124 +172,115 @@
                     csid = /csl(\d+)/.exec(csid)[1];
                     query('#sectionSeq').attr('value', csid);
                 });
-                topic.subscribe("/dnd/drop", function (source, nodes, copy, target) {
-                    if (target.getAllNodes().length == 0) {
-                        //TODO: 目标单元还没有任何内容
+                var courseId = "${courseInstance.id}";
+                var requestData = {
+                    courseId: courseId,
+                    targetUnitItemSeq: 0
+                };
+                topic.subscribe("/dnd/drop/before", function (source, nodes) {
+                    var sourceUnitSeq = source.id.match(/.*(\d+)$/)[1];
+                    var sourceUnitItemSeq = nodes[0].id.match(/.*(\d+)$/)[1];
+                    requestData.sourceUnitSeq = sourceUnitSeq;
+                    requestData.sourceUnitItemSeq = sourceUnitItemSeq;
+                    requestData.before = true;
+                    var q = query(".dojoDndItemBefore");
+                    var targetUnitSeq;
+                    if (q.length > 0) {
+                        targetUnitSeq = q[0].id.match(/.*(\d+)$/)[1];
+                        requestData.targetUnitItemSeq = targetUnitSeq;
+                    } else {
+                        q = query(".dojoDndItemAfter");
+                        if (q.length > 0) {
+                            targetUnitSeq = q[0].id.match(/.*(\d+)$/)[1];
+                            requestData.targetUnitItemSeq = targetUnitSeq;
+                            requestData.before = false;
+                        } else {
+                            console.error("oops! Something is wrong or empty target!");
+                            return;
+                        }
                     }
-                    target.forInSelectedItems(function (item, id) {
-                        if (target == source) {
-                            var oldPos = id.match(/.*(\d+)$/)[1];
-                            var targetPos = target.current.id.match(/.*(\d+)$/)[1];
-                            require(['dojo/request'], function (request) {
-                                request.post("${request.contextPath}/courseSection/updateSeq", {
-                                    data: {
-                                        courseId: "${courseInstance.id}",
-
+                });
+                topic.subscribe("/dnd/drop", function (source, nodes, copy, target) {
+                    var type = domAttr.get(nodes[0], 'dndType');
+                    if (type == 'unit') {
+                        return;
+                    }
+                    var updateUrl = "${request.contextPath}/courseUnit/updateUnit";
+                    var targetUnitSeq = target.id.match(/.*(\d+)$/)[1];
+                    requestData.targetUnitSeq = targetUnitSeq;
+                    var responseHandler = function (response) {
+                        require(['dojo/json'], function (json) {
+                            var responseJson = json.parse(response);
+                            if (!responseJson.success) {
+                                alert("更新失败:" + responseJson.error);
+//                                dojo.dnd.manager().stopDrag(); //TODO: 如何正确取消拖拽？
+                                return;
+                            }
+                            if (source == target) {
+                                source.getAllNodes().forEach(function (node) {
+                                    var m = node.id.match(/(.*)(\d+)$/);
+                                    var seq = parseInt(m[2]);
+                                    if (requestData.sourceUnitItemSeq < requestData.targetUnitItemSeq) {
+                                        if (seq > requestData.sourceUnitItemSeq && seq <= requestData.targetUnitItemSeq) {
+                                            query(node).attr('id', m[1] + (seq - 1));
+                                        }
+                                    } else if (requestData.sourceUnitItemSeq > requestData.targetUnitItemSeq) {
+                                        if (seq >= requestData.targetUnitItemSeq && seq < requestData.sourceUnitItemSeq) {
+                                            query(node).attr('id', m[1] + (seq + 1));
+                                        }
                                     }
-                                })
+                                    if (seq == requestData.sourceUnitItemSeq) {
+                                        query(node).attr('id', m[1] + requestData.targetUnitItemSeq);
+                                    }
+                                });
+                            } else {
+                                target.getAllNodes().forEach(function (node) {
+                                    var m = node.id.match(/(.*)(\d+)$/);
+                                    var seq = parseInt(m[2]);
+                                    if (seq >= requestData.targetUnitItemSeq) {
+                                        query(node).attr('id', m[1] + (seq + 1));
+                                    }
+                                });
+                                var newId = "courseSection" + targetUnitSeq + "item" + requestData.targetUnitItemSeq;
+                                query(nodes[0]).attr('id', newId);
+                                source.getAllNodes().forEach(function (node) {
+                                    var m = node.id.match(/(.*)(\d+)$/);
+                                    var seq = parseInt(m[2]);
+                                    if (seq > requestData.sourceUnitItemSeq) {
+                                        query(node).attr('id', m[1] + (seq - 1));
+                                    }
+                                });
+                            }
+                        });
+                    };
+                    if (target.getAllNodes().length == 0) {
+                        console.log("no node found in target unit");
+                        require(['dojo/request'], function (request) {
+                            request.post(updateUrl, {
+                                data: requestData
+                            }).then(responseHandler);
+                        });
+                    } else {
+                        console.log("ready to process moving unit item:" + target.selection.length);
+                        if (target.current == null) { // 未拖拽到任何一个节点上，当最后一个节点处理
+                            console.log("add node to last");
+                            require(['dojo/request'], function (request) {
+                                requestData.targetUnitItemSeq = target.getAllNodes().length;
+                                request.post(updateUrl, {
+                                    data: requestData
+                                }).then(responseHandler);
+                            });
+                        } else {
+                            console.log("add node to specified pos");
+                            require(['dojo/request'], function (request) {
+                                requestData.targetUnitItemSeq = target.current.id.match(/.*(\d+)$/)[1];
+                                request.post(updateUrl, {
+                                    data: requestData
+                                }).then(responseHandler);
                             });
                         }
-                    });
+                    }
                 });
-                %{--topic.subscribe("/dnd/drop", function (source, nodes, copy, target) {--}%
-                %{--if(target == null) {--}%
-                %{--return;--}%
-                %{--}--}%
-                %{--var type = domAttr.get(nodes[0], 'dndType');--}%
-                %{--if (type == 'section') {--}%
-                %{--var oldId = nodes[0].id;--}%
-                %{--var current = target.current;--}%
-                %{--var targetId = current.id;--}%
-                %{--var oldSection = oldId.match(/^courseSection(\d+)$/)[1];--}%
-                %{--var targetSection = targetId.match(/^courseSection(\d+)$/)[1];--}%
-                %{--require(['dojo/request'], function (request) {--}%
-                %{--request.post("${request.contextPath}/courseSection/updateSeq",--}%
-                %{--{--}%
-                %{--data: {--}%
-                %{--moveSection: true,--}%
-                %{--courseId: "${courseInstance.id}",--}%
-                %{--oldSection: oldSection,--}%
-                %{--targetSection: targetSection--}%
-                %{--}--}%
-                %{--}).then(function (response) {--}%
-                %{--require(['dojo/json'], function (json) {--}%
-                %{--if (!json.parse(response).success) {--}%
-                %{--alert('更新失败！');--}%
-                %{--} else {--}%
-                %{--domAttr.set(nodes[0], 'id', targetId);--}%
-                %{--domAttr.set(current, 'id', oldId);--}%
-                %{--}--}%
-                %{--});--}%
-                %{--})--}%
-                %{--});--}%
-                %{--return;--}%
-                %{--}--}%
-
-                %{--var current = target.current;--}%
-                %{--if (current != null) {--}%
-                %{--var clazz = domAttr.get(current, 'class');--}%
-                %{--console.log(clazz);--}%
-                %{--} else {--}%
-                %{--return;--}%
-                %{--}--}%
-                %{--if (source == target) {--}%
-                %{--var node = nodes[0];--}%
-                %{--var nodeId = node.id.match(/.*(\d+)$/)[1];--}%
-                %{--var pos = current.id.match(/.*(\d+)$/)[1];--}%
-                %{--if (nodeId != pos) {--}%
-                %{--var sectionSeq = source.id.match(/.*(\d+)$/)[1];--}%
-                %{--require(['dojo/request'], function (request) {--}%
-                %{--request.post("${request.contextPath}/courseSection/updateSeq",--}%
-                %{--{--}%
-                %{--data: {--}%
-                %{--courseId: "${courseInstance.id}",--}%
-                %{--sourceSeq: sectionSeq,--}%
-                %{--internal: true,--}%
-                %{--oldPos: nodeId,--}%
-                %{--newPos: pos--}%
-                %{--}--}%
-                %{--}).then(function (response) {--}%
-                %{--require(['dojo/json'], function (json) {--}%
-                %{--if (!json.parse(response).success) {--}%
-                %{--alert('更新失败！');--}%
-                %{--} else {--}%
-
-                %{--}--}%
-                %{--});--}%
-                %{--});--}%
-                %{--});--}%
-                %{--}--}%
-                %{--} else {--}%
-                %{--var nodeId = nodes[0].id.match(/.*(\d+)$/)[1], pos;--}%
-                %{--var sourceSectionSeq = source.id.match(/.*(\d+)$/)[1];--}%
-                %{--var targetSectionSeq = target.id.match(/.*(\d+)$/)[1];--}%
-                %{--if (current == null) {--}%
-                %{--pos = target.getAllNodes().length;--}%
-                %{--} else {--}%
-                %{--pos = current.id.match(/.*(\d+)$/)[1];--}%
-                %{--}--}%
-                %{--require(['dojo/request'], function (request) {--}%
-                %{--request.post("${request.contextPath}/courseSection/updateSeq",--}%
-                %{--{--}%
-                %{--data: {--}%
-                %{--courseId: "${courseInstance.id}",--}%
-                %{--sourceSeq: sourceSectionSeq,--}%
-                %{--targetSeq: targetSectionSeq,--}%
-                %{--oldPos: nodeId,--}%
-                %{--newPos: pos--}%
-                %{--}--}%
-                %{--}).then(function (response) {--}%
-                %{--require(['dojo/json'], function (json) {--}%
-                %{--if (!json.parse(response).success) {--}%
-                %{--alert('更新失败！'); //TODO: 1. 美化对话框； 2. 撤消拖动--}%
-                %{--} else {--}%
-
-                %{--}--}%
-                %{--});--}%
-                %{--});--}%
-                %{--});--}%
-                %{--}--}%
-                %{--});--}%
             });
 </script>
 </body>

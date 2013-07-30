@@ -5,7 +5,7 @@
 <g:else>
     <div id="${courseSectionId}" data-dojo-id="${courseSectionId}"
      class="dojoDndItem course-section"
-     dndType="section">
+     dndType="unit">
 </g:else>
 <g:set var="beginDate" value="${startDate + (order - 1) * 7}"/>
 <g:set var="endDate" value="${beginDate + 6}"/>

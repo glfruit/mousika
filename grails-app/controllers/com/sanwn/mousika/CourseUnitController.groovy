@@ -8,6 +8,16 @@ class CourseUnitController {
 
     def index() {}
 
+    def updateUnit(UpdateCourseUnitCommand cmd) {
+        try {
+            courseUnitService.moveUnitItem(cmd.courseId, cmd.sourceUnitSeq, cmd.targetUnitSeq, cmd.sourceUnitItemSeq, cmd.targetUnitItemSeq,cmd.before)
+            render contentType: "application/json", text: '{"success":true}'
+        } catch (Exception e) {
+            log.error("发生异常：", e)
+            render contentType: "application/json", text: """{"success":false,"error":"${e.message}"}"""
+        }
+    }
+
     def updateSeq() {
         if (params.moveSection) {
             def course = Course.get(params.long('courseId'))
@@ -57,4 +67,13 @@ class CourseUnitController {
 
         render contentType: "application/json", text: '{"success":true}'
     }
+}
+
+class UpdateCourseUnitCommand {
+    Long courseId
+    int sourceUnitSeq
+    int targetUnitSeq
+    int sourceUnitItemSeq
+    int targetUnitItemSeq
+    boolean before
 }

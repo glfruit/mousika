@@ -41,9 +41,6 @@ class Course {
      */
     int numberOfWeeks
 
-    List units
-
-
     static hasMany = [courseMembers: CourseMember, units: CourseUnit]
 
 

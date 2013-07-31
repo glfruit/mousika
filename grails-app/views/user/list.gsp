@@ -23,7 +23,6 @@
 			<table class="table table-striped">
 				<thead>
 					<tr>
-
 						<g:sortableColumn property="username" title="${message(code: 'user.username.label', default: 'Username')}" />
 					
 						<g:sortableColumn property="fullname" title="${message(code: 'user.fullname.label', default: 'Fullname')}" />

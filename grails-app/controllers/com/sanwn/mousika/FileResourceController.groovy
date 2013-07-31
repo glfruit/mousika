@@ -36,6 +36,12 @@ class FileResourceController {
         uploadedFile.transferTo(newFile)
         def fileResource = new FileResource(params)
         fileResource.filePath = newFile.getCanonicalPath()
+        def pos = filename.lastIndexOf('.')
+        if (pos == -1) {
+            fileResource.fileType = '*' //unknown file type
+        } else {
+            fileResource.fileType = filename.substring(pos + 1)
+        }
         try {
             courseUnitService.createUnitItem(course.id, sectionSeq, fileResource)
             redirect(controller: 'course', action: 'show', id: courseId)
@@ -68,14 +74,27 @@ class FileResourceController {
     }
 
     def show(Long id) {
-        def fileResourceInstance = FileResource.get(id)
-        if (!fileResourceInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'fileResource.label', default: 'FileResource'), id])
-            redirect(action: "list")
-            return
+        def fileResource = FileResource.get(id)
+        def file = new File(fileResource.filePath)
+        def contentType = FileResource.FILE_TYPES[fileResource.fileType]
+        contentType = contentType ? contentType : "application/octet-stream"
+        def supportedPlay = "mp3,m4v,m4a,wav,flv"
+        def range = request.getHeader('Range') //TODO: parse 0-n?
+        if (supportedPlay.indexOf(fileResource.fileType) != -1) {
+            response.reset()
+            response.setStatus(206)
+            response.addHeader("Accept-Ranges", "bytes")
+            response.addHeader("Content-length", String.valueOf(file.length() + 1))
+            response.addHeader("Content-range", "bytes 0-" + file.length() + "/" + (file.length() + 1))
         }
-
-        [fileResourceInstance: fileResourceInstance]
+        response.setContentType(contentType)
+        response.setContentLength(file.length().toInteger())
+        response.setCharacterEncoding("UTF-8")
+        def filename = "${fileResource.title}.${fileResource.fileType}"
+        filename = new String(filename.getBytes("UTF-8"), "ISO-8859-1")
+        response.setHeader("Content-disposition", "attachment;filename=${filename}")
+        response.outputStream << file.newInputStream()
+        response.outputStream.flush()
     }
 
     def edit(Long id) {

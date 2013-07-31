@@ -43,14 +43,22 @@
                 class="dojoDndItem" dndType="content">
                 <div style="display: inline;">
                     <div style="float: left; padding-right: 3em;">
-                        <g:if test="${item.content.type == 'urlresource'}">
+                        <g:if test="${item.content.type == 'urlResource'}">
                             <a href="${item.content.location}"
                                target="_blank">${item.title}</a>
                         </g:if>
                         <g:elseif test="${item.content.type != 'label'}">
-                            <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id)}">
-                                ${item.title}
-                            </a>
+                            <g:if test="${item.content.type == 'fileResource'}">
+                                <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id,
+                                        params: ['type': item.content.fileType])}" class="fileType">
+                                    ${item.title}
+                                </a>
+                            </g:if>
+                            <g:else>
+                                <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id)}">
+                                    ${item.title}
+                                </a>
+                            </g:else>
                             <span class="resource-link-details"></span>
                         </g:elseif>
                         <g:else>

@@ -76,7 +76,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="brand" href="${request.contextPath}"><g:message
-                        code="label.student.working"/></a>
+                        code="default.app.title"/></a>
 
                 <shiro:authenticated>
                     <div class="pull-right">
@@ -108,7 +108,9 @@
         <div class="row-fluid">
             <div class="span2">
                 <h4 style="border-bottom: 1px solid #000;color: #777777;">
-                    <g:message code="label.app.menu.nav"/>
+                    <a class="brand" href="${request.contextPath}/student"><g:message
+                            code="label.app.menu.nav"/></a>
+                    %{--<g:link action="student"><g:message code="label.app.menu.nav"/></g:link>--}%
                 </h4>
                 <g:if test="${controllerName == 'student'}">
                     %{--actionName == 'list'--}%
@@ -116,34 +118,24 @@
                         <div data-dojo-type="dijit/TitlePane"
                              data-dojo-props="title: '我的课程'"
                              style="padding-bottom: 10px;">
-                            <p>
-                                <g:if test="${courseInstanceList}">
-                                    <g:each in="${courseInstanceList}" status="i"
-                                            var="courseInstance">
-                                            <ul class="thumbnails">
-                                                <li class="span5">
-                                                        <g:link action="show"
-                                                                id="${courseInstance.id}">
-                                                            ${fieldValue(bean: courseInstance, field: "title")}
-                                                        </g:link>
+                                <g:if test="${myCourses}">
+                                    <g:each in="${myCourses}" status="i" var="course">
+                                        <p>
+                                            <g:link action="show" id="${course.id}"> ${course.title}</g:link>
+                                        </p>
 
-                                                </li>
-                                                <li class="span6">
-                                                </li>
-                                            </ul>
                                     </g:each>
                                 </g:if>
                                 <g:else>
                                     没有任何课程
                                 </g:else>
-                            </p>
                         </div>
                         <div data-dojo-type="dijit/TitlePane"
                              data-dojo-props="title: '我的活动'"
                              style="padding-bottom: 10px;">
                             <p>
                                 <g:link controller="student" action="regCourseList" class="btn create">注册课程</g:link>
-                                <g:link controller="student" action="regCourseList" class="btn create">我的作业</g:link>
+                                <g:link controller="student" action="assignmentList" class="btn create">我的作业</g:link>
                             <p>
                             </p>
                                         预习课程

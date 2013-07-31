@@ -3,6 +3,7 @@ package com.sanwn.mousika.controllers
 import com.sanwn.mousika.*
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
+import grails.converters.JSON
 
 class StudentController {
 
@@ -10,12 +11,14 @@ class StudentController {
 
     def gsonBuilder
 
-    def courses, myCourses
+    def courses, myCourses, notRegCourses
+    def assignments
 
-    def user
+    User loginUser
+    boolean isStudent
 
     def index() {
-        redirect(action: "myWorks", params: params)
+        redirect(action: "works", params: params)
     }
 
     /**
@@ -24,27 +27,69 @@ class StudentController {
      * @return
      */
     def beforeInterceptor = {  //before返回false，后续action不执行
-        def user = User.findByUsername(SecurityUtils.subject.principal)
+        loginUser = User.findByUsername(SecurityUtils.subject.principal)
+        isStudent = SecurityUtils.subject.hasRole(Role.STUDENT)
 
         courses = Course.findAll() {
-            courseMembers.user == user
         }
+
+        myCourses = Course.findAll() {
+            courseMembers.user == loginUser
+        }
+
+//        notRegCourses = Course.findAll() {
+//            courseMembers.user != loginUser
+//        }
+
+        notRegCourses = new ArrayList();
+        boolean isReg = false;
+        for(Course c:courses){
+            isReg = false
+            for(Course m:myCourses){
+                if(c.id==m.id){
+                    isReg = true;
+                }
+            }
+
+            if(!isReg){
+                notRegCourses.add(c)
+            }
+        }
+//        for(int i=notRegCourses.size()-1;i>=0;i--){
+//            Course c = notRegCourses.get(i);
+//            if(c.courseMembers!=null&&c.courseMembers.size()>0) {
+//                for(CourseMember cm:c.courseMembers.toArray()){
+//                    if(cm.user.id==user.id){
+//                        notRegCourses.remove(c)
+//                        break;
+//                    }
+//                }
+//            }
+//        }
+
+        assignments = Assignment.list([sort: 'section',order: 'asc']);
+            //type=="com.sanwn.mousika.Assignment";
+        assignments = Assignment.findAll("from Assignment as a order by section asc");
     }
 
-    def prepare(){
-    }
-
-    def myWorks() {
-        def isStudent = SecurityUtils.subject.hasRole(Role.STUDENT)
+    def works() {
         def count
         if (isStudent) {
-
             count = Course.createCriteria().count {
-                'in'('id', courses.id)
+                'in'('id', myCourses.id)
             }
         }
 
-        [courseInstanceList: courses, courseInstanceTotal: courses.size()]
+        [courselist:courses, myCourses: myCourses, notRegCourses:notRegCourses, assignments:assignments]
+    }
+
+    def assignment() {
+        def assignment = Assignment.findById(params.assignmentId);
+
+       [courselist:courses, myCourses: myCourses, notRegCourses:notRegCourses, assignment:assignment]
+    }
+    def assignmentList() {
+        [courselist:courses, myCourses: myCourses, notRegCourses:notRegCourses, assignments:assignments]
     }
 
     def list(Integer max) {
@@ -64,7 +109,7 @@ class StudentController {
             }
         }
 
-        [courseInstanceList: courses, courseInstanceTotal: courses.size()]
+        [courseList: courses, total: courses.size()]
     }
 
     def listPublic() {
@@ -100,41 +145,25 @@ class StudentController {
     }
 
     def regCourseList() {
-        def user = User.findByUsername(SecurityUtils.subject.principal)
-
-
-        def notRegCoures = Course.findAll() {
-            }
-
-        for(Course c:notRegCoures){
-            if(c.courseMembers!=null&&c.courseMembers.size()>0) {
-                for(CourseMember cm:c.courseMembers.toArray()){
-                    if(cm.user.id==user.id)
-                        notRegCoures.remove(c)
-                }
-            }
-        }
-
-        [items: courses, courseInstanceList: courses, courseInstanceTotal: courses.size(), notRegCoures: notRegCoures]
+        [myCourses: myCourses, notRegCourses:notRegCourses]
     }
 
     def regCourse() {
         def user = User.findByUsername(SecurityUtils.subject.principal)
+        def courseId = params.courseId;
+        if(courseId != null){
+            def course = Course.findById(courseId);
+            def role = Role.findByName("学生")
 
-
-        def notRegCoures = Course.findAll() {
-        }
-
-        for(Course c:notRegCoures){
-            if(c.courseMembers?.size()>0) {
-                for(CourseMember cm:c.courseMembers.toArray()){
-                    if(cm.user.id==user.id)
-                        notRegCoures.remove(c)
-                }
+            if(course != null){
+                CourseMember cm = new CourseMember();
+                cm.setUser(user)
+                cm.setCourse(course)
+                cm.setRole(role)
+                cm.save();
             }
         }
-
-        [courseInstanceList: courses, courseInstanceTotal: courses.size(), notRegCoures: notRegCoures]
+        redirect(action: "regCourseList", params: params)
     }
 
     def save() {

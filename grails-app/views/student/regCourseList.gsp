@@ -1,97 +1,66 @@
 <%@ page import="com.sanwn.mousika.Role; org.apache.commons.lang.StringEscapeUtils; com.sanwn.mousika.User; com.sanwn.mousika.Course" %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <g:set var="entityName"
-               value="${message(code: 'course.label')}"/>
-        <title><g:message code="default.list.label"
-                          args="[entityName]"/></title>
-        <style type="text/css">
-        .dojoxGridCell {
-            font-size: 12px;
-        }
+<head>
+    <link rel="stylesheet"
+          href="${resource(dir:'js/lib/dijit/themes/claro',file:'claro.css')}"
+    />
+    <script src="${resource(dir:'js/lib/dojo',file:'dojo.js')}"
+            data-dojo-config="isDebug: true,parseOnLoad: true,locale:'zh'"></script>
+    <g:set var="entityName"
+           value="${message(code: 'course.label')}"/>
+    <title><g:message code="default.list.label"
+                      args="[entityName]"/></title>
 
-        h2 {
-            margin-top: 0;
-        }
-        </style>
-        <link rel="stylesheet"
-              href="${resource(dir: 'js/lib/dojox/grid/enhanced/resources/claro', file: 'EnhancedGrid.css')}"
-              type="text/css"/>
-        <script type="text/javascript">
-            require(['dojox/grid/EnhancedGrid','dojox/grid/enhanced/plugins/Pagination','dojox/data/QueryReadStore'],function(g,p,Store) {
-                var myStore = new Store({url:'student/regCourseList',requestMethod:'POST'});
-            })
-        </script>
-    </head>
+    <style type="text/css">
+    .dojoxGridCell {font-size: 12px;}
+    h2 {margin-top: 0;}
+    </style>
 
-    <body class="claro">
-        <g:if test="${org.apache.shiro.SecurityUtils.subject.hasRoles([com.sanwn.mousika.Role.STUDENT])}">
-            <h4 style="border-bottom: 1px solid #000;color: #777777;">
-                <g:message code="label.student.regCourse"/>
-            </h4>
-        </g:if>
+</head>
 
-        <% header = {
-            return """
-    <button style="float:left">Selected: ${dojo.bind(variable: 'myGrid.selected')}</button>
-    <h2>My Widgets ( ${dojo.bind(variable: 'myGrid.rowCount')} )</h2>
-  """
-        } %>
+<body >
+<g:if test="${org.apache.shiro.SecurityUtils.subject.hasRoles([com.sanwn.mousika.Role.STUDENT])}">
+    <h4 style="border-bottom: 1px solid #000;color: #777777;">
+        <g:message code="label.student.regCourse"/>
+    </h4>
+</g:if>
 
-        <table dojoType="dojox.grid.EnhancedGrid" jsId="grid" data-dojo-id="myStore"
-               rowsPerPage="5" clientSort="true"
-               style="width: 100%; height: 100%;"
-               onRowDblClick="onRowDblClick"
-               rowSelector="20px" plugins="{ pagination: {
-           pageSizes:['5','10','20'],
-           maxPageStep: 5,
-           descTemplate: '${message(code: 'AAA')}',
-           description: true,
-           sizeSwitch: true,
-           pageStepper: true ,
-           gotoButton: true
-           }}">
-            <thead>
-                <tr>
-                    <th width="50px" field="id">ID</th>
-                    <th width="100px" field="name">员工号</th>
-                </tr>
-            </thead>
-        </table>
-
-
-        <g:if test="${notRegCoures}">
-            <g:each in="${notRegCoures}" status="i"
-                    var="courseInstance">
-                <section
-                        style="border: 1px solid #A0A0A0;padding-left: 10px;padding-right: 10px;margin-top:10px;margin-bottom: 10px;">
-                    <ul class="thumbnails">
-                        <li class="span5">
-                            <h3>
-                                <dojo:grid name="myGrid" controller="student"
-                                           action="regCourse" max="20"
-                                           sort="name"
-                                           style="height:200px; width:600px"
-                                           header="${header}" selectable="true">
-                                    <dojo:col width="50%" label="title"
-                                              field="notRegCoures.title">${notRegCoures.title}</dojo:col>
-                                    <dojo:col width="50%" label="id"
-                                              field="notRegCoures.id">${notRegCoures.id}</dojo:col>
-                                </dojo:grid>
-                            </h3>
-
-                    </ul>
-                </section>
-            </g:each>
-            <p>
-                <g:link controller="student" action="regCourse"
-                        class="btn create">注 册</g:link>
-            <p>
-        </g:if>
+<div id="list-user" class="content scaffold-show" role="main">
+    <g:link action="regCourse" class="btn pull-right">批量注册</g:link>
+    <g:link action="create" class="btn pull-right">查询</g:link>
+    </br>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>课程名称</th>
+            <th>课程代码</th>
+            <th>授课周数</th>
+            <th>课程描述</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+<g:if test="${notRegCourses}">
+        <g:each in="${notRegCourses}" var="course">
+            <tr>
+                <td>${course.title}</td>
+                <td>${course.code}</td>
+                <td>${course.numberOfWeeks}</td>
+                <td>${course.description}</td>
+                <td>
+                    <g:link action="regCourse" params="['courseId':course.id]" class="btn pull-right">注册</g:link>
+                </td>
+            </tr>
+        </g:each>
+</g:if>
         <g:else>
-            <p>暂时没有任何课程</p>
+            <tr><td colspan="4">暂时没有任何课程</td></tr>
         </g:else>
 
-    </body>
+        </tbody>
+    </table>
+</div>
+
+</body>
 </html>

@@ -9,6 +9,8 @@ class CourseUnit {
 
     String title
 
+    static searchable = true
+
     static belongsTo = [course: Course]
 
     static hasMany = [items: UnitItem]

@@ -11,6 +11,8 @@ class UnitItem {
 
     Content content
 
+    static searchable = true
+
     static belongsTo = [unit: CourseUnit]
 
     static mapping = {

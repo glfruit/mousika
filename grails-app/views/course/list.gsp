@@ -50,7 +50,16 @@
         </g:else>
         <shiro:hasPermission permission="course:create">
             <g:link controller="course" action="create"
-                    class="btn create">创建新课程</g:link>
+                    class="btn create"><g:message
+                    code="course.create.label"/></g:link>
         </shiro:hasPermission>
+        <g:form style="float: right;" class="form-search"
+                url="[controller: 'course', action: 'search']" method='get'>
+            <g:textField name="q" value="${params.q}" size="50"
+                         class="input-medium search-query"/>
+            <button type="submit" class="btn"><g:message
+                    code="course.search.label"/></button>
+        </g:form>
+        <div style="clear:both;"></div>
     </body>
 </html>

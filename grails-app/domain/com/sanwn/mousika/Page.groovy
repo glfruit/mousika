@@ -11,6 +11,8 @@ class Page extends Content {
         content blank: false
     }
 
+    static searchable = true
+
     static mapping = {
         content column: "labelContent", sqlType: "text"
     }

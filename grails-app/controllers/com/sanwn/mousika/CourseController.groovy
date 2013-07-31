@@ -1,6 +1,7 @@
 package com.sanwn.mousika
 
 import org.apache.shiro.SecurityUtils
+import org.compass.core.engine.SearchEngineQueryParseException
 import org.springframework.dao.DataIntegrityViolationException
 
 class CourseController {
@@ -8,6 +9,8 @@ class CourseController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def gsonBuilder
+
+    def searchableService
 
     def index() {
         redirect(action: "list", params: params)
@@ -232,5 +235,16 @@ class CourseController {
         def code = course.code
         SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, code)
         redirect(controller: 'fileRepository', action: 'list')
+    }
+
+    def search() {
+        if (!params.q?.trim()) {
+            return [:]
+        }
+        try {
+            return [searchResult: Course.search(params.q, params)]
+        } catch (SearchEngineQueryParseException ex) {
+            return [parseException: true]
+        }
     }
 }

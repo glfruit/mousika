@@ -41,6 +41,8 @@ class Course {
      */
     int numberOfWeeks
 
+    static searchable = true
+
     static hasMany = [courseMembers: CourseMember, units: CourseUnit]
 
 

@@ -14,6 +14,8 @@ class FileResource extends Content {
             'mp3': 'audio/mp3',
             'avi': 'video/avi']
 
+    static searchable = true
+
     static constraints = {
     }
 }

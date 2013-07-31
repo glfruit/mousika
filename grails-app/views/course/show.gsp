@@ -276,20 +276,16 @@
                     if (supported) {
                         on(node, 'click', function (e) {
                             event.stop(e);
-//                            $(document).ready(function () {
                             if (supportedAudioFormats.indexOf(fileType) != -1) {
                                 $("#jquery_jplayer_1").jPlayer({
                                     ready: function () {
                                         $(this).jPlayer("setMedia", {
-                                            mp3: "http://localhost:8080/mousika/fileResource/show/41"
-//                                            m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
-//                                            oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
+                                            mp3: node.pathname
                                         });
                                     },
                                     swfPath: "${request.contextPath}/js/jplayer",
                                     supplied: supportedAudioFormats
                                 });
-//                            });
                                 query('#jPlayerAudioDlg').modal();
                             } else {
                                 $("#jquery_video_jplayer").jPlayer({
@@ -297,8 +293,6 @@
                                     ready: function () {
                                         $(this).jPlayer("setMedia", {
                                             flv: node.pathname
-//                                            m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
-//                                            oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
                                         });
                                     },
                                     swfPath: "${request.contextPath}/js/jplayer",

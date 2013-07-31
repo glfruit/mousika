@@ -6,4 +6,6 @@ class UrlResource extends Content {
 
     static constraints = {
     }
+
+    static searchable = true
 }

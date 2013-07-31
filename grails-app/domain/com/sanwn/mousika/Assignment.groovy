@@ -32,6 +32,8 @@ class Assignment extends Content {
      */
     String filePath
 
+    static searchable = true
+
     static constraints = {
         filePath nullable: true, blank: false
         availableFrom nullable: true

@@ -8,6 +8,8 @@ class Content {
 
     def type = this.class.simpleName[0].toLowerCase() + this.class.simpleName.substring(1)
 
+    static searchable = true
+
     static transients = ['type']
 
     static constraints = {

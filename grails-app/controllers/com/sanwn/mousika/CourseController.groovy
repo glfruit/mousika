@@ -22,27 +22,20 @@ class CourseController {
         params.offset = params.offset ?: 0
 
         def isAdmin = SecurityUtils.subject.hasRole(Role.ADMIN)
-        def courses, count
+        def courses, total
         if (isAdmin) {
             courses = Course.list(params)
-            count = Course.count()
+            total = Course.count()
         } else {
-            def user = User.findByUsername(SecurityUtils.subject.principal)
-            courses = Course.findAll([max: params.max, sort: params.sort, offset: params.offset]) {
-                courseMembers.user == user
-            }
-            count = Course.createCriteria().count {
+            courses = Course.where {
+                deliveredBy.username == SecurityUtils.subject.principal
+            }.list(params)
+            total = Course.createCriteria().count {
                 'in'('id', courses.id)
             }
         }
 
-        def teachers = []
-        courses.each { course ->
-            teachers << course.courseMembers.find { member ->  //TODO: 一门课程只有一名教师？
-                member.role.name == "教师"
-            }
-        }
-        [courseInstanceList: courses, courseInstanceTotal: count, teachers: teachers]
+        [courseInstanceList: courses, courseInstanceTotal: total]
     }
 
     def listPublic() {
@@ -88,8 +81,16 @@ class CourseController {
             courseInstance.addToUnits(unit)
         }
 
-        if (!courseInstance.save(flush: true)) {
-            log.error("添加课程${courseInstance.title}失败:${courseInstance.errors.fieldError.defaultMessage}")
+        try {
+            if (!courseInstance.save(flush: true)) {
+                log.error("添加课程${courseInstance.title}失败:${courseInstance.errors.fieldError.defaultMessage}")
+                render(view: "create", model: [courseInstance: courseInstance])
+                return
+            }
+        }
+        catch (DataIntegrityViolationException e) {
+            log.error("系统错误:${e}",)
+            flash.message = "系统内部错误"
             render(view: "create", model: [courseInstance: courseInstance])
             return
         }
@@ -169,15 +170,16 @@ class CourseController {
     }
 
     def enrol(Long id) {
-        params.max = Math.min(params.max ?: 10, 100)
+        params.max = Math.min(params.max ?: 2, 100)
         params.offset = params.offset ?: 0
-        params.sort = 'fullname'
+        params.sort = 'username'
         params.order = 'asc'
         def userCount = User.count()
         def course = Course.get(id)
-        def members = course.courseMembers.user
+        def members = course.deliveredBy ? [course.deliveredBy] : []
+        members.addAll(course.students)
         [users: User.list(params), members: members,
-                userCount: userCount, pages: userCount / params.max + 1, offset: params.offset]
+                userCount: userCount, pages: Math.ceil(userCount / params.max), offset: params.offset]
     }
 
     def assign(Long id) {
@@ -186,10 +188,12 @@ class CourseController {
         def role = Role.get(params.rid)
         user.addToRoles(role)
         if ("学生" == role.name) {
+            course.addToStudents(user)
             user.addToPermissions("course:show:${id}")
+        } else if ("教师" == role.name) {
+            course.deliveredBy = user
+            user.addToPermissions("course:*:${id}")
         }
-        def member = new CourseMember(user: user, role: role)
-        course.addToCourseMembers(member)
         course.save(flush: true)
         render(contentType: "text/json") {  //TODO: handle failure
             [success: !course.hasErrors()]
@@ -198,9 +202,8 @@ class CourseController {
 
     def listMembers(Long id) {
         def course = Course.get(id)
-        def members = CourseMember.where {
-            course.id == id
-        }.order('role').order('user').list().user
+        def members = course.deliveredBy ? [course.deliveredBy] : []
+        members.addAll(course.students)
         withFormat {
             html {
                 [members: members, courseId: course.id]
@@ -232,8 +235,8 @@ class CourseController {
         if (!course) {
             throw new IllegalArgumentException("未找到id为${id}的课程")
         }
-        def code = course.code
-        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, code)
+        def token = course.courseToken
+        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, token)
         redirect(controller: 'fileRepository', action: 'list')
     }
 

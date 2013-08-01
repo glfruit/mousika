@@ -10,6 +10,11 @@ package com.sanwn.mousika
 class Course {
 
     /**
+     * 课程标识符，唯一标明一位教师教授的一门课程
+     */
+    String courseToken
+
+    /**
      * 课程名称
      */
     String title
@@ -41,14 +46,23 @@ class Course {
      */
     int numberOfWeeks
 
+    /**
+     * 授课教师
+     */
+    User deliveredBy
+
+    SortedSet students
+
     static searchable = true
 
-    static hasMany = [courseMembers: CourseMember, units: CourseUnit]
+    static hasMany = [students: User, units: CourseUnit]
 
 
     static constraints = {
+        courseToken unique: true, blank: false
         code blank: false
         title blank: false
+        deliveredBy nullable: true
         description nullable: true
     }
 

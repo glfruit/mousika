@@ -141,7 +141,7 @@
                                 </li>
                                 <li><i class="icon-user"></i><span
                                         style="padding-left: 5px;"><a
-                                            href="${createLink(action: 'listMembers', id: courseInstance.id)}">成员</a>
+                                            href="${createLink(action: 'enrol', id: courseInstance.id)}">成员</a>
                                 </span>
                                 </li>
                                 <li><i class="icon-list"></i><span

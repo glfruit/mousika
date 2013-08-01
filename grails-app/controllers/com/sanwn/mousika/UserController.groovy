@@ -6,13 +6,32 @@ class UserController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
+    def gsonBuilder
+
     def index() {
         redirect(action: "list", params: params)
     }
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [userInstanceList: User.list(params), userInstanceTotal: User.count()]
+        withFormat {
+            html {
+                [userInstanceList: User.list(params), userInstanceTotal: User.count()]
+            }
+            json {
+                def json = User.list(params).collect {
+                    [
+                            username: it.username,
+                            fullname: it.fullname,
+                            email: it.profile?.email,
+                            lastAccessed: it.profile?.lastAccessed,
+                            roles: it.roles.collect { [id: it.id, name: it.name] }
+                    ]
+                }
+                def gson = gsonBuilder.create()
+                render contentType: "text/json", text: gson.toJson(json)
+            }
+        }
     }
 
     def create() {

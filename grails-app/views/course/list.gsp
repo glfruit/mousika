@@ -34,16 +34,20 @@
                             </h3>
 
                             <p>教师：<g:link controller="user" action="show"
-                                          id="${teachers[i]?.user?.id}">${teachers[i]?.user?.fullname}</g:link></p>
+                                          id="${courseInstance.deliveredBy?.id}">${courseInstance.deliveredBy?.fullname}</g:link></p>
                         </li>
                         <li class="span6">
-                            <g:set var="desc"
-                                   value="${courseInstance.description}"/>
-                            ${StringEscapeUtils.unescapeHtml(desc)}
+                            <%=courseInstance.description%>
                         </li>
                     </ul>
                 </section>
             </g:each>
+            <g:paginate controller="course"
+                        action="list"
+                        params="${params}"
+                        total="${courseInstanceTotal}"
+                        prev="&lt; previous"
+                        next="next &gt;"></g:paginate>
         </g:if>
         <g:else>
             <p>暂时没有任何课程</p>

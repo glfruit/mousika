@@ -116,7 +116,7 @@
                                     %{--id="${teachers[i]?.user?.id}">${teachers[i]?.user?.fullname}</g:link></p>--}%
                                 </li>
                                 <li class="span6">
-                                    ${result.description.decodeHTML()}
+                                    <%=result.description%>
                                 </li>
                             </ul>
                         </section>

@@ -2,7 +2,9 @@ package com.sanwn.mousika
 
 class User implements Comparable {
 
-    static searchable = true
+    static searchable = {
+        roles reference:true
+    }
 
     String username
 

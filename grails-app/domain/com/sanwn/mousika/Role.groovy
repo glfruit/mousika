@@ -1,6 +1,9 @@
 package com.sanwn.mousika
 
 class Role {
+
+    static searchable = true
+
     static final String TEACHER = "教师"
 
     static final String STUDENT = "学生"

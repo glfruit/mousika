@@ -75,8 +75,9 @@
             </div>
         </g:if>
         <form class="form-search">
-            <input type="text" class="input-medium search-query">
-            <button type="submit" class="btn">搜索</button>
+            <input id="searchBy" placeholder="查找用户" type="text"
+                   class="input-medium search-query">
+            <button id="searchUserBtn" type="submit" class="btn">搜索</button>
         </form>
     </div>
 
@@ -125,10 +126,17 @@
     require(["dojo/query",
         "dojo/ready",
         "dojo/_base/event",
-        "bootstrap/Modal"], function (query, ready, event) {
+        "dojo/dom",
+        "dojo/dom-class",
+        "dojo/request",
+        "dojo/dom-construct",
+        "dojo/json",
+        "dojo/_base/array",
+        "bootstrap/Modal"], function (query, ready, event, dom, domClass, request, domConstruct, json, arrayUtil) {
         ready(function () {
+            var searchTotal = -1;
             query(".enrol").on("click", function (e) {
-                require(['dojo/request', 'dojo/dom', 'dojo/dom-attr'], function (request, dom, domAttr) {
+                require(['dojo/request'], function (request) {
                     var uid = query(e.target)[0].id.match(/btn(\d+)$/)[1];
                     request.post("${request.contextPath}/course/assign/${params.id}", {
                         data: {
@@ -147,8 +155,39 @@
                             });
                 });
             });
-            query(".page-link").on("click", function (e) {  //TODO: 处理分页
+            query("#searchUserBtn").on("click", function (e) {
                 event.stop(e);
+                domClass.add(dom.byId('searchUserBtn'), 'inSearch');
+                request.get("${request.contextPath}/user/search", {
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    query: {
+                        max: 20,
+                        offset: 0,
+                        sort: 'username',
+                        q: dom.byId('searchBy').value
+                    }
+                }).then(function (response) {
+                            var userTbl = dom.byId('userTbl');
+                            domConstruct.empty(userTbl);
+                            var searchResult = json.parse(response);
+                            var users = searchResult.users;
+                            arrayUtil.forEach(users, function (user, i) {
+                                var tr = domConstruct.create('tr', null, userTbl);
+                                domConstruct.create("td", {innerHTML: i + 1}, tr);
+                                domConstruct.create("td", {innerHTML: user.profile ? user.photo : ''})
+                                domConstruct.create("td", {innerHTML: user.fullname}, tr);
+                                domConstruct.create("td", {innerHTML: user.profile ? user.profile.email : ''}, tr);
+                                domConstruct.create("td", {innerHTML: "<button id='btn" + user.id + " type='button' class='btn enrol'>添加</button>"}, tr);
+                            });
+                            searchTotal = searchResult.total;
+                        });
+            });
+            query(".page-link").on("click", function (e) {
+                event.stop(e);
+                var baseUrl = "${request.contextPath}/user/";
+                var url = query('.inSearch').length == 0 ? baseUrl + 'list' : baseUrl + 'search';
                 require(['dojo/request', 'dojo/dom-attr', 'dojo/dom', 'dojo/dom-class'], function (request, domAttr, dom, domClass) {
                     var clz = query(e.target).parent().attr("class").toString();
                     if (!clz.contains("active")) {
@@ -158,13 +197,13 @@
                         if (p == "back") {
                             p = current - 1;
                             if (p < 0) return;
-                            request.get("${request.contextPath}/user/list", {
+                            request.get(url, {
                                 headers: {
                                     'Accept': 'application/json'
                                 },
                                 query: {
-                                    max: 2,
-                                    offset: p * 2,
+                                    max: 20,
+                                    offset: p * 20,
                                     sort: 'username'
                                 }
                             }).then(function (response) {
@@ -179,7 +218,7 @@
                                                         domConstruct.create("td", {innerHTML: user.profile ? user.photo : ''})
                                                         domConstruct.create("td", {innerHTML: user.fullname}, tr);
                                                         domConstruct.create("td", {innerHTML: user.profile ? user.profile.email : ''}, tr);
-                                                        domConstruct.create("td",{innerHTML:"<button id='btn" + user.id + " type='button' class='btn enrol'>添加</button>"},tr);
+                                                        domConstruct.create("td", {innerHTML: "<button id='btn" + user.id + " type='button' class='btn enrol'>添加</button>"}, tr);
                                                     });
                                                     domClass.remove(dom.byId('forwardAnchor'), 'disabled');
                                                     query('.active.page-num').removeClass('active');
@@ -194,14 +233,15 @@
 
                         } else if (p == "forward") {
                             p = current + 1;
+                            if (searchTotal != -1 && p >= searchTotal) return;
                             if (p >= parseInt("${pages}")) return;
-                            request.get("${request.contextPath}/user/list", {
+                            request.get(url, {
                                 headers: {
                                     'Accept': 'application/json'
                                 },
                                 query: {
-                                    max: 2,
-                                    offset: p * 2,
+                                    max: 20,
+                                    offset: p * 20,
                                     sort: 'username'
                                 }
                             }).then(function (response) {
@@ -216,7 +256,7 @@
                                                         domConstruct.create("td", {innerHTML: user.profile ? user.photo : ''})
                                                         domConstruct.create("td", {innerHTML: user.fullname}, tr);
                                                         domConstruct.create("td", {innerHTML: user.profile ? user.profile.email : ''}, tr);
-                                                        domConstruct.create("td",{innerHTML:"<button id='btn" + user.id + " type='button' class='btn enrol'>添加</button>"},tr);
+                                                        domConstruct.create("td", {innerHTML: "<button id='btn" + user.id + " type='button' class='btn enrol'>添加</button>"}, tr);
                                                     });
                                                     domClass.remove(dom.byId('backAnchor'), 'disabled');
                                                     query('.active.page-num').removeClass('active');
@@ -230,13 +270,13 @@
                                     });
                         } else {
                             p = parseInt(p);
-                            request.get("${request.contextPath}/user/list", {
+                            request.get(url, {
                                 headers: {
                                     'Accept': 'application/json'
                                 },
                                 query: {
-                                    max: 2,
-                                    offset: p * 2,
+                                    max: 20,
+                                    offset: p * 20,
                                     sort: 'username'
                                 }
                             }).then(function (response) {
@@ -251,7 +291,7 @@
                                                         domConstruct.create("td", {innerHTML: user.profile ? user.photo : ''})
                                                         domConstruct.create("td", {innerHTML: user.fullname}, tr);
                                                         domConstruct.create("td", {innerHTML: user.profile ? user.profile.email : ''}, tr);
-                                                        domConstruct.create("td",{innerHTML:"<button id='btn" + user.id + " type='button' class='btn enrol'>添加</button>"},tr);
+                                                        domConstruct.create("td", {innerHTML: "<button id='btn" + user.id + " type='button' class='btn enrol'>添加</button>"}, tr);
                                                     });
                                                     query('.active.page-num').removeClass('active');
                                                     domClass.toggle(e.target.parentNode, 'active');
@@ -300,6 +340,8 @@
                                                 });
                                                 domConstruct.create("td", {innerHTML: roles}, tr);
                                             });
+                                            query('.inSearch').removeClass('inSearch');
+                                            searchTotal = -1;
                                         });
                             });
                 });

@@ -170,7 +170,7 @@ class CourseController {
     }
 
     def enrol(Long id) {
-        params.max = Math.min(params.max ?: 2, 100)
+        params.max = Math.min(params.max ?: 20, 100)
         params.offset = params.offset ?: 0
         params.sort = 'username'
         params.order = 'asc'
@@ -211,6 +211,7 @@ class CourseController {
             json {
                 def json = members.collect { member ->
                     [
+                            id: member.id,
                             username: member.username,
                             fullname: member.fullname,
                             email: member.profile?.email,

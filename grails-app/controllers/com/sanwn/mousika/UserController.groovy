@@ -1,5 +1,6 @@
 package com.sanwn.mousika
 
+import org.compass.core.engine.SearchEngineQueryParseException
 import org.springframework.dao.DataIntegrityViolationException
 
 class UserController {
@@ -21,6 +22,7 @@ class UserController {
             json {
                 def json = User.list(params).collect {
                     [
+                            id: it.id,
                             username: it.username,
                             fullname: it.fullname,
                             email: it.profile?.email,
@@ -116,6 +118,40 @@ class UserController {
         catch (DataIntegrityViolationException e) {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), id])
             redirect(action: "show", id: id)
+        }
+    }
+
+    def search() {
+        if (!params.q?.trim()) {
+            return [:]
+        }
+        try {
+            def searchResult = User.search(params.q, params)
+            withFormat {
+                html {
+                    [searchResult: searchResult]
+                }
+                json {
+                    def results = [
+                        total: searchResult.total,
+                        max: searchResult.max,
+                        offset: searchResult.offset,
+                        users: searchResult.results.collect {
+                            [
+                                    id: it.id,
+                                    username: it.username,
+                                    fullname: it.fullname,
+                                    email: it.profile?.email,
+                                    lastAccessed: it.profile?.lastAccessed,
+                                    roles: it.roles.collect { [id: it.id, name: it.name] }
+                            ]
+                        }
+                    ]
+                    render contentType: 'text/json', text: gsonBuilder.create().toJson(results)
+                }
+            }
+        } catch (SearchEngineQueryParseException ex) {
+            return [parseException: true]
         }
     }
 

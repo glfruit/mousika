@@ -25,7 +25,8 @@
     </head>
 
     <body>
-        <div id="edit-course" class="content scaffold-create" role="main">
+        <div id="edit-course" class="content scaffold-create" role="main"
+             style="padding-top: 20px;">
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -37,9 +38,13 @@
                     </g:eachError>
                 </ul>
             </g:hasErrors>
-            <g:form id="create-course-form" action="save"
+            <g:form method="post"
+                    action="update"
                     class="form-horizontal">
                 <f:with bean="courseInstance">
+                    <g:hiddenField name="id" value="${courseInstance?.id}"/>
+                    <g:hiddenField name="version"
+                                   value="${courseInstance?.version}"/>
                     <f:field property="code"/>
                     <f:field property="title"/>
                     <f:field property="description"/>
@@ -49,8 +54,8 @@
                     <f:field property="guestVisible"/>
                 </f:with>
                 <div class="control-group pagination-centered">
-                    <g:actionSubmit action="update" class="btn btn-primary"
-                                    value="${message(code: 'default.button.update.label')}"/>
+                    <g:submitButton id="update-course" name="update-course"
+                            class="btn btn-primary" value="${message(code: 'default.button.update.label')}"/>
                     <a class="btn"
                        href="${createLink(action: 'show', id: courseInstance.id)}">取消</a>
                 </div>

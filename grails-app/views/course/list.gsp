@@ -10,12 +10,12 @@
 
     <body>
         <g:if test="${org.apache.shiro.SecurityUtils.subject.hasRoles([com.sanwn.mousika.Role.ADMIN])}">
-            <h4 style="border-bottom: 1px solid #000;color: #777777;">
+            <h4 style="border-bottom: 1px solid #DEDEDE;color: #777777;padding-top: 10px;">
                 <g:message code="label.course.list"/>
             </h4>
         </g:if>
         <g:else>
-            <h4 style="border-bottom: 1px solid #000;color: #777777;">
+            <h4 style="border-bottom: 1px solid #DEDEDE;color: #777777;">
                 <g:message code="label.course.teacher"/>
             </h4>
         </g:else>

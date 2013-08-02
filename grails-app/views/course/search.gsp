@@ -24,9 +24,6 @@
                 <button type="submit" class="btn"><g:message
                         code="course.search.label"/></button>
             </g:form>
-            <div style="clear: both; display: none;" class="hint">See <a
-                    href="http://lucene.apache.org/java/docs/queryparsersyntax.html">Lucene query syntax</a> for advanced queries
-            </div>
         </div>
 
         <div id="main">
@@ -45,56 +42,11 @@
             </div>
 
             <g:if test="${haveQuery && !haveResults && !parseException}">
-                <p>Nothing matched your query - <strong>${params.q}</strong></p>
-                <g:if test="${!searchResult?.suggestedQuery}">
-                    <p>Suggestions:</p>
-                    <ul>
-                        <li>Try a suggested query: <g:link
-                                controller="searchable" action="index"
-                                params="[q: params.q, suggestQuery: true]">Search again with the <strong>suggestQuery</strong> option</g:link><br/>
-                            <em>Note: Suggestions are only available when classes are mapped with <strong>spellCheck</strong> options, either at the class or property level.<br/>
-                                The simplest way to do this is add <strong>spellCheck "include"</strong> to the domain class searchable mapping closure.<br/>
-                                See the plugin/Compass documentation Mapping sections for details.
-                            </em>
-                        </li>
-                    </ul>
-                </g:if>
-            </g:if>
-
-            <g:if test="${searchResult?.suggestedQuery}">
-                <p>Did you mean <g:link controller="searchable" action="index"
-                                        params="[q: searchResult.suggestedQuery]">${StringQueryUtils.highlightTermDiffs(params.q.trim(), searchResult.suggestedQuery)}</g:link>?</p>
+                <p>未找到匹配“<strong>${params.q}</strong>“的结果。</p>
             </g:if>
 
             <g:if test="${parseException}">
-                <p>Your query - <strong>${params.q}</strong> - is not valid.</p>
-
-                <p>Suggestions:</p>
-                <ul>
-                    <li>Fix the query: see <a
-                            href="http://lucene.apache.org/java/docs/queryparsersyntax.html">Lucene query syntax</a> for examples
-                    </li>
-                    <g:if test="${LuceneUtils.queryHasSpecialCharacters(params.q)}">
-                        <li>Remove special characters like <strong>" - [ ]</strong>, before searching, eg, <em><strong>${LuceneUtils.cleanQuery(params.q)}</strong>
-                        </em><br/>
-                            <em>Use the Searchable Plugin's <strong>LuceneUtils#cleanQuery</strong> helper method for this: <g:link
-                                    controller="searchable" action="index"
-                                    params="[q: LuceneUtils.cleanQuery(params.q)]">Search again with special characters removed</g:link>
-                            </em>
-                        </li>
-                        <li>Escape special characters like <strong>" - [ ]</strong> with <strong>\</strong>, eg, <em><strong>${LuceneUtils.escapeQuery(params.q)}</strong>
-                        </em><br/>
-                            <em>Use the Searchable Plugin's <strong>LuceneUtils#escapeQuery</strong> helper method for this: <g:link
-                                    controller="searchable" action="index"
-                                    params="[q: LuceneUtils.escapeQuery(params.q)]">Search again with special characters escaped</g:link>
-                            </em><br/>
-                            <em>Or use the Searchable Plugin's <strong>escape</strong> option: <g:link
-                                    controller="searchable" action="index"
-                                    params="[q: params.q, escape: true]">Search again with the <strong>escape</strong> option enabled</g:link>
-                            </em>
-                        </li>
-                    </g:if>
-                </ul>
+                <p>输入的查询关键字“<strong>${params.q}</strong>“不正确。</p>
             </g:if>
 
             <g:if test="${haveResults}">
@@ -129,9 +81,6 @@
                                             </span>
                                         </a>
                                     </p>
-
-                                    %{--<p>教师：<g:link controller="user" action="show"--}%
-                                    %{--id="${teachers[i]?.user?.id}">${teachers[i]?.user?.fullname}</g:link></p>--}%
                                 </li>
                                 <li class="span6">
                                     <%=result.description%>

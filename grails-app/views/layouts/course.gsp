@@ -126,9 +126,25 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span2">
-                <h4 style="border-bottom: 1px solid #000;color: #777777;">
-                    <g:message code="label.app.menu.nav"/>
-                </h4>
+                <div id="nav-panel"
+                     data-dojo-type="dijit/TitlePane"
+                     data-dojo-props="title: '导航'"
+                     style="padding-bottom: 10px; padding-top: 20px;">
+                    <ul style="list-style: none;text-align: left;margin: 0;padding: 0;">
+                        <li>
+                            <i class="icon-home"></i>
+                            <span style="padding-left: 5px;">
+                                <a href="${request.contextPath}">首页</a>
+                            </span>
+                        </li>
+                        <li>
+                            <i class="icon-book"></i>
+                            <span style="padding-left: 5px;">
+                                <a href="${createLink(controller: 'course', action: 'list')}">课程</a>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
                 <g:if test="${controllerName == 'course' && (actionName == 'show')}">
                     <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
                         <div id="course-admin-panel"

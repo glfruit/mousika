@@ -67,6 +67,25 @@ class CourseController {
         }
     }
 
+    def listMine() {
+        def username = SecurityUtils.subject.principal
+        def user = User.where {
+            username == username
+        }.find()
+        def courses = Course.where {
+            deliveredBy == user //TODO: 加上课程是否仍有效的过滤条件
+        }.list(order: 'courseToken')
+        render contentType: 'text/json', text: "{" +
+                "identifier: 'id', label: 'description', items: [" +
+                "{ id: 987987, description:\"Order 987987\", priority:\"Next Day Air\"" +
+                "}," +
+                "{ id: 988855, description:\"Order 988855\"," +
+                "priority:\"2nd Day Air\" }," +
+                "{ id: 988900, description:\"Order 988900\", priority:\"2nd Day Air\"" +
+                "} ]" +
+                "}"
+    }
+
     def create() {
         [courseInstance: new Course(params)]
     }
@@ -85,6 +104,11 @@ class CourseController {
         def course = Course.get(params.courseId).copy()
         params.startDate = params.date('startDate')
         course.properties = params
+        def username = SecurityUtils.subject.principal
+        def user = User.where {
+            username == username
+        }.find()
+        course.deliveredBy = user
         if (!course.save(flush: true)) {
             log.error("导入课程失败")
             flash.message = "导入课程失败"
@@ -96,18 +120,8 @@ class CourseController {
 
     def save() {
         params.startDate = params.date('startDate')
-        def startDate = params.startDate
         def courseInstance = new Course(params)
-        def unit = new CourseUnit(sequence: 0, title: '')
-        courseInstance.addToUnits(unit)
-        def formatter = new SimpleDateFormat("yyyy-MM-dd")
-        def title
-        for (i in 0..courseInstance.numberOfWeeks) {
-            def d = startDate + i * 7
-            title = formatter.format(d) + '-' + formatter.format(d + 6)
-            unit = new CourseUnit(sequence: i + 1, title: title) //TODO:重构;第一个章节添加一个默认新闻讨论区
-            courseInstance.addToUnits(unit)
-        }
+        courseInstance.init()
 
         try {
             if (!courseInstance.save(flush: true)) {
@@ -153,7 +167,7 @@ class CourseController {
         def courseInstance = Course.get(id)
         if (!courseInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'course.label', default: 'Course'), id])
-            redirect(action: "list")
+            redirect(action: "show", id: id)
             return
         }
 
@@ -167,7 +181,20 @@ class CourseController {
             }
         }
 
+        params.startDate = params.date('startDate')
+        def numberOfWeeks = courseInstance.numberOfWeeks
         courseInstance.properties = params
+        if (courseInstance.numberOfWeeks > numberOfWeeks) {
+            def startDate = courseInstance.startDate
+            def formatter = new SimpleDateFormat("yyyy-MM-dd")
+            def title, unit
+            for (i in numberOfWeeks + 1..courseInstance.numberOfWeeks) {
+                def d = startDate + i * 7
+                title = formatter.format(d) + '-' + formatter.format(d + 6)
+                unit = new CourseUnit(sequence: i, title: title) //TODO:重构;第一个章节添加一个默认新闻讨论区
+                courseInstance.addToUnits(unit)
+            }
+        }
 
         if (!courseInstance.save(flush: true)) {
             render(view: "edit", model: [courseInstance: courseInstance])

@@ -35,58 +35,11 @@
             </div>
 
             <g:if test="${haveQuery && !haveResults && !parseException}">
-                <p><g:message
-                        code="search.notfound.label"/> <strong>${params.q}</strong>
-                </p>
-                <g:if test="${!searchResult?.suggestedQuery}">
-                    <p>Suggestions:</p>
-                    <ul>
-                        <li>Try a suggested query: <g:link
-                                controller="searchable" action="index"
-                                params="[q: params.q, suggestQuery: true]">Search again with the <strong>suggestQuery</strong> option</g:link><br/>
-                            <em>Note: Suggestions are only available when classes are mapped with <strong>spellCheck</strong> options, either at the class or property level.<br/>
-                                The simplest way to do this is add <strong>spellCheck "include"</strong> to the domain class searchable mapping closure.<br/>
-                                See the plugin/Compass documentation Mapping sections for details.
-                            </em>
-                        </li>
-                    </ul>
-                </g:if>
-            </g:if>
-
-            <g:if test="${searchResult?.suggestedQuery}">
-                <p>Did you mean <g:link controller="searchable" action="index"
-                                        params="[q: searchResult.suggestedQuery]">${StringQueryUtils.highlightTermDiffs(params.q.trim(), searchResult.suggestedQuery)}</g:link>?</p>
+                <p>未找到匹配“<strong>${params.q}</strong>“的结果。</p>
             </g:if>
 
             <g:if test="${parseException}">
-                <p>Your query - <strong>${params.q}</strong> - is not valid.</p>
-
-                <p>Suggestions:</p>
-                <ul>
-                    <li>Fix the query: see <a
-                            href="http://lucene.apache.org/java/docs/queryparsersyntax.html">Lucene query syntax</a> for examples
-                    </li>
-                    <g:if test="${LuceneUtils.queryHasSpecialCharacters(params.q)}">
-                        <li>Remove special characters like <strong>" - [ ]</strong>, before searching, eg, <em><strong>${LuceneUtils.cleanQuery(params.q)}</strong>
-                        </em><br/>
-                            <em>Use the Searchable Plugin's <strong>LuceneUtils#cleanQuery</strong> helper method for this: <g:link
-                                    controller="searchable" action="index"
-                                    params="[q: LuceneUtils.cleanQuery(params.q)]">Search again with special characters removed</g:link>
-                            </em>
-                        </li>
-                        <li>Escape special characters like <strong>" - [ ]</strong> with <strong>\</strong>, eg, <em><strong>${LuceneUtils.escapeQuery(params.q)}</strong>
-                        </em><br/>
-                            <em>Use the Searchable Plugin's <strong>LuceneUtils#escapeQuery</strong> helper method for this: <g:link
-                                    controller="searchable" action="index"
-                                    params="[q: LuceneUtils.escapeQuery(params.q)]">Search again with special characters escaped</g:link>
-                            </em><br/>
-                            <em>Or use the Searchable Plugin's <strong>escape</strong> option: <g:link
-                                    controller="searchable" action="index"
-                                    params="[q: params.q, escape: true]">Search again with the <strong>escape</strong> option enabled</g:link>
-                            </em>
-                        </li>
-                    </g:if>
-                </ul>
+                <p>输入的查询关键字“<strong>${params.q}</strong>“不正确。</p>
             </g:if>
 
             <g:if test="${haveResults}">
@@ -120,7 +73,10 @@
                                 </g:link>
                             </td>
                             <td>
-                                <a class="btn btn-primary" href="#">引用</a>
+                                <a role="button" data-toggle="modal"
+                                   href="#copyResource"><i
+                                        class="icon-download-alt"></i>
+                                </a>
                             </td>
                         </tr>
                     </g:each>
@@ -144,6 +100,31 @@
                     </div>
                 </div>
             </g:if>
+            <div>
+                <div dojoType="dojo.data.ItemFileReadStore"
+                     url="${createLink(controller: 'course', action: 'listMine')}"
+                     jsId="ordJson"></div>
+
+                <div dojoType="dijit.tree.ForestStoreModel"
+                     rootLabel="我的课程"
+                     store="ordJson" jsId="ordModel"></div>
+
+                <div dojoType="dijit.Tree" id="ordTree"
+                     model="ordModel"></div>
+            </div>
+            <script>
+                require(['dijit/Dialog', 'dojo/query', 'dojo/data/ItemFileReadStore', 'dijit/tree/ForestStoreModel', 'dijit/Tree', 'bootstrap/Modal', 'dojo/domReady!'],
+                        function (Dialog, query) {
+                            myDialog = new Dialog({
+                                title: "导入课程资源",
+                                content: "Test content.",
+                                style: "width: 300px"
+                            });
+                            query('.icon-download-alt').on('click', function () {
+                                myDialog.show();
+                            });
+                        });
+            </script>
         </div>
     </body>
 </html>

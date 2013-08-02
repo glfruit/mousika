@@ -4,6 +4,8 @@ import org.apache.shiro.SecurityUtils
 import org.compass.core.engine.SearchEngineQueryParseException
 import org.springframework.dao.DataIntegrityViolationException
 
+import java.text.SimpleDateFormat
+
 class CourseController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -48,18 +50,17 @@ class CourseController {
         } else
             courses = Course.findAllByGuestVisible(true, params)
         withFormat {
-            html courses: courses
+            html {
+                courses: courses
+            }
             json {
                 def results = courses.collect { course ->
                     [
                             id: course.id,
                             title: course.title,
-                            teacher: course.courseMembers.find { memeber -> memeber.role.name == "教师" },
+                            teacher: course.deliveredBy?.fullname,
                             description: course.description
                     ]
-                }
-                results.each {
-                    it.teacher = it.teacher ? it.teacher.user.fullname : ''
                 }
                 render(contentType: 'text/json', text: gsonBuilder.create().toJson(results))
             }
@@ -70,14 +71,41 @@ class CourseController {
         [courseInstance: new Course(params)]
     }
 
+    def copy(Long id) {
+        def course = Course.get(id)
+        [copied: new Course(startDate: course.startDate, available: course.available,
+                guestVisible: course.guestVisible), courseId: id]
+    }
+
+    def editCopy(Long id) {
+        [courseInstance: Course.get(id)]
+    }
+
+    def saveCopy() {
+        def course = Course.get(params.courseId).copy()
+        params.startDate = params.date('startDate')
+        course.properties = params
+        if (!course.save(flush: true)) {
+            log.error("导入课程失败")
+            flash.message = "导入课程失败"
+            render(view: "copy", model: [copied: course, courseId: params.courseId])
+            return
+        }
+        redirect(action: 'editCopy', id: course.id)
+    }
+
     def save() {
         params.startDate = params.date('startDate')
         def startDate = params.startDate
         def courseInstance = new Course(params)
         def unit = new CourseUnit(sequence: 0, title: '')
         courseInstance.addToUnits(unit)
+        def formatter = new SimpleDateFormat("yyyy-MM-dd")
+        def title
         for (i in 0..courseInstance.numberOfWeeks) {
-            unit = new CourseUnit(sequence: i + 1, title: (startDate + i * 7).toString() + "-" + (startDate + i * 7 + 6).toString()) //TODO:重构;第一个章节添加一个默认新闻讨论区
+            def d = startDate + i * 7
+            title = formatter.format(d) + '-' + formatter.format(d + 6)
+            unit = new CourseUnit(sequence: i + 1, title: title) //TODO:重构;第一个章节添加一个默认新闻讨论区
             courseInstance.addToUnits(unit)
         }
 
@@ -246,6 +274,10 @@ class CourseController {
             return [:]
         }
         try {
+            if ("resource" == params.type) {
+                render view: 'searchResource', model: [searchResult: UnitItem.search(params.q, params)]
+                return
+            }
             return [searchResult: Course.search(params.q, params)]
         } catch (SearchEngineQueryParseException ex) {
             return [parseException: true]

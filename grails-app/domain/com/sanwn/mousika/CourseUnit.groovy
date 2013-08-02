@@ -22,4 +22,12 @@ class CourseUnit {
         sort sequence: 'asc'
         items sort: "sequence", order: "asc"
     }
+
+    def copy() {
+        def unit = new CourseUnit(title: title, sequence: sequence)
+        items.each { unitItem ->
+            unit.addToItems(unitItem.copy())
+        }
+        return unit
+    }
 }

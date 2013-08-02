@@ -75,37 +75,50 @@
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
             <div class="container">
-                <button type="button" class="btn btn-navbar"
-                        data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="brand" href="${request.contextPath}"><g:message
-                        code="default.app.title"/></a>
-
-                <shiro:authenticated>
-                    <div class="pull-right">
-                        您好,<shiro:principal/><%=link(action: 'signOut', controller: 'auth') { '（注销）' }%>
+                <div class="row">
+                    <div class="span4">
+                        <a class="brand"
+                           href="${request.contextPath}"><g:message
+                                code="default.app.title"/></a>
                     </div>
-                </shiro:authenticated>
-                <shiro:notAuthenticated>
-                    <g:form class="navbar-form pull-right"
-                            controller="auth" action="signIn">
-                        <input type="hidden" name="targetUri"
-                               value="${targetUri}"/>
-                        <input class="span2" type="text"
-                               name="username" value="${username}"
-                               placeholder="<g:message
-                                       code='label.login.username'/>">
-                        <input class="span2" type="password"
-                               name="password" value=""
-                               placeholder="<g:message
-                                       code='label.login.password'/>">
-                        <button type="submit" class="btn"><g:message
-                                code="label.login"/></button>
-                    </g:form>
-                </shiro:notAuthenticated>
+
+                    <div class="span6" style="padding-top: 10px;">
+                        <g:form class="form-search"
+                                url="[controller: 'course', action: 'search']"
+                                method='get'>
+                            <g:hiddenField name="type" value="resource"/>
+                            <g:textField name="q" value="${params.q}" size="50"
+                                         class="input-xlarge search-query"/>
+                            <button type="submit" class="btn"><g:message
+                                    code="courseResource.search.label"/></button>
+                        </g:form>
+                    </div>
+
+                    <div class="span2" style="padding-top: 10px;">
+                        <shiro:authenticated>
+                            <div class="pull-right">
+                                您好,<shiro:principal/><%=link(action: 'signOut', controller: 'auth') { '（注销）' }%>
+                            </div>
+                        </shiro:authenticated>
+                        <shiro:notAuthenticated>
+                            <g:form class="navbar-form pull-right"
+                                    controller="auth" action="signIn">
+                                <input type="hidden" name="targetUri"
+                                       value="${targetUri}"/>
+                                <input class="span2" type="text"
+                                       name="username" value="${username}"
+                                       placeholder="<g:message
+                                               code='label.login.username'/>">
+                                <input class="span2" type="password"
+                                       name="password" value=""
+                                       placeholder="<g:message
+                                               code='label.login.password'/>">
+                                <button type="submit" class="btn"><g:message
+                                        code="label.login"/></button>
+                            </g:form>
+                        </shiro:notAuthenticated>
+                    </div>
+                </div>
             </div><!--/.nav-collapse -->
         </div>
     </div>
@@ -146,9 +159,6 @@
                                 </li>
                                 <li><i class="icon-list"></i><span
                                         style="padding-left: 5px;">成绩</span>
-                                </li>
-                                <li><i class="icon-arrow-up"></i><span
-                                        style="padding-left: 5px;">导入</span>
                                 </li>
                             </ul>
                         </div>

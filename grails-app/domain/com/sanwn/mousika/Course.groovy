@@ -1,5 +1,7 @@
 package com.sanwn.mousika
 
+import java.text.SimpleDateFormat
+
 /**
  * 描述一门课程的基本信息
  *
@@ -74,9 +76,21 @@ class Course {
     def init() {
         def unit = new CourseUnit(sequence: 0, title: '')
         this.addToUnits(unit)
+        def formatter = new SimpleDateFormat("yyyy-MM-dd")
+        def title
         for (i in 0..numberOfWeeks - 1) {
-            unit = new CourseUnit(sequence: i + 1, title: (startDate + i * 7).toString() + "-" + (startDate + i * 7 + 6).toString()) //TODO:重构;第一个章节添加一个默认新闻讨论区
+            def d = startDate + i * 7
+            title = formatter.format(d) + '-' + formatter.format(d + 6)
+            unit = new CourseUnit(sequence: i + 1, title: title) //TODO:重构;第一个章节添加一个默认新闻讨论区
             addToUnits(unit)
         }
+    }
+
+    def copy() {
+        def course = new Course(title: title, code: code, description: description, numberOfWeeks: numberOfWeeks)
+        units.each { unit ->
+            course.addToUnits(unit.copy())
+        }
+        return course
     }
 }

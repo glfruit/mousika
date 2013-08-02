@@ -8,6 +8,8 @@ class Attempt {
 
     User submittedBy
 
+    static hasOne = [feedback: Feedback]
+
     static belongsTo = [assignment: Assignment]
 
     static constraints = {

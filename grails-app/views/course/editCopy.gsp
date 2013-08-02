@@ -236,18 +236,71 @@
     </g:form>
 </div>
 
+<div id="delConfirm" class="modal hide">
+    <div class="modal-header">
+        <h4>确认删除</h4>
+    </div>
+
+    <div class="modal-body alert-danger">
+        <p>是否要删除该内容？</p>
+    </div>
+
+    <div class="modal-footer">
+        <p class="pull-right">
+            <a id="removeBtn" class="btn btn-danger" href="#">删除</a>
+            <button class="btn" data-dismiss="modal"
+                    aria-hidden="true">取消</button>
+        </p>
+    </div>
+</div>
+
 <div data-dojo-type="dojo.dnd.Source"
      data-dojo-props="accept: ['section'], withHandles: true, autoSync: true"
      class="dojoDndSource">
     <g:each in="${courseInstance.units}" var="unit">
-        <g:render template="section"
+        <g:render template="unit"
                   model="['startDate': courseInstance.startDate,
                           'section': unit, 'order': unit.sequence]"/>
     </g:each>
 </div>
 <script>
-    require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event', 'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
-            function (query, topic, request, domAttr, on, Source, ioQuery, $, event) {
+    require(['dojo/dom', 'dojo/dom-construct','dojo/dom-class', 'dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event', 'dojo/json', 'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
+            function (dom, domConstruct, domClass,query, topic, request, domAttr, on, Source, ioQuery, $, event, json) {
+                var delUrl;
+                var delData;
+                var removeUnit;
+                var removed;
+                query(".remove-unit").on('click', function (e) {
+                    var unit = e.target.id.match(/removeUnit(\d+)$/)[1];
+                    delUrl = "${request.contextPath}/courseUnit/delete/" + unit;
+                    delData = {courseId:${courseInstance.id}};
+                    removeUnit = true;
+                    removed = "courseSection" + unit;
+                });
+                query(".remove-unit-item").on('click', function (e) {
+                    var r = e.target.id.match(/removeUnit(\d+)Item(\d+)$/);
+                    var unit = r[1];
+                    var item = r[2];
+                    delUrl = "${request.contextPath}/unitItem/delete/" + item;
+                    delData = {courseId:${courseInstance.id}, unitSequence: unit};
+                    removeUnit = false;
+                    removed = "courseSection" + unit + "item" + item;
+                });
+                on(dom.byId('removeBtn'), 'click', function (e) {
+                    event.stop(e);
+                    request.post(delUrl, {
+                        data: delData
+                    }).then(function (response) {
+                                domClass.remove("delConfirm","in");
+                                var r = json.parse(response);
+                                if (!r.success) {
+                                    alert("删除失败！" + r.error ? r.error : "");
+                                    return;
+                                }
+                                //remove unit or item
+                                domConstruct.destroy(removed);
+                            });
+                });
                 define.amd.jQuery = true;
                 query(".addContent").on('click', function (e) {
                     var csid = query(e.target).parent().attr('id');
@@ -401,7 +454,8 @@
                         }
                     }
                 });
-            });
+            })
+    ;
 </script>
 </body>
 </html>

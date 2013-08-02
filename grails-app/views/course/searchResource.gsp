@@ -17,16 +17,6 @@
     <body onload="focusQueryInput();">
         <div id="header">
             <h4>"${params.q}"的搜索结果</h4>
-            <g:form class="form-search"
-                    url="[controller: 'course', action: 'search']" method='get'>
-                <g:textField name="q" value="${params.q}" size="50"
-                             class="input-medium search-query"/>
-                <button type="submit" class="btn"><g:message
-                        code="course.search.label"/></button>
-            </g:form>
-            <div style="clear: both; display: none;" class="hint">See <a
-                    href="http://lucene.apache.org/java/docs/queryparsersyntax.html">Lucene query syntax</a> for advanced queries
-            </div>
         </div>
 
         <div id="main">
@@ -45,7 +35,9 @@
             </div>
 
             <g:if test="${haveQuery && !haveResults && !parseException}">
-                <p>Nothing matched your query - <strong>${params.q}</strong></p>
+                <p><g:message
+                        code="search.notfound.label"/> <strong>${params.q}</strong>
+                </p>
                 <g:if test="${!searchResult?.suggestedQuery}">
                     <p>Suggestions:</p>
                     <ul>
@@ -98,48 +90,41 @@
             </g:if>
 
             <g:if test="${haveResults}">
-                <div class="results">
+                <table class="table table-striped">
+                    <tr>
+                        <td>资源名称</td>
+                        <td>所属单元</td>
+                        <td>所属课程</td>
+                        <td></td>
+                    </tr>
                     <g:each var="result" in="${searchResult.results}"
                             status="index">
-                        <section
-                                style="border: 1px solid #A0A0A0;padding-left: 10px;padding-right: 10px;margin-top:10px;margin-bottom: 10px;">
-                            <ul class="thumbnails">
-                                <li class="span5">
-                                    <h3>
-                                        <g:link action="show"
-                                                id="${result.id}">
-                                            ${fieldValue(bean: result, field: "title")}
-                                        </g:link>
-                                    </h3>
-
-                                    <p>教师：
-                                    <g:if test="${result.deliveredBy}">
-                                        <g:link controller="user"
-                                                action="show"
-                                                id="${result.deliveredBy?.id}">
-                                            ${result.deliveredBy?.fullname}
-                                        </g:link>
-                                    </g:if>
-                                    <g:else>
-                                        N/A
-                                    </g:else>
-                                        <a href="${createLink(controller: 'course', action: 'copy', id: result.id)}">
-                                            <span style="padding-left: 5px;">
-                                                <i class="icon-download-alt"></i>导入
-                                            </span>
-                                        </a>
-                                    </p>
-
-                                    %{--<p>教师：<g:link controller="user" action="show"--}%
-                                    %{--id="${teachers[i]?.user?.id}">${teachers[i]?.user?.fullname}</g:link></p>--}%
-                                </li>
-                                <li class="span6">
-                                    <%=result.description%>
-                                </li>
-                            </ul>
-                        </section>
+                        <tr>
+                            <td>
+                                <g:link controller="${result.content.type}"
+                                        action="show" id="${result.content.id}">
+                                    ${result.title}
+                                </g:link>
+                            </td>
+                            <td>
+                                <g:link controller="course" action="show"
+                                        id="${result.unit.course.id}"
+                                        fragment="courseSection${result.unit.sequence}">
+                                    ${result.unit.title}
+                                </g:link>
+                            </td>
+                            <td>
+                                <g:link controller="course" action="show"
+                                        id="${result.unit.course.id}">
+                                    ${result.unit.course.title}
+                                </g:link>
+                            </td>
+                            <td>
+                                <a class="btn btn-primary" href="#">引用</a>
+                            </td>
+                        </tr>
                     </g:each>
-                </div>
+                </table>
 
                 <div>
                     <div class="paging">
@@ -151,7 +136,7 @@
                                     class="currentStep">1</span>页，共1页</g:if>
                             <g:else><g:paginate controller="course"
                                                 action="search"
-                                                params="[q: params.q]"
+                                                params="[q: params.q, type: 'resource']"
                                                 total="${searchResult.total}"
                                                 prev="&lt; previous"
                                                 next="next &gt;"/></g:else>

@@ -42,4 +42,8 @@ class Assignment extends Content {
     }
 
     static hasMany = [attempts: Attempt]
+
+    def copy() {
+        new Assignment(title: title, description: description, style: style)
+    }
 }

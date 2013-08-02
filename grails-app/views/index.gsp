@@ -50,7 +50,8 @@
                                                 var li = domConstruct.create('li', {class: 'span5'}, ul);
                                                 var h3 = domConstruct.create('h3', null, li);
                                                 domConstruct.create('a', {href: "${request.contextPath}/course/show/" + course.id, innerHTML: course.title}, h3);
-                                                domConstruct.create('p', {innerHTML: '教师:' + course.teacher}, li);
+                                                var teacher = course.teacher ? course.teacher : 'N/A';
+                                                domConstruct.create('p', {innerHTML: '教师:' + teacher}, li);
                                                 li = domConstruct.create('li', {class: 'span6', innerHTML: course.description}, ul);
                                             });
                                         }

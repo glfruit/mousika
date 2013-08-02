@@ -43,8 +43,9 @@
                 class="dojoDndItem" dndType="content">
                 <div style="display: inline;">
                     <div style="float: left; padding-right: 3em;">
-                        <g:if test="${content.type != 'label'}">
-                            <a href="${createLink(controller: content.type, action: 'show', id: content.id)}">
+                        <g:if test="${content.type == 'assignment'}">
+                            %{--<a href="${createLink(controller: content.type, action: 'show', id: content.id)}">--}%
+                            <a href="${createLink(controller: 'student', action: 'resource', id: content.id)}">
                                 ${content.title}
                             </a>
                             <span class="resource-link-details"></span>
@@ -76,7 +77,7 @@
            class="addContent"
            style="text-align: right;margin-right: 5px;">
             <span>
-                <i class="icon-plus"></i> 添加一个活动或资源
+                %{--<i class="icon-plus"></i> 添加一个活动或资源--}%
             </span>
         </a>
     </div>

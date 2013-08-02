@@ -136,15 +136,15 @@
                             <p>
                                 <g:link controller="student" action="regCourseList" class="btn create">注册课程</g:link>
                                 <g:link controller="student" action="assignmentList" class="btn create">我的作业</g:link>
-                            <p>
                             </p>
+                            <p>
                                         预习课程
-                            <p>
                             </p>
+                            <p>
                                         我的提问与解答
-                            <p>
                             </p>
-                                        分享到微信/微博
+                            <p>
+                                <g:include view="shareto.gsp"></g:include>&nbsp;
                             </p>
                         </div>
                         <div data-dojo-type="dijit/TitlePane"

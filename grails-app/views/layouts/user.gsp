@@ -126,7 +126,7 @@
                              data-dojo-props="title: '系统管理'"
                              style="padding-bottom: 10px;">
                             <p><i class="icon-user"></i> <a
-                                    href="${createLink(controller: 'user', action: 'list')}">用户列表</a>
+                                    href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
                             </p>
 
                             <p>

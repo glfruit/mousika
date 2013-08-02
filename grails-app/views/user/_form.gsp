@@ -18,7 +18,7 @@
 	<g:textField name="fullname" required="" value="${userInstance?.fullname}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'profile', 'error')} ">
+%{--<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'profile', 'error')} ">
 	<label for="profile">
 		<g:message code="user.profile.label" default="Profile" />
 		
@@ -32,15 +32,15 @@
 		
 	</label>
 	<g:textField name="passwordHash" value="${userInstance?.passwordHash}"/>
-</div>
+</div>--}%
 
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'permissions', 'error')} ">
+%{--<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'permissions', 'error')} ">
 	<label for="permissions">
 		<g:message code="user.permissions.label" default="Permissions" />
 		
 	</label>
 	
-</div>
+</div>--}%
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'roles', 'error')} ">
 	<label for="roles">

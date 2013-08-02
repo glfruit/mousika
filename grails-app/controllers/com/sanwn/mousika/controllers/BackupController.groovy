@@ -52,11 +52,6 @@ class BackupController {
             dataBasePath = "\""+dataBasePath+"\""
             FileWriter fileWriter = new FileWriter(userDir+backupCommandLocation)
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)
-            bufferedWriter.append("@echo off\n" +
-                    "            :1\n" +
-                    "            if \"%1\"==\"h\" goto :2\n" +
-                    "            mshta vbscript:createobject(\"wscript.shell\").run(\"\"%0\"h\",0)(window.close)&&exit\n" +
-                    "            :2")
 
             bufferedWriter.append("set PGPASSWORD=mousika_dev\n")
             bufferedWriter.append(dataBasePath)

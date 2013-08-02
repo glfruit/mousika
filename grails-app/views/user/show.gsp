@@ -8,7 +8,7 @@
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 	</head>
 	<body>
-		<a href="#show-user" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
+		%{--<a href="#show-user" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>--}%
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
@@ -41,7 +41,7 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${userInstance?.profile}">
+				%{--<g:if test="${userInstance?.profile}">
 				<li class="fieldcontain">
 					<span id="profile-label" class="property-label"><g:message code="user.profile.label" default="Profile" /></span>
 					
@@ -75,7 +75,7 @@
 						<span class="property-value" aria-labelledby="permissions-label"><g:fieldValue bean="${userInstance}" field="permissions"/></span>
 					
 				</li>
-				</g:if>
+				</g:if>--}%
 			
 				<g:if test="${userInstance?.roles}">
 				<li class="fieldcontain">

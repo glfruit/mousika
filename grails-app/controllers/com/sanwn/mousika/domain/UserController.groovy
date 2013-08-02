@@ -100,4 +100,8 @@ class UserController {
             redirect(action: "show", id: id)
         }
     }
+
+    def batchImport(){
+
+    }
 }

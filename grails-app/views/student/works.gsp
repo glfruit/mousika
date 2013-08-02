@@ -21,18 +21,18 @@
                 <g:if test="${assignments}">
                     <table width="100%">
                     <g:each in="${assignments}" status="i" var="assignment">
-                        <g:if test="${i<3}">
+                        <g:if test="${assignment.availableFrom<=new Date()&&new Date()<=assignment.dueDate}">
                         <tr><td>
                             <g:link action="resource" params="['id':assignment.id]">${assignment.title}【${assignment.section.course.title}】</g:link>
                             %{--<g:link action="assignment" params="['assignmentId':assignment.id]">${assignment.title}【${assignment.section.course.title}】</g:link>--}%
                         </td></tr>
                         </g:if>
                     </g:each>
-                    <g:if test="${assignments.size>3}">
+                    %{--<g:if test="${assignments.size>3}">--}%
                         <tr><td align="right">
-                            <g:link action="assignmentList">&gt;&gt;more...</g:link>
+                            <g:link action="assignmentList">查看全部&gt;&gt;</g:link>
                         </td></tr>
-                    </g:if>
+                    %{--</g:if>--}%
                     </table>
                 </g:if>
                 <g:else>

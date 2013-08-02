@@ -118,10 +118,13 @@
             </tr>
         </g:each>
         <tr colspan="4"><a class="btn"
-                           href="${createLink(action: 'list')}">返回到课程</a>
+                           href="${createLink(action: 'show', id: params.id)}">返回到课程</a>
         </tr>
     </tbody>
 </table>
+
+<p>已注册人数：10;<span style="padding-left: 5px;">待审批人数：<a
+        href="${createLink(action: 'examine', id: params.id)}">5</a></span></p>
 <script type="text/javascript">
     require(["dojo/query",
         "dojo/ready",

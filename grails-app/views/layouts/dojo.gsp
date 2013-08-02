@@ -81,26 +81,28 @@
                            href="${request.contextPath}"><g:message
                                 code="default.app.title"/></a>
                     </div>
+                    <shiro:authenticated>
+                        <div class="span6" style="padding-top: 10px;">
 
-                    <div class="span6" style="padding-top: 10px;">
-                        <g:form class="form-search"
-                                url="[controller: 'course', action: 'search']"
-                                method='get'>
-                            <g:hiddenField name="type" value="resource"/>
-                            <g:textField name="q" value="${params.q}" size="50"
-                                         class="input-xlarge search-query"/>
-                            <button type="submit" class="btn"><g:message
-                                    code="courseResource.search.label"/></button>
-                        </g:form>
-                    </div>
+                            <g:form class="form-search"
+                                    url="[controller: 'course', action: 'search']"
+                                    method='get'>
+                                <g:hiddenField name="type" value="resource"/>
+                                <g:textField name="q" value="${params.q}"
+                                             size="50"
+                                             class="input-xlarge search-query"/>
+                                <button type="submit" class="btn"><g:message
+                                        code="courseResource.search.label"/></button>
+                            </g:form>
+                        </div>
 
-                    <div class="span2" style="padding-top: 10px;">
-                        <shiro:authenticated>
-                            <div class="pull-right">
-                                您好,<shiro:principal/><%=link(action: 'signOut', controller: 'auth') { '（注销）' }%>
-                            </div>
-                        </shiro:authenticated>
-                        <shiro:notAuthenticated>
+                        <div class="span2" style="padding-top: 10px;">
+                                <div class="pull-right">
+                                    您好,<shiro:principal/><%=link(action: 'signOut', controller: 'auth') { '（注销）' }%>
+                        </div>
+                    </shiro:authenticated>
+                    <shiro:notAuthenticated>
+                        <div class="span8">
                             <g:form class="navbar-form pull-right"
                                     controller="auth" action="signIn">
                                 <input type="hidden" name="targetUri"
@@ -116,8 +118,9 @@
                                 <button type="submit" class="btn"><g:message
                                         code="label.login"/></button>
                             </g:form>
-                        </shiro:notAuthenticated>
-                    </div>
+                        </div>
+                    </shiro:notAuthenticated>
+                </div>
                 </div>
             </div><!--/.nav-collapse -->
         </div>
@@ -182,20 +185,22 @@
                         });
                     </script>
                 </shiro:hasRole>
-                <div data-dojo-type="dijit/TitlePane"
-                     data-dojo-props="title: '我的个人文件'"
-                     style="padding-bottom: 10px;">
-                    <p>
-                        <g:if test="${fileRepository?.items?.size() > 0}">
-                            <!-- TODO -->
-                        </g:if>
-                        <g:else>
-                            没有任何文件
-                        </g:else>
-                    </p>
-                    <a class="btn"
-                       href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
-                </div>
+                <shiro:authenticated>
+                    <div data-dojo-type="dijit/TitlePane"
+                         data-dojo-props="title: '我的个人文件'"
+                         style="padding-bottom: 10px;">
+                        <p>
+                            <g:if test="${fileRepository?.items?.size() > 0}">
+                                <!-- TODO -->
+                            </g:if>
+                            <g:else>
+                                没有任何文件
+                            </g:else>
+                        </p>
+                        <a class="btn"
+                           href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
+                    </div>
+                </shiro:authenticated>
             </div>
 
             <div class="span7">

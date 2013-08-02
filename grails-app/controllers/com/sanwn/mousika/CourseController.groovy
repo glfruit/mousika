@@ -86,6 +86,55 @@ class CourseController {
                 "}"
     }
 
+    def examine(Long id) {
+        params.sort = params.sort ?: 'applyDate'
+        params.max = params.max ?: 20
+        def course = Course.get(id)
+        def applications = CourseApplication.where {
+            applyFor == course && status == CourseApplication.STATUS_SUBMITTED
+        }.list(params)
+        def total = CourseApplication.countByApplyForAndStatus(course, CourseApplication.STATUS_SUBMITTED)
+        [applications: applications, total: total]
+    }
+
+    def approve(Long id) {
+        def updated, approved
+        if (params.boolean('batch')) {
+            approved = params.list('approved')
+            approved = approved.collect {
+                it as Long
+            }
+            def query = CourseApplication.where {
+                id in approved
+            }
+            updated = query.updateAll(status: CourseApplication.STATUS_APPROVED)
+        } else {
+            approved = params.approved
+            def application = CourseApplication.where {
+                id == approved
+            }.find()
+            application.status = CourseApplication.STATUS_APPROVED
+            if (application.save(flush: true)) {
+                updated = 1
+            }
+        }
+        if (updated > 0) {
+            def applications = CourseApplication.where {
+                applyFor.id == id && status == CourseApplication.STATUS_SUBMITTED
+            }.list(params)
+            def json = applications.collect {
+                [
+                        id: it.id,
+                        applicantId: it.applicant.id,
+                        applicantName: it.applicant.fullname,
+                        applyDate: it.applyDate
+                ]
+            }
+            render contentType: 'application/json', text: '{"success":true,"applications":' + gsonBuilder.create().toJson(json) + '}'
+        } else
+            render contentType: 'application/json', text: '{"success":false}'
+    }
+
     def create() {
         [courseInstance: new Course(params)]
     }

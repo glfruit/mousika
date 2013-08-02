@@ -43,7 +43,7 @@
                 class="dojoDndItem" dndType="content">
                 <div style="display: inline;">
                     <div style="float: left; padding-right: 3em;">
-                        <g:if test="${content.type != 'label'}">
+                        <g:if test="${content.type == 'assignment'}">
                             %{--<a href="${createLink(controller: content.type, action: 'show', id: content.id)}">--}%
                             <a href="${createLink(controller: 'student', action: 'resource', id: content.id)}">
                                 ${content.title}

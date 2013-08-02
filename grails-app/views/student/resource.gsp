@@ -81,7 +81,9 @@
                         </tr>
                         <tr>
                             <td colspan="4" align="center">
-                                <button type="submit" class="btn btn-primary">提交作业</button>
+                                <g:if test="${assignment.availableFrom<=new Date()&&new Date()<=assignment.dueDate}">
+                                    <button type="submit" class="btn btn-primary">提交作业</button>
+                                </g:if>
                             </td>
                         </tr>
                     </table>

@@ -23,7 +23,8 @@
                     <g:each in="${assignments}" status="i" var="assignment">
                         <g:if test="${i<3}">
                         <tr><td>
-                            <g:link action="assignment" params="['assignmentId':assignment.id]">${assignment.title}【${assignment.section.course.title}】</g:link>
+                            <g:link action="resource" params="['id':assignment.id]">${assignment.title}【${assignment.section.course.title}】</g:link>
+                            %{--<g:link action="assignment" params="['assignmentId':assignment.id]">${assignment.title}【${assignment.section.course.title}】</g:link>--}%
                         </td></tr>
                         </g:if>
                     </g:each>

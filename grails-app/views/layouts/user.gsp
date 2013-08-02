@@ -133,6 +133,10 @@
                                 <i class="icon-lock"></i>
                                 <a href="${createLink(controller: 'privilege', action: 'list')}">权限管理</a>
                             </p>
+                            <p>
+                                <i class="icon-pencil"></i>
+                                <a href="${createLink(controller: 'backup', action: 'list')}">系统备份</a>
+                            </p>
                         </div>
                     </shiro:hasRole>
                     <g:if test="${actionName == 'show'}">

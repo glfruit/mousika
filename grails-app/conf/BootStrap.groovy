@@ -1,3 +1,4 @@
+import com.sanwn.mousika.Backup
 import com.sanwn.mousika.Role
 import com.sanwn.mousika.User
 import org.apache.shiro.crypto.hash.Sha256Hash
@@ -50,6 +51,9 @@ class BootStrap {
 
                     user = new User(username: "test1", fullname: "彭启华", email: "ppller25@126.com", dateCreated: new Date(), passwordHash: new Sha256Hash("test").toHex())
                     user.save(failOnError: true)
+
+                    def backup = new Backup(dataBasePath: "D:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe",backupDelay: 0, autoBackupPeriod: 1.0)
+                    backup.save(failOnError: true)
                 }
             }
         }

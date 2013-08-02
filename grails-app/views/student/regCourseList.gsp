@@ -55,7 +55,12 @@
         </g:each>
 </g:if>
         <g:else>
-            <tr><td colspan="4">暂时没有任何课程</td></tr>
+            <tr>
+                <td colspan="4">
+                    暂时没有任何课程
+
+                </td>
+            </tr>
         </g:else>
 
         </tbody>

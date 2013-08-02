@@ -187,6 +187,40 @@ class StudentController {
         redirect(action: "enrol", id: courseInstance.id)
     }
 
+    def resource(Long id) {
+        def assignment = Assignment.get(id)
+        if (!assignment) {
+            flash.message = "未找到指定的作业"
+            redirect(action: 'list')
+            return
+        }
+        def attempt = Attempt.where {
+            submittedBy == loginUser && assignment == assignment
+        }.list()
+
+        [assignment: assignment, attempt: attempt, courselist:courses, myCourses: myCourses, notRegCourses:notRegCourses]
+    }
+
+    def createAttempt() {
+        def attempt;
+        def assignment = Assignment.get(params.assignmentId)
+        if(assignment.attempts!=null&&assignment.attempts.size()>0){
+            attempt = assignment.attempts.first()
+            attempt.attemptContent = params.attemptContent
+        }else{
+            attempt = new Attempt(params)
+            attempt.submittedBy = loginUser
+            assignment.addToAttempts(attempt)
+        }
+        if (attempt.validate() && assignment.save()) {
+            flash.message = "保存答案成功"
+            redirect(action: 'resource', id: assignment.id)
+            return
+        }
+        flash.message = "保存答案失败"
+        render(view: 'resource', model: [assignment: assignment, attempt: attempt])
+    }
+
     def show(Long id) {
         def courseInstance = Course.get(id)
         if (!courseInstance) {
@@ -195,16 +229,16 @@ class StudentController {
             return
         }
 
-        def courses, count, myCourses
-        def user = User.findByUsername(SecurityUtils.subject.principal)
-        courses = Course.findAll() {
-            courseMembers.user == user
-        }
-        count = Course.createCriteria().count {
-            'in'('id', courses.id)
-        }
+//        def courses, count, myCourses
+//        def user = User.findByUsername(SecurityUtils.subject.principal)
+//        courses = Course.findAll() {
+//            courseMembers.user == user
+//        }
+//        count = Course.createCriteria().count {
+//            'in'('id', courses.id)
+//        }
 
-        [courseInstanceList: courses, courseInstanceTotal: courses.size(),courseInstance: courseInstance]
+        [courseInstance: courseInstance,courselist:courses, myCourses: myCourses, notRegCourses:notRegCourses]
     }
 
     def edit(Long id) {

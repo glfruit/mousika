@@ -44,12 +44,13 @@
                                                 <table width="96%" align="left">
                                                     <tr>
                                                         <td>
-                                                            <g:link action="assignment" params="['assignmentId':assignment.id]">${assignment.title}</g:link>
+                                                            <g:link action="resource" params="['id':assignment.id]">${assignment.title}</g:link>
+                                                            %{--<g:link action="assignment" params="['assignmentId':assignment.id]">${assignment.title}</g:link>--}%
                                                         </td>
                             </g:if>
                             <g:else>
                                 <td>
-                                    <g:link action="assignment" params="['assignmentId':assignment.id]">${assignment.title}</g:link>
+                                    <g:link action="resource" params="['id':assignment.id]">${assignment.title}</g:link>
                                 </td>
                             </g:else>
                         </g:each>

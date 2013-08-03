@@ -2,17 +2,15 @@ package com.sanwn.mousika
 
 class Content {
 
-    int sequence
-
     String title
 
     String description
 
-    def type = this.class.simpleName.toLowerCase()
+    def type = this.class.simpleName[0].toLowerCase() + this.class.simpleName.substring(1)
+
+    static searchable = true
 
     static transients = ['type']
-
-    static belongsTo = [section: CourseSection]
 
     static constraints = {
         description nullable: true, blank: true

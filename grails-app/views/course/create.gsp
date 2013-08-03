@@ -50,6 +50,7 @@
             <g:form id="create-course-form" action="save"
                     class="form-horizontal">
                 <f:with bean="courseInstance">
+                    <f:field property="courseToken"/>
                     <f:field property="code"/>
                     <f:field property="title"/>
                     <f:field property="description"/>

@@ -27,7 +27,7 @@
 				<li class="fieldcontain">
 					<span id="section-label" class="property-label"><g:message code="fileResource.section.label" default="Section" /></span>
 					
-						<span class="property-value" aria-labelledby="section-label"><g:link controller="courseSection" action="show" id="${fileResourceInstance?.section?.id}">${fileResourceInstance?.section?.encodeAsHTML()}</g:link></span>
+						<span class="property-value" aria-labelledby="section-label"><g:link controller="courseUnit" action="show" id="${fileResourceInstance?.section?.id}">${fileResourceInstance?.section?.encodeAsHTML()}</g:link></span>
 					
 				</li>
 				</g:if>

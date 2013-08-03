@@ -36,7 +36,7 @@ grails.mime.types = [
 grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*']
 
 // The default codec used to encode data with ${}
-grails.views.default.codec = "none" // none, html, base64
+grails.views.default.codec = "html" // none, html, base64
 grails.views.gsp.encoding = "UTF-8"
 grails.converters.encoding = "UTF-8"
 // enable Sitemesh preprocessing of GSP pages
@@ -92,7 +92,7 @@ log4j = {
         console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     }
 
-    info 'grails.app'
+//    info 'grails.app'
     info 'org.eclipse.jetty'
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
@@ -105,6 +105,21 @@ log4j = {
            'org.springframework',
            'org.hibernate',
            'net.sf.ehcache.hibernate'
+}
+
+ckeditor {
+//    config = "/js/myckconfig.js"
+    defaultFileBrowser = "ofm"
+    upload {
+        link {
+            browser = true
+            upload = true
+        }
+        image {
+            browser = true
+            upload = true
+        }
+    }
 }
 
 // disable searchable operations, will be enabled in Bootstrap.groovy

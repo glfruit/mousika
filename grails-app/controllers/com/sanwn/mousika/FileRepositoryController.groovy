@@ -1,5 +1,6 @@
 package com.sanwn.mousika
 
+import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
 
 class FileRepositoryController {
@@ -7,6 +8,8 @@ class FileRepositoryController {
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
 
     def index() {
+        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_TYPE, FileRepository.REPOSITORY_TYPE_FILE)
+        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, SecurityUtils.subject.principal)
         redirect(action: "list", params: params)
     }
 

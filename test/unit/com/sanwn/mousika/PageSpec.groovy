@@ -1,6 +1,5 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.Page
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
@@ -16,16 +15,6 @@ class PageSpec extends Specification {
 
     def cleanup() {
     }
-
-//    void "test something"() {
-//        given:
-//        def page = new Page("$field", val)
-//
-//        then:
-//
-//        where:
-//
-//    }
 
     void validateConstraints(obj, field, error) {
         def validated = obj.validate()

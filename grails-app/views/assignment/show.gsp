@@ -42,7 +42,7 @@
                 </ul>
             </g:hasErrors>
             <div style="border: 1px solid #EEEEFF;">
-                ${assignment?.description}
+                <%=assignment?.description%>
             </div>
             <shiro:hasRole name="教师">
                 <h4>作业提交情况</h4>

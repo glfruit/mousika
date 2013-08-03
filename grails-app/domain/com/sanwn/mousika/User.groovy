@@ -1,9 +1,13 @@
 package com.sanwn.mousika
 
-class User {
-    static searchable = true
+class User implements Comparable {
+
+    static searchable = {
+        roles reference:true
+    }
 
     String username
+
     String passwordHash
 
     String fullname
@@ -25,5 +29,9 @@ class User {
 
     static mapping = {
         table 'mousika_user'
+    }
+
+    int compareTo(obj) {
+        username.compareTo(obj.username)
     }
 }

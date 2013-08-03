@@ -86,11 +86,16 @@
                         <g:form class="form-search"
                                 url="[controller: 'course', action: 'search']"
                                 method='get'>
-                            <g:hiddenField name="type" value="resource"/>
-                            <g:textField name="q" value="${params.q}" size="50"
-                                         class="input-xlarge search-query"/>
-                            <button type="submit" class="btn"><g:message
-                                    code="courseResource.search.label"/></button>
+                            <div class="input-append">
+                                <g:hiddenField name="type" value="resource"/>
+                                <g:textField name="q" value="${params.q}"
+                                             size="50"
+                                             class="input-xlarge search-query"/>
+                                <button type="submit" class="btn"><i
+                                        class="icon-search"></i><g:message
+                                        code="courseResource.search.label"/>
+                                </button>
+                            </div>
                         </g:form>
                     </div>
 
@@ -145,16 +150,21 @@
                         </li>
                     </ul>
                 </div>
-                <g:if test="${params.action in ['edit','show','enrol','examine']}">
+                <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate']}">
                     <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
                         <div id="course-admin-panel"
                              data-dojo-type="dijit/TitlePane"
                              data-dojo-props="title: '课程管理'"
                              style="padding-bottom: 10px;">
-                            <ul id="courseAdmin" style="list-style: none;text-align: left;margin:0;padding:0;">
+                            <ul id="courseAdmin"
+                                style="list-style: none;text-align: left;margin:0;padding:0;">
+                                <li><i class="icon-list-alt"></i><span
+                                        style="padding-left: 5px;">
+                                    <a href="${createLink(controller: 'course', action: 'show', id: params.id)}">课程首页</a>
+                                </span></li>
                                 <li><i class="icon-briefcase"></i><span
                                         style="padding-left: 5px;">
-                                    <a href="${createLink(action: 'listMaterials', id: params.id)}">课程资料</a>
+                                    <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.id)}">课程资料</a>
                                 </span></li>
                                 <li id="turn-edit-on-or-off"><i
                                         class="icon-edit"></i><a href="#"
@@ -165,16 +175,18 @@
                                 </li>
                                 <li><i class="icon-pencil"></i><span
                                         style="padding-left: 5px;"><a
-                                            href="${createLink(action: 'edit', id: params.id)}">编辑设置</a>
+                                            href="${createLink(controller: 'course', action: 'edit', id: params.id)}">编辑设置</a>
                                 </span>
                                 </li>
                                 <li><i class="icon-user"></i><span
                                         style="padding-left: 5px;"><a
-                                            href="${createLink(action: 'enrol', id: params.id)}">成员</a>
+                                            href="${createLink(controller: 'course', action: 'enrol', id: params.id)}">成员</a>
                                 </span>
                                 </li>
                                 <li><i class="icon-list"></i><span
-                                        style="padding-left: 5px;">成绩</span>
+                                        style="padding-left: 5px;">
+                                    <a href="${createLink(controller: 'course', action: 'grade', id: params.id)}">成绩</a>
+                                </span>
                                 </li>
                             </ul>
                         </div>

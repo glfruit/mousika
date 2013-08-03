@@ -59,6 +59,8 @@ class Course {
 
     static hasMany = [students: User, units: CourseUnit]
 
+    static hasOne = [gradeBook: GradeBook]
+
 
     static constraints = {
         courseToken unique: true, blank: false
@@ -84,6 +86,7 @@ class Course {
             unit = new CourseUnit(sequence: i + 1, title: title) //TODO:重构;第一个章节添加一个默认新闻讨论区
             addToUnits(unit)
         }
+        gradeBook = new GradeBook()
     }
 
     def copy() {
@@ -91,6 +94,7 @@ class Course {
         units.each { unit ->
             course.addToUnits(unit.copy())
         }
+        course.gradeBook = new GradeBook()
         return course
     }
 }

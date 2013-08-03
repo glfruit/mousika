@@ -52,11 +52,11 @@
                 </tr>
             </tbody>
         </table>
-        <g:paginate total="${total}" controller="course" action="approve"
+        <g:paginate total="${total}" controller="course" action="examine"
                     id="${params.id}"
                     max="20"
-                    prev="&lt; previous"
-                    next="next &gt;"></g:paginate>
+                    prev="&lt;"
+                    next="&gt;"></g:paginate>
         <a class="btn"
            href="${createLink(action: 'show', id: 63)}">返回到课程</a>
         <script>

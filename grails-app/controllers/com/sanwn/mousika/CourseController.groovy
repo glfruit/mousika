@@ -29,12 +29,13 @@ class CourseController {
             courses = Course.list(params)
             total = Course.count()
         } else {
+            def deliveredBy = User.where {
+                username == SecurityUtils.subject.principal
+            }.find()
             courses = Course.where {
-                deliveredBy.username == SecurityUtils.subject.principal
+                deliveredBy == deliveredBy
             }.list(params)
-            total = Course.createCriteria().count {
-                'in'('id', courses.id)
-            }
+            total = Course.countByDeliveredBy()
         }
 
         [courseInstanceList: courses, courseInstanceTotal: total]
@@ -359,5 +360,23 @@ class CourseController {
         } catch (SearchEngineQueryParseException ex) {
             return [parseException: true]
         }
+    }
+
+    def grade(Long id) {
+        params.max = params.max ?: 20;
+        params.offset = params.offset ?: 0;
+        def course = Course.get(id)
+        def query = UnitItem.createCriteria()
+        def items = query.list(params) {
+            'in'('unit', course.units)
+            createAlias("unit", "_unit")
+            order("_unit.sequence")
+            order("sequence")
+        }
+        items = items.findAll {
+            it.content.type == 'assignment'
+        }
+        def total = 10 //TODO: 获取totoal总数
+        [assignments: items, course: course,total:total]
     }
 }

@@ -34,6 +34,10 @@ class Assignment extends Content {
 
     static searchable = true
 
+    static mapping = {
+        attempts sort: 'submittedDate', order: 'desc'
+    }
+
     static constraints = {
         filePath nullable: true, blank: false
         availableFrom nullable: true

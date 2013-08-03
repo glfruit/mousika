@@ -123,8 +123,9 @@
     </tbody>
 </table>
 
-<p>已注册人数：10;<span style="padding-left: 5px;">待审批人数：<a
-        href="${createLink(action: 'examine', id: params.id)}">5</a></span></p>
+<p>已注册人数：${registered};<span style="padding-left: 5px;">待审批人数：<a
+        href="${createLink(action: 'examine', id: params.id)}">${applied}</a>
+</span></p>
 <script type="text/javascript">
     require(["dojo/query",
         "dojo/ready",

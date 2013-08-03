@@ -65,9 +65,10 @@ class StudentController {
 //            }
 //        }
 
-        assignments = Assignment.list([sort: 'section', order: 'asc']);
+        assignments = Assignment.list()
+//        assignments = Assignment.list([sort: 'section', order: 'asc']);
         //type=="com.sanwn.mousika.Assignment";
-        assignments = Assignment.findAll("from Assignment as a order by section asc");
+//        assignments = Assignment.findAll("from Assignment as a order by section asc");
     }
 
     def works() {
@@ -152,14 +153,13 @@ class StudentController {
         def courseId = params.courseId;
         if (courseId != null) {
             def course = Course.findById(courseId);
-            def role = Role.findByName("学生")
-
-            if (course != null) {
-                CourseMember cm = new CourseMember();
-                cm.setUser(user)
-                cm.setCourse(course)
-                cm.setRole(role)
-                cm.save();
+            CourseApplication application =
+                new CourseApplication(applicant: user, applyFor: course, applyDate: new Date(), status: CourseApplication.STATUS_SUBMITTED)
+            if (application.save(flush: true)) {
+                redirect(action: "regCourseList", params: params)
+                return
+            } else {
+                flash.message = "申请课程失败，请稍后重试"
             }
         }
         redirect(action: "regCourseList", params: params)

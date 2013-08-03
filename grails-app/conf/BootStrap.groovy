@@ -28,6 +28,7 @@ class BootStrap {
                     courseMgrRole.save(failOnError: true)
 
                     def studentRole = new Role(name: "学生")
+                    studentRole.addToPermissions("student:*")
                     studentRole.addToPermissions("course:index,list")
                     studentRole.addToPermissions("assignment:show")
                     studentRole.addToPermissions("attempt:create,update")
@@ -39,9 +40,11 @@ class BootStrap {
                     user.save(failOnError: true)
 
                     user = new User(username: "glfruit", fullname: "李果", email: "glfruit80@gmail.com", dateCreated: new Date(), passwordHash: new Sha256Hash("test").toHex())
+                    user.addToRoles(teacherRole)
                     user.save(failOnError: true)
 
                     user = new User(username: "linda", fullname: "李彦熹", email: "linda@123.com", dateCreated: new Date(), passwordHash: new Sha256Hash("test").toHex())
+                    user.addToRoles(studentRole)
                     user.save(failOnError: true)
 
                     user = new User(username: "test1", fullname: "彭启华", email: "ppller25@126.com", dateCreated: new Date(), passwordHash: new Sha256Hash("test").toHex())

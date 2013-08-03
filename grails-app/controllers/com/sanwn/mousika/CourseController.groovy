@@ -284,8 +284,10 @@ class CourseController {
         def course = Course.get(id)
         def members = course.deliveredBy ? [course.deliveredBy] : []
         members.addAll(course.students)
+        def registered = course.students.size()
+        def applied = CourseApplication.countByApplyForAndStatus(course, CourseApplication.STATUS_SUBMITTED)
         [users: User.list(params), members: members,
-                userCount: userCount, pages: Math.ceil(userCount / params.max), offset: params.offset]
+                userCount: userCount, pages: Math.ceil(userCount / params.max), offset: params.offset, registered: registered, applied: applied]
     }
 
     def assign(Long id) {
@@ -377,6 +379,6 @@ class CourseController {
             it.content.type == 'assignment'
         }
         def total = 10 //TODO: 获取totoal总数
-        [assignments: items, course: course,total:total]
+        [assignments: items, course: course, total: total]
     }
 }

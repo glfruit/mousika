@@ -9,7 +9,7 @@ var profile = (function () {
                 && ~/\.css$/.test(filename)) || /(png|jpg|jpeg|gif|tiff)$/.test(filename);
         };
     return {
-        basePath: '../lib',
+        basePath: '../dojo-release-1.9.1',
         action: 'release',
         cssOptimize: 'comments',
         mini: true,

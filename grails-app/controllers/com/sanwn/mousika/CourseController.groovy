@@ -100,20 +100,21 @@ class CourseController {
     def approve(Long id) {
         def updated, approved
         if (params.boolean('batch')) {
-            approved = params.list('approved')
+            approved = params.list('examine')
             approved = approved.collect {
                 it as Long
             }
             def query = CourseApplication.where {
                 id in approved
             }
-            updated = query.updateAll(status: CourseApplication.STATUS_APPROVED)
+            updated = query.updateAll(status: params.status, approveDate: new Date())
         } else {
-            approved = params.approved
+            approved = params.examine
             def application = CourseApplication.where {
                 id == approved
             }.find()
-            application.status = CourseApplication.STATUS_APPROVED
+            application.status = params.status//TODO: 重构进service里
+            application.approveDate = new Date()
             if (application.save(flush: true)) {
                 updated = 1
             }

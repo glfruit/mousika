@@ -36,7 +36,9 @@
                         <td>
                             <a id="btn${apply.id}" href="#"
                                class="btn btn-success btn-approve">批准</a>
-                            <a href="#" class="btn">打回</a>
+                            <a id="deny${apply.id}" href="#"
+                               class="btn btn-deny"
+                               style="padding-left:5px;">拒绝</a>
                         </td>
                     </tr>
                 </g:each>
@@ -44,7 +46,8 @@
                     <p>
                         <a class="btn"
                            href="${createLink(action: 'show', id: 63)}">返回到课程</a>
-                        <a id="batchApprove" class="btn" href="#">批量审批</a>
+                        <a id="batchApprove" class="btn" href="#">批量批准</a>
+                        <a id="batchDeny" class="btn" href="#">批量拒绝</a>
                     </p>
                 </tr>
             </tbody>
@@ -93,14 +96,41 @@
                         var requestData = {
                             max: max,
                             offset: offset,
-                            sort: 'applyDate'
+                            sort: 'applyDate',
+                            status: 'approved',
+                            batch: false
                         };
+                        query('.btn-deny').on('click', function (e) {
+                            event.stop(e);
+                            var id = e.target.id.match(/deny(\d+)$/)[1];
+                            if (!dom.byId('apply' + id).checked) return;
+                            requestData.examine = id;
+                            requestData.status = 'denied';
+                            request.post(requestUrl, {
+                                data: requestData
+                            }).then(responseHandler);
+                        });
+                        on(dom.byId('batchDeny'), 'click', function (e) {
+                            event.stop(e);
+                            var examined = []
+                            query('input.examine:checked').forEach(function (node) {
+                                var id = node.id.match(/apply(\d+)$/)[1];
+                                examined.push(id);
+                            });
+                            if (examined.length > 0) {
+                                requestData.examine = examined;
+                                requestData.status = "denied";
+                                requestData.batch = true;
+                                request.post(requestUrl, {
+                                    data: requestData
+                                }).then(responseHandler);
+                            }
+                        });
                         query('.btn-approve').on('click', function (e) {
                             event.stop(e);
                             var id = e.target.id.match(/btn(\d+)$/)[1];
                             if (!dom.byId('apply' + id).checked) return;
-                            requestData.batch = false;
-                            requestData.approved = id;
+                            requestData.examine = id;
                             request.post(requestUrl, {
                                 data: requestData
                             }).then(responseHandler);
@@ -113,7 +143,7 @@
                                 approved.push(id);
                             });
                             if (approved.length > 0) {
-                                requestData.approved = approved;
+                                requestData.examine = approved;
                                 requestData.batch = true;
                                 request.post(requestUrl, {
                                     data: requestData

@@ -21,7 +21,7 @@
 
 		<div id="list-user" class="content scaffold-list" role="main">
             <h1><g:message code="user.list.label" args="[entityName]" /></h1>
-            <g:link class="create" action="create"><g:message code="user.create.label" args="[entityName]" /></g:link>&nbsp;&nbsp;&nbsp;&nbsp;<g:link class="batchImport" action="batchImport"><g:message code="user.batch.import.label" args="[entityName]" /></g:link></li>
+            <g:link class="create" action="create"><g:message code="user.create.label" args="[entityName]" /></g:link>&nbsp;&nbsp;&nbsp;&nbsp;<g:link class="batchImportIndex" action="batchImportIndex"><g:message code="user.batch.import.label" args="[entityName]" /></g:link></li>
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
@@ -31,6 +31,8 @@
 						<g:sortableColumn property="username" title="${message(code: 'user.username.label', default: '用户名')}" />
 					
 						<g:sortableColumn property="fullname" title="${message(code: 'user.fullname.label', default: '姓名')}" />
+
+                        <g:sortableColumn property="email" title="${message(code: 'user.email.label', default: '邮箱')}" />
 
 						<g:sortableColumn property="firstAccessed" title="${message(code: 'user.firstAccessed.label', default: '首次访问时间')}" />
 
@@ -45,6 +47,8 @@
 						<td><g:link action="show" id="${userInstance.id}">${fieldValue(bean: userInstance, field: "username")}</g:link></td>
 					
 						<td>${fieldValue(bean: userInstance, field: "fullname")}</td>
+
+                        <td>${fieldValue(bean: userInstance, field: "email")}</td>
 
                         <td><g:formatDate format="yyyy-MM-dd HH:mm:ss"
                                           date="${userInstance.profile?.firstAccessed}"/></td>

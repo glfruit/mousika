@@ -9,6 +9,8 @@ class CourseUnit {
 
     String title
 
+    static searchable = true
+
     static belongsTo = [course: Course]
 
     static hasMany = [items: UnitItem]
@@ -18,11 +20,14 @@ class CourseUnit {
 
     static mapping = {
         sort sequence: 'asc'
+        items sort: "sequence", order: "asc"
     }
 
-    def createUnitItem(Content content) {
-        def seq = items == null ? 0 : items.size()
-        def item = new UnitItem(sequence: seq, title: content.title, content: content)
-        addToItems(item)
+    def copy() {
+        def unit = new CourseUnit(title: title, sequence: sequence)
+        items.each { unitItem ->
+            unit.addToItems(unitItem.copy())
+        }
+        return unit
     }
 }

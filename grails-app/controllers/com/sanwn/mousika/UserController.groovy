@@ -1,10 +1,13 @@
 package com.sanwn.mousika
 
+import org.compass.core.engine.SearchEngineQueryParseException
 import org.springframework.dao.DataIntegrityViolationException
 
 class UserController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def gsonBuilder
 
     def index() {
         redirect(action: "list", params: params)
@@ -12,7 +15,25 @@ class UserController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [userInstanceList: User.list(params), userInstanceTotal: User.count()]
+        withFormat {
+            html {
+                [userInstanceList: User.list(params), userInstanceTotal: User.count()]
+            }
+            json {
+                def json = User.list(params).collect {
+                    [
+                            id: it.id,
+                            username: it.username,
+                            fullname: it.fullname,
+                            email: it.profile?.email,
+                            lastAccessed: it.profile?.lastAccessed,
+                            roles: it.roles.collect { [id: it.id, name: it.name] }
+                    ]
+                }
+                def gson = gsonBuilder.create()
+                render contentType: "text/json", text: gson.toJson(json)
+            }
+        }
     }
 
     def create() {
@@ -97,6 +118,40 @@ class UserController {
         catch (DataIntegrityViolationException e) {
             flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'user.label', default: 'User'), id])
             redirect(action: "show", id: id)
+        }
+    }
+
+    def search() {
+        if (!params.q?.trim()) {
+            return [:]
+        }
+        try {
+            def searchResult = User.search(params.q, params)
+            withFormat {
+                html {
+                    [searchResult: searchResult]
+                }
+                json {
+                    def results = [
+                        total: searchResult.total,
+                        max: searchResult.max,
+                        offset: searchResult.offset,
+                        users: searchResult.results.collect {
+                            [
+                                    id: it.id,
+                                    username: it.username,
+                                    fullname: it.fullname,
+                                    email: it.profile?.email,
+                                    lastAccessed: it.profile?.lastAccessed,
+                                    roles: it.roles.collect { [id: it.id, name: it.name] }
+                            ]
+                        }
+                    ]
+                    render contentType: 'text/json', text: gsonBuilder.create().toJson(results)
+                }
+            }
+        } catch (SearchEngineQueryParseException ex) {
+            return [parseException: true]
         }
     }
 

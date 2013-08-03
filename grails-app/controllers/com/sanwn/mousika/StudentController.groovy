@@ -32,7 +32,7 @@ class StudentController {
         }
 
         myCourses = Course.findAll() {
-            courseMembers.user == loginUser
+            deliveredBy == loginUser
         }
 
 //        notRegCourses = Course.findAll() {
@@ -101,7 +101,7 @@ class StudentController {
         if (isStudent) {
             def user = User.findByUsername(SecurityUtils.subject.principal)
             courses = Course.findAll([max: params.max, sort: params.sort, offset: params.offset]) {
-                courseMembers.user == user
+                deliveredBy == user
             }
             count = Course.createCriteria().count {
                 'in'('id', courses.id)

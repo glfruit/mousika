@@ -1,4 +1,7 @@
 package com.sanwn.mousika
+
+import org.springframework.dao.DataIntegrityViolationException
+
 /**
  *
  * @author glix
@@ -23,6 +26,23 @@ class CourseService {
         def newSeq = targetUnit.sequence
         targetUnit.sequence = oldSeq
         sourceUnit.sequence = newSeq
+    }
+
+    def removeUnit(CourseUnit courseUnit) {
+        def course = courseUnit.course
+        try {
+            course.numberOfWeeks = course.numberOfWeeks - 1
+            course.units.each { unit ->
+                if (unit.sequence > courseUnit.sequence) {
+                    unit.sequence = unit.sequence - 1
+                }
+            }
+            course.removeFromUnits(courseUnit)
+            courseUnit.delete(flush: true)
+            course.save(flush: true)
+        } catch (DataIntegrityViolationException e) {
+            throw new CourseException(message: "删除课程单元${courseUnit.title}失败", course: course)
+        }
     }
 }
 class CourseException extends RuntimeException {

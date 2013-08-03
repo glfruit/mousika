@@ -5,7 +5,7 @@
 <g:else>
     <div id="${courseSectionId}" data-dojo-id="${courseSectionId}"
      class="dojoDndItem course-section"
-     dndType="section">
+     dndType="unit">
 </g:else>
 <g:set var="beginDate" value="${startDate + (order - 1) * 7}"/>
 <g:set var="endDate" value="${beginDate + 6}"/>
@@ -38,19 +38,31 @@
     %{--<p>新闻讨论区</p>--}%
     %{--</li>--}%
     %{--</g:if>--}%
-        <g:each in="${section.contents}" var="content" status="s">
+        <g:each in="${section.items}" var="item" status="s">
             <li id="${courseSectionId}item${s}"
                 class="dojoDndItem" dndType="content">
                 <div style="display: inline;">
                     <div style="float: left; padding-right: 3em;">
-                        <g:if test="${content.type != 'label'}">
-                            <a href="${createLink(controller: content.type, action: 'show', id: content.id)}">
-                                ${content.title}
-                            </a>
-                            <span class="resource-link-details"></span>
+                        <g:if test="${item.content.type == 'urlResource'}">
+                            <a href="${item.content.location}"
+                               target="_blank">${item.title}</a>
                         </g:if>
+                        <g:elseif test="${item.content.type != 'label'}">
+                            <g:if test="${item.content.type == 'fileResource'}">
+                                <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id,
+                                        params: ['type': item.content.fileType])}" class="fileType">
+                                    ${item.title}
+                                </a>
+                            </g:if>
+                            <g:else>
+                                <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id)}">
+                                    ${item.title}
+                                </a>
+                            </g:else>
+                            <span class="resource-link-details"></span>
+                        </g:elseif>
                         <g:else>
-                            ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(content.labelContent)}
+                            ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(item.content.labelContent)}
                         </g:else>
                     </div>
 

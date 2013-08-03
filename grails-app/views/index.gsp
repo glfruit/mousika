@@ -12,6 +12,23 @@
         <div id="publicCourseList">
 
         </div>
+        <shiro:hasPermission permission="course:create">
+            <g:link controller="course" action="create"
+                    class="btn create"><g:message
+                    code="course.create.label"/></g:link>
+        </shiro:hasPermission>
+        <g:form style="float: right;" class="form-search"
+                url="[controller: 'course', action: 'search']" method='get'>
+            <g:textField name="q" value="${params.q}" size="50"
+                         class="input-medium search-query"/>
+            <button type="submit" class="btn"><g:message
+                    code="course.search.label"/></button>
+        </g:form>
+    %{--<g:form url='[controller: "course", action: "search"]'--}%
+    %{--id="searchableForm" name="searchableForm" method="get">--}%
+    %{--<g:textField name="q" value="${params.q}" size="50"/> <input--}%
+    %{--type="submit" value="Search"/>--}%
+    %{--</g:form>--}%
         <script>
             require(['dojo/request', 'dojo/domReady!'], function (request) {
                 request.get("${createLink(controller: 'course', action: 'listPublic')}", {
@@ -33,7 +50,8 @@
                                                 var li = domConstruct.create('li', {class: 'span5'}, ul);
                                                 var h3 = domConstruct.create('h3', null, li);
                                                 domConstruct.create('a', {href: "${request.contextPath}/course/show/" + course.id, innerHTML: course.title}, h3);
-                                                domConstruct.create('p', {innerHTML: '教师:' + course.teacher}, h3);
+                                                var teacher = course.teacher ? course.teacher : 'N/A';
+                                                domConstruct.create('p', {innerHTML: '教师:' + teacher}, li);
                                                 li = domConstruct.create('li', {class: 'span6', innerHTML: course.description}, ul);
                                             });
                                         }

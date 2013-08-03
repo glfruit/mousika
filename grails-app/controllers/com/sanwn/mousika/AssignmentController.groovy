@@ -10,6 +10,8 @@ class AssignmentController {
 
     def userService
 
+    def courseUnitService
+
     def create() {
         [assignment: new Assignment(params), sectionSeq: params.sectionSeq, courseId: params.courseId]
     }
@@ -32,7 +34,7 @@ class AssignmentController {
         def courseId = params.long('courseId')
         def sectionSeq = params.int('sectionSeq')
         try {
-            assignmentService.createAssignment(courseId, sectionSeq, assignment)
+            courseUnitService.createUnitItem(courseId, sectionSeq, assignment)
         } catch (AssignmentException ae) {
             flash.message = ae.message
             render(view: 'create', model: [assignment: assignment, courseId: courseId, sectionSeq: sectionSeq])
@@ -40,7 +42,7 @@ class AssignmentController {
         } catch (Exception e) {
             log.error("未知的异常", e)
             flash.message = '系统内部错误'
-            render(view: 'create', model: [assignment: assignment])
+            render(view: 'create', model: [assignment: assignment, courseId: courseId, sectionSeq: sectionSeq])
             return
         }
         def returnToCourse = params.boolean('returnToCourse')

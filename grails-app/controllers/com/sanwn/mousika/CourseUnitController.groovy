@@ -8,6 +8,16 @@ class CourseUnitController {
 
     def index() {}
 
+    def updateUnit(UpdateCourseUnitCommand cmd) {
+        try {
+            courseUnitService.moveUnitItem(cmd.courseId, cmd.sourceUnitSeq, cmd.targetUnitSeq, cmd.sourceUnitItemSeq, cmd.targetUnitItemSeq, cmd.before)
+            render contentType: "application/json", text: '{"success":true}'
+        } catch (Exception e) {
+            log.error("发生异常：", e)
+            render contentType: "application/json", text: """{"success":false,"error":"${e.message}"}"""
+        }
+    }
+
     def updateSeq() {
         if (params.moveSection) {
             def course = Course.get(params.long('courseId'))
@@ -57,4 +67,34 @@ class CourseUnitController {
 
         render contentType: "application/json", text: '{"success":true}'
     }
+
+    def delete(Long id) {
+        def courseId = params.courseId
+        def unit = CourseUnit.where {
+            course.id == courseId && sequence == id
+        }.find()
+        if (!unit) {
+            render contentType: "application/json", text: '{"success":false,"error":"要删除的课程单元不存在"}'
+            return;
+        }
+        try {
+            courseService.removeUnit(unit)
+            render contentType: "application/json", text: '{"success":true}'
+        } catch (CourseException e) {
+            log.error("删除课程单元失败：${e.message}")
+            render contentType: "application/json", text: '{"success":false}'
+        } catch (Exception ex) {
+            log.error("未知错误：${e}")
+            render contentType: "application/json", text: '{"success":false,"error":"未知错误"}'
+        }
+    }
+}
+
+class UpdateCourseUnitCommand {
+    Long courseId
+    int sourceUnitSeq
+    int targetUnitSeq
+    int sourceUnitItemSeq
+    int targetUnitItemSeq
+    boolean before
 }

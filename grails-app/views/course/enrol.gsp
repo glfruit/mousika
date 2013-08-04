@@ -153,7 +153,7 @@
                                         query(e.target).parents("tr").first().addClass("success");
                                         query(e.target).addClass("hide");
                                     } else {
-                                        alert("failure!" + json.parse(response).error);
+                                        alert("注册课程失败!" + json.parse(response).error);
                                     }
                                 });
                             });

@@ -28,7 +28,7 @@ class FileResourceController {
         def course = Course.get(params.courseId)
         def uploadedFile = request.getFile('qqfile')
         def filename = uploadedFile.originalFilename
-        def fileRepo = new File(".", "courseFiles/${course.code}")
+        def fileRepo = new File(".", "courseFiles/${course.courseToken}")
         if (!fileRepo.exists()) {
             FileUtils.forceMkdir(fileRepo)
         }

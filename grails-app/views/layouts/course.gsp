@@ -167,13 +167,15 @@
                                         style="padding-left: 5px;">
                                     <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.id)}">课程资料</a>
                                 </span></li>
-                                <li id="turn-edit-on-or-off"><i
-                                        class="icon-edit"></i><a href="#"
-                                                                 style="padding-left: 5px;"><span
-                                            class="edit-course-region hide">打开编辑</span>
-                                    <span class="edit-course-region">关闭编辑</span>
-                                </a>
-                                </li>
+                                <g:if test="${params.controller == 'course' && params.action == 'show'}">
+                                    <li id="turn-edit-on-or-off"><i
+                                            class="icon-edit"></i><a href="#"
+                                                                     style="padding-left: 5px;"><span
+                                                class="edit-course-region hide">打开编辑</span>
+                                        <span class="edit-course-region">关闭编辑</span>
+                                    </a>
+                                    </li>
+                                </g:if>
                                 <li><i class="icon-pencil"></i><span
                                         style="padding-left: 5px;"><a
                                             href="${createLink(controller: 'course', action: 'edit', id: params.id)}">编辑设置</a>

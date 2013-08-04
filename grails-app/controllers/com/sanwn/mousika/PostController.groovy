@@ -48,6 +48,19 @@ class PostController {
     }
 
     def show(Long id) {
-        render "Post showed"
+        [post: Post.get(id)]
+    }
+
+    def download(String id) {
+        def course = Course.where {
+            id == params.courseId
+        }.find()
+        def file = new File(".", "courseFiles/${course.courseToken}/forum/${id}")
+        response.setContentType("application/octet-stream")
+        response.setContentLength(file.size().toInteger())
+        def filename = new String(id.getBytes("UTF-8"), "ISO-8859-1")
+        response.setHeader("Content-disposition", "attachment;filename=${filename}")
+        response.outputStream << file.newInputStream()
+        response.outputStream.flush()
     }
 }

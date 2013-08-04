@@ -35,7 +35,7 @@
                     <g:each in="${forum.posts}" var="post">
                         <tr>
                             <td>
-                                <a href="${createLink(mapping: 'post', params:[courseId: params.courseId, forumId: params.id, id: post.id])}">
+                                <a href="${createLink(mapping: 'post', params: [courseId: params.courseId, forumId: params.id, id: post.id])}">
                                     ${post.title}</a></td>
                             <td>${post.postedBy.fullname}</td>
                             <td>${post.replies.size()}/100</td>
@@ -48,9 +48,9 @@
                     </g:each>
                 </tbody>
             </table>
-            <g:paginate total="total" mapping="forum" prev="&lt; previous"
+            <g:paginate total="total" mapping="post" prev="&lt;"
                         max="20"
-                        next="next &gt;"></g:paginate>
+                        next="&gt;"></g:paginate>
             <a class="btn"
                href="${request.contextPath}/course/${params.courseId}/forum/${params.id}/post/create">发表新帖</a>
         </div>

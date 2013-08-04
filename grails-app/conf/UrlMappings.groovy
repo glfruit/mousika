@@ -18,9 +18,14 @@ class UrlMappings {
             action = 'show'
         }
 
-        name post: "/course/$courseId/forum/$forumId/post/show/$id" {
+        name post: "/course/$courseId/forum/$forumId/posts/$id" {
             controller = 'post'
             action = 'show'
+        }
+
+        name attachmentDownload: "/course/$courseId/forum/$forumId/post/$postId/attachment/$id" {
+            controller = 'post'
+            action = 'download'
         }
     }
 }

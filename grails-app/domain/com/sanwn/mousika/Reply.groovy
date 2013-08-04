@@ -6,6 +6,8 @@ class Reply {
 
     String replyContent
 
+    User repliedBy
+
     Date dateCreated
 
     Date lastUpdated

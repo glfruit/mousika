@@ -150,7 +150,8 @@
                         </li>
                     </ul>
                 </div>
-                <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate']}">
+                <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate'] ||
+                        request.forwardURI =~ /\/course\/\d+\//}">
                     <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
                         <div id="course-admin-panel"
                              data-dojo-type="dijit/TitlePane"

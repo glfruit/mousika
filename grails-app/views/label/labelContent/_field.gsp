@@ -4,7 +4,6 @@
     </label>
 
     <div class="controls">
-        <g:textArea name="${property}" value="${value}" rows="10"
-                    required="true"/>
+        <g:textArea name="${property}" value="${value}" rows="10" class="required" />
     </div>
 </div>

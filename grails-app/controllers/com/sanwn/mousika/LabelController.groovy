@@ -1,11 +1,12 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.CourseSection
 import org.springframework.dao.DataIntegrityViolationException
 
 class LabelController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def courseUnitService
 
     def index() {
         redirect(action: "list", params: params)
@@ -17,25 +18,22 @@ class LabelController {
     }
 
     def create() {
-        def section = CourseSection.findBySequence(params.sectionSeq)
+        def section = CourseUnit.findBySequence(params.sectionSeq)
         [labelInstance: new Label(params), sectionSeq: section.sequence, courseId: section.course.id]
     }
 
     def save() {
-        def section = CourseSection.findBySequence(params.sectionSeq)
-        if (section == null) {
-            flash.message = message(code: 'error.missing.section')
-            redirect(controller: "course", action: "list")
-        } else {
-            def labelInstance = new Label(params)
-            labelInstance.title = ''
-            section.addToContents(labelInstance)
-            if (!section.save(flush: true)) {
-                render(view: "create", model: [labelInstance: labelInstance])
-                return
-            }
-
-            redirect(controller: "course", action: "show", id: section.course.id)
+        def label = new Label(params)
+        def courseId = params.long('courseId')
+        def sectionSeq = params.int('sectionSeq')
+        try {
+            label.title = 'label'
+            courseUnitService.createUnitItem(courseId, sectionSeq, label)
+            redirect(controller: 'course', action: 'show', id: courseId)
+        } catch (Exception e) {
+            flash.message = e.message
+            log.error("发生异常：", e)
+            render(view: "create", model: [labelInstance: label, courseId: courseId, sectionSeq: sectionSeq])
         }
     }
 

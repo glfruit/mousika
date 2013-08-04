@@ -51,6 +51,7 @@ grails.project.dependency.resolution = {
         runtime 'postgresql:postgresql:9.1-901-1.jdbc4'
 
         test("org.spockframework:spock-grails-support:0.7-groovy-2.0")
+        compile "net.sourceforge.jexcelapi:jxl:2.6.10"
     }
 
     plugins {

@@ -1,6 +1,5 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.controllers.EventController
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

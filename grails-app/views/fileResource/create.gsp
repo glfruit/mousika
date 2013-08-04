@@ -2,18 +2,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main">
-        <g:set var="entityName"
-               value="${message(code: 'fileResource.label', default: 'FileResource')}"/>
-        <title><g:message code="default.create.label"
-                          args="[entityName]"/></title>
+        <meta name="layout" content="course">
+        <title><g:message code="fileResource.button.create.label"/></title>
+        <ckeditor:resources/>
     </head>
 
     <body>
         <div id="create-fileResource" class="content scaffold-create"
              role="main">
-            <h1><g:message code="default.create.label"
-                           args="[entityName]"/></h1>
+            <h4>创建文件资源</h4>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -25,17 +22,24 @@
                     </g:eachError>
                 </ul>
             </g:hasErrors>
-            <g:form action="save">
-                <g:render template="/uploader"/>
+            <g:uploadForm action="upload" class="form-horizontal">
                 <fieldset class="form">
-                    <g:hiddenField name="sectionSeq" value="${sectionSeq}"/>
-                    <g:render template="form"/>
+                    <f:with bean="fileResourceInstance">
+                        <g:hiddenField name="courseId" value="${courseId}"/>
+                        <g:hiddenField name="sectionSeq" value="${sectionSeq}"/>
+                        <f:field property="title" required="true"/>
+                        <f:field property="description"/>
+                    </f:with>
+                    <input type="file" name="qqfile"/>
                 </fieldset>
                 <fieldset class="buttons">
-                    <g:submitButton name="create" class="save"
-                                    value="${message(code: 'default.button.create.label', default: 'Create')}"/>
+                    %{--<g:render template="/uploader"/>--}%
+                    <g:submitButton name="create" class="btn btn-primary"
+                                    value="${message(code: 'fileResource.button.create.label', default: 'Create')}"/>
+                    <a class="btn"
+                       href="${createLink(controller: 'course', action: 'show', id: courseId)}">${message(code: 'default.cancel.label')}</a>
                 </fieldset>
-            </g:form>
+            </g:uploadForm>
         </div>
     </body>
 </html>

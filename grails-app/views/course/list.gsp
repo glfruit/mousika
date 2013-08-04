@@ -10,12 +10,12 @@
 
     <body>
         <g:if test="${org.apache.shiro.SecurityUtils.subject.hasRoles([com.sanwn.mousika.Role.ADMIN])}">
-            <h4 style="border-bottom: 1px solid #000;color: #777777;">
+            <h4 style="border-bottom: 1px solid #DEDEDE;color: #777777;padding-top: 10px;">
                 <g:message code="label.course.list"/>
             </h4>
         </g:if>
         <g:else>
-            <h4 style="border-bottom: 1px solid #000;color: #777777;">
+            <h4 style="border-bottom: 1px solid #DEDEDE;color: #777777;">
                 <g:message code="label.course.teacher"/>
             </h4>
         </g:else>
@@ -34,23 +34,36 @@
                             </h3>
 
                             <p>教师：<g:link controller="user" action="show"
-                                          id="${teachers[i]?.user?.id}">${teachers[i]?.user?.fullname}</g:link></p>
+                                          id="${courseInstance.deliveredBy?.id}">${courseInstance.deliveredBy?.fullname}</g:link></p>
                         </li>
                         <li class="span6">
-                            <g:set var="desc"
-                                   value="${courseInstance.description}"/>
-                            ${StringEscapeUtils.unescapeHtml(desc)}
+                            <%=courseInstance.description%>
                         </li>
                     </ul>
                 </section>
             </g:each>
+            <g:paginate controller="course"
+                        action="list"
+                        params="${params}"
+                        total="${courseInstanceTotal}"
+                        prev="&lt; previous"
+                        next="next &gt;"></g:paginate>
         </g:if>
         <g:else>
             <p>暂时没有任何课程</p>
         </g:else>
         <shiro:hasPermission permission="course:create">
             <g:link controller="course" action="create"
-                    class="btn create">创建新课程</g:link>
+                    class="btn create"><g:message
+                    code="course.create.label"/></g:link>
         </shiro:hasPermission>
+        <g:form style="float: right;" class="form-search"
+                url="[controller: 'course', action: 'search']" method='get'>
+            <g:textField name="q" value="${params.q}" size="50"
+                         class="input-medium search-query"/>
+            <button type="submit" class="btn"><g:message
+                    code="course.search.label"/></button>
+        </g:form>
+        <div style="clear:both;"></div>
     </body>
 </html>

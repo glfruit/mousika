@@ -1,18 +1,30 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.domain.Course
-import com.sanwn.mousika.domain.CourseMember
-import com.sanwn.mousika.domain.CourseSection
 import grails.plugin.spock.IntegrationSpec
-import org.springframework.transaction.annotation.Transactional
+import spock.lang.Shared
 
 class CourseIntegrationSpec extends IntegrationSpec {
 
-    def fixtureLoader
+    @Shared fixtureLoader
+
+    def setupSpec() {
+        fixtureLoader['courseFixture'].load('CourseFixture')
+    }
+
+    def "create a valid new course"() {
+        given: "user input valid course info"
+        def course = new Course(title: 'a course', code: 'coursecode', startDate: new Date(), numberOfWeeks: 5)
+
+        when: "the course is initiated"
+        course.init()
+
+        then:
+        course.units.size() == 6
+    }
 
     def "add a course member to course"() {
         setup:
-        def fixture = fixtureLoader.load("CourseFixture")
+        def fixture = fixtureLoader['courseFixture']
         def course = fixture.course
         def member = new CourseMember(user: fixture.user, role: fixture.role)
 
@@ -32,10 +44,14 @@ class CourseIntegrationSpec extends IntegrationSpec {
 
     def "find courses taught by user"() {
         setup:
-        def fixture = fixtureLoader.load("CourseFixture")
+        def fixture = fixtureLoader["courseFixture"]
+
         when:
-        def owned = Course.findAll {
-            fixture.course.courseMembers == fixture.user
+        def c = Course.createCriteria()
+        def owned = c.list {
+            courseMembers {
+                eq("user", fixture.user)
+            }
         }
 
         then:
@@ -47,18 +63,18 @@ class CourseIntegrationSpec extends IntegrationSpec {
     def "add new sections"() {
         setup:
         def course = new Course(code: "test", title: "test", startDate: new Date())
-        def section = new CourseSection(sequence: 1, title: 'section one')
+        def unit = new CourseUnit(sequence: 1, title: 'unit one')
 
         when:
-        course.addToSections(section)
+        course.addToUnits(unit)
         course.save(flush: true)
 
         then:
         course.hasErrors() == false
         course.id != null
-        course.sections.size() == 1
-        course.sections[0].id != null
-        course.sections[0].sequence == 1
-        course.sections[0].title == 'section one'
+        course.units.size() == 1
+        course.units[0].id != null
+        course.units[0].sequence == 1
+        course.units[0].title == 'unit one'
     }
 }

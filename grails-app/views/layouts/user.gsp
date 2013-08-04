@@ -126,12 +126,16 @@
                              data-dojo-props="title: '系统管理'"
                              style="padding-bottom: 10px;">
                             <p><i class="icon-user"></i> <a
-                                    href="${createLink(controller: 'user', action: 'list')}">用户列表</a>
+                                    href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
                             </p>
 
                             <p>
                                 <i class="icon-lock"></i>
-                                <a href="${createLink(controller: 'user', action: 'privilege')}">权限管理</a>
+                                <a href="${createLink(controller: 'privilege', action: 'list')}">权限管理</a>
+                            </p>
+                            <p>
+                                <i class="icon-pencil"></i>
+                                <a href="${createLink(controller: 'backup', action: 'list')}">系统备份</a>
                             </p>
                         </div>
                     </shiro:hasRole>

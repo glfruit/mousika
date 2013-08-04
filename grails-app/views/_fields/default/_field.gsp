@@ -17,5 +17,8 @@
         <g:elseif test="${type == String || type == int}">
             <g:textField name="${property}" value="${value}"/>
         </g:elseif>
+        <g:else>
+            <g:textField name="${property}" value="${value}"/>
+        </g:else>
     </div>
 </div>

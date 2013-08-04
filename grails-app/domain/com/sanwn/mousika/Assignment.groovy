@@ -32,6 +32,12 @@ class Assignment extends Content {
      */
     String filePath
 
+    static searchable = true
+
+    static mapping = {
+        attempts sort: 'submittedDate', order: 'desc'
+    }
+
     static constraints = {
         filePath nullable: true, blank: false
         availableFrom nullable: true
@@ -40,4 +46,8 @@ class Assignment extends Content {
     }
 
     static hasMany = [attempts: Attempt]
+
+    def copy() {
+        new Assignment(title: title, description: description, style: style)
+    }
 }

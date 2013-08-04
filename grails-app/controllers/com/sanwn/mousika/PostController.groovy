@@ -48,7 +48,15 @@ class PostController {
     }
 
     def show(Long id) {
-        [post: Post.get(id)]
+        params.max = params.max ?: 20
+        params.offset = params.offset ?: 0
+        params.sort = params.sort ?: 'dateCreated'
+        def post = Post.get(id)
+        def replies = Reply.where {
+            post == post
+        }.list(params)
+        def total = Reply.countByPost(post)
+        [post: Post.get(id), replies: replies, total: total]
     }
 
     def download(String id) {

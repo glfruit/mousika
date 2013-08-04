@@ -25,7 +25,6 @@ class UnitItem {
             c = (c as Assignment).copy()
         }
         //TODO: 拷贝文件资源时应当将相应的文件也拷贝过去
-        //TODO: 创建一个新的论坛
         new UnitItem(title: title, sequence: sequence, content: c)
     }
 }

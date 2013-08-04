@@ -23,8 +23,18 @@ class UrlMappings {
             action = 'show'
         }
 
+        name reply: "/course/$courseId/forum/$forumId/posts/$id/reply" {
+            controller = 'reply'
+            action = 'create'
+        }
+
         name attachmentDownload: "/course/$courseId/forum/$forumId/post/$postId/attachment/$id" {
             controller = 'post'
+            action = 'download'
+        }
+
+        name replyAttachmentDownload: "/course/$courseId/forum/$forumId/post/$postId/reply/$replyId/attachment/$id" {
+            controller = 'reply'
             action = 'download'
         }
     }

@@ -77,7 +77,7 @@ class Course {
 
     def init() {
         def unit = new CourseUnit(sequence: 0, title: '')
-        def forum = new Forum(title:"新闻讨论区")
+        def forum = new Forum(title: "新闻讨论区")
         this.forum = forum
         forum.course = this
         def forumItem = new UnitItem(title: "新闻讨论区", sequence: 0, content: forum)
@@ -96,8 +96,11 @@ class Course {
 
     def copy() {
         def course = new Course(title: title, code: code, description: description, numberOfWeeks: numberOfWeeks)
+        def forum = new Forum(title: "新闻讨论区")
+        course.forum = forum
+        forum.course = course
         units.each { unit ->
-            course.addToUnits(unit.copy())
+            course.addToUnits(unit.copy(course))
         }
         course.gradeBook = new GradeBook()
         return course

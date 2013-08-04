@@ -25,5 +25,6 @@ class Post {
     static mapping = {
         table name: 'mousika_forum_posts'
         postContent sqlType: 'text'
+        replies sort: 'dateCreated'
     }
 }

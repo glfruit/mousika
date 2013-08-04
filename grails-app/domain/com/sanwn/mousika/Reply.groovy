@@ -2,11 +2,11 @@ package com.sanwn.mousika
 
 class Reply {
 
-    String title
-
     String replyContent
 
     User repliedBy
+
+    String attachment
 
     Date dateCreated
 
@@ -17,7 +17,7 @@ class Reply {
     static hasMany = [comments: Comment]
 
     static constraints = {
-        title nullable: true, blank: true
+        attachment nullable: true
     }
 
     static mapping = {

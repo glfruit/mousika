@@ -3,15 +3,6 @@
 <html>
     <head>
         <meta name="layout" content="course">
-        <style type="text/css">
-        table.fixed {
-            table-layout: fixed;
-        }
-
-        table.fixed td {
-            overflow: hidden;
-        }
-        </style>
         <title>${forum.title}</title>
     </head>
 

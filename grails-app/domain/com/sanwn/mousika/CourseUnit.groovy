@@ -23,10 +23,13 @@ class CourseUnit {
         items sort: "sequence", order: "asc"
     }
 
-    def copy() {
+    def copy(Course course) {
         def unit = new CourseUnit(title: title, sequence: sequence)
         items.each { unitItem ->
-            unit.addToItems(unitItem.copy())
+            def itemCopy = unitItem.copy()
+            if (unitItem.content instanceof Forum)
+                itemCopy.content = course.forum
+            unit.addToItems(itemCopy)
         }
         return unit
     }

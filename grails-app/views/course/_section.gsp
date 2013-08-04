@@ -47,10 +47,14 @@
                             <a href="${item.content.location}"
                                target="_blank">${item.title}</a>
                         </g:if>
+                        <g:elseif test="${item.content.type == 'forum'}">
+                            <a href="${request.contextPath}/course/${course.id}/forum/${item.content.id}">${item.title}</a>
+                        </g:elseif>
                         <g:elseif test="${item.content.type != 'label'}">
                             <g:if test="${item.content.type == 'fileResource'}">
                                 <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id,
-                                        params: ['type': item.content.fileType])}" class="fileType">
+                                        params: ['type': item.content.fileType])}"
+                                   class="fileType">
                                     ${item.title}
                                 </a>
                             </g:if>
@@ -62,7 +66,7 @@
                             <span class="resource-link-details"></span>
                         </g:elseif>
                         <g:else>
-                            ${org.apache.commons.lang.StringEscapeUtils.unescapeHtml(item.content.labelContent)}
+                            <%=item.content.labelContent%>
                         </g:else>
                     </div>
 

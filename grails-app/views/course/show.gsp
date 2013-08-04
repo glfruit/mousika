@@ -241,7 +241,7 @@
      class="dojoDndSource">
     <g:each in="${courseInstance.units}" var="unit">
         <g:render template="section"
-                  model="['startDate': courseInstance.startDate,
+                  model="['startDate': courseInstance.startDate, 'course': courseInstance,
                           'section': unit, 'order': unit.sequence]"/>
     </g:each>
 </div>

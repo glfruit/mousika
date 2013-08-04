@@ -29,3 +29,25 @@
 .required {
     color: red;
 }
+
+table.fixed {
+    table-layout: fixed;
+}
+
+table.fixed td {
+    overflow: hidden;
+}
+
+.post-content-title {
+    border-bottom: 1px #777777 solid;
+}
+
+.post-reply-content-title {
+    border-bottom: 1px #777777 solid;
+}
+
+.pull-top-left {
+    float: left;
+    margin-right: 10px;
+    margin-top: 3px;
+}

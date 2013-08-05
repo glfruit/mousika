@@ -41,16 +41,16 @@
                     <g:form action="createAttempt">
                     <table width="96%" border="0">
                         <tr>
-                            <th width="90">
-                                课程名称：
-                            </th>
-                            <td>
-                                ${assignment.section.course.title}
-                            </td>
+                            %{--<th width="90">--}%
+                                %{--课程名称：--}%
+                            %{--</th>--}%
+                            %{--<td>--}%
+                                %{--${assignment.section.course.title}--}%
+                            %{--</td>--}%
                             <th width="90">
                                 作业名称：
                             </th>
-                            <td>
+                            <td colspan="3">
                                 ${assignment.title}
                             </td>
                         </tr>
@@ -59,7 +59,7 @@
                                 作业内容：
                             </th>
                             <td colspan="3">
-                                ${assignment.description}
+                                <%=assignment?.description%>
                             </td>
                         </tr>
                         <tr>
@@ -67,7 +67,7 @@
                                 回答：
                             </th>
                             <td colspan="3">
-                                <g:hiddenField name="assignmentId"  value="${assignment.id}"/>
+                                <g:hiddenField name="assignmentId"  value="${assignment?.id}"/>
                                 <g:textArea name="attemptContent" value="${attempt?.attemptContent}" rows="10"/>
                             </td>
                         </tr>

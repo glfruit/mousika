@@ -134,11 +134,8 @@
                              data-dojo-props="title: '我的活动'"
                              style="padding-bottom: 10px;">
                             <p>
-                                <g:link controller="student" action="regCourseList" class="btn create">注册课程</g:link>
-                                <g:link controller="student" action="assignmentList" class="btn create">我的作业</g:link>
-                            </p>
-                            <p>
-                                        预习课程
+                                <g:link controller="student" action="regCourseList">注册课程</g:link>
+                                <g:link controller="student" action="assignmentList">我的作业</g:link>
                             </p>
                             <p>
                                         我的提问与解答
@@ -158,7 +155,8 @@
                                     没有任何文件
                                 </g:else>
                             </p>
-                            <button class="btn">管理我的个人文件</button>
+                            <a class="btn"
+                               href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
                         </div>
                     </shiro:hasRole>
                 </g:if>

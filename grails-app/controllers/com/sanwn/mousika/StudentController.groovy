@@ -10,7 +10,8 @@ class StudentController {
     def gsonBuilder
 
     def courses, myCourses, notRegCourses
-    def assignments
+    Map<Course, List<Assignment>> assignments
+    def fileRepository;
 
     User loginUser
     boolean isStudent
@@ -73,10 +74,33 @@ class StudentController {
 //            }
 //        }
 
-        assignments = Assignment.list()
 //        assignments = Assignment.list([sort: 'section', order: 'asc']);
         //type=="com.sanwn.mousika.Assignment";
 //        assignments = Assignment.findAll("from Assignment as a order by section asc");
+        fileRepository = FileRepository.findAll(){
+            owner == loginUser
+        };
+        //assignments = Assignment.list()
+
+        assignments = new HashMap<>();
+        Course key=null
+        List<Assignment> assignmentList = null;
+        for(Course course:myCourses){
+            assignmentList = null;
+            for(CourseUnit courseUnit:course.units){
+                for(UnitItem unitItem:courseUnit.items){
+                    if(unitItem.content instanceof  Assignment){
+                        if(assignmentList==null)
+                            assignmentList = new ArrayList()
+                        assignmentList.add((Assignment)unitItem.content)
+                    }
+                }
+            }
+            if(key==null||key.id!=course.id){
+                assignments.put(course,assignmentList)
+            }
+        }
+        return
     }
 
     def works() {
@@ -87,7 +111,7 @@ class StudentController {
 //            }
         }
 
-        [courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses, assignments: assignments]
+        [courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses, assignments: assignments,fileRepository:fileRepository]
     }
 
     def assignment() {

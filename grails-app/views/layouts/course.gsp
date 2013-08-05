@@ -131,6 +131,14 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span2">
+                <shiro:hasAnyRole in="['学生']">
+                <h4 style="border-bottom: 1px solid #000;color: #777777;">
+                    <a class="brand" href="${request.contextPath}/student"><g:message
+                            code="label.app.menu.nav"/></a>
+                    %{--<g:link action="student"><g:message code="label.app.menu.nav"/></g:link>--}%
+                </h4>
+                </shiro:hasAnyRole>
+                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
                 <div id="nav-panel"
                      data-dojo-type="dijit/TitlePane"
                      data-dojo-props="title: '导航'"
@@ -150,6 +158,7 @@
                         </li>
                     </ul>
                 </div>
+                </shiro:hasAnyRole>
                 <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate'] ||
                         request.forwardURI =~ /\/course\/\d+\//}">
                     <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
@@ -204,7 +213,40 @@
                         </p>
                     </div>
                 </shiro:hasRole>
-                <div data-dojo-type="dijit/TitlePane"
+                <shiro:hasRole name="学生">
+                    <div data-dojo-type="dijit/TitlePane"
+                         data-dojo-props="title: '我的课程1'"
+                         style="padding-bottom: 10px;">
+                        <g:if test="${myCourses}">
+                            <g:each in="${myCourses}" status="i" var="course">
+                                <p>
+                                    <g:link action="show" id="${course.id}"> ${course.title}</g:link>
+                                </p>
+
+                            </g:each>
+                        </g:if>
+                        <g:else>
+                            没有任何课程
+                        </g:else>
+                    </div>
+                    <div data-dojo-type="dijit/TitlePane"
+                         data-dojo-props="title: '我的活动'"
+                         style="padding-bottom: 10px;">
+                        <p>
+                            <g:link controller="student" action="regCourseList" class="btn create">注册课程</g:link>
+                            <g:link controller="student" action="assignmentList" class="btn create">我的作业</g:link>
+                        </p>
+                        <p>
+                            预习课程
+                        </p>
+                        <p>
+                            我的提问与解答
+                        </p>
+                        <p>
+                            <g:include view="shareto.gsp"></g:include>&nbsp;
+                        </p>
+                    </div>
+                </shiro:hasRole>                <div data-dojo-type="dijit/TitlePane"
                      data-dojo-props="title: '我的个人文件'"
                      style="padding-bottom: 10px;">
                     <p>

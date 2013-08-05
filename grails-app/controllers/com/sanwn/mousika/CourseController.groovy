@@ -35,7 +35,7 @@ class CourseController {
             courses = Course.where {
                 deliveredBy == deliveredBy
             }.list(params)
-            total = Course.countByDeliveredBy()
+//            total = Course.countByDeliveredBy()
         }
 
         [courseInstanceList: courses, courseInstanceTotal: total]

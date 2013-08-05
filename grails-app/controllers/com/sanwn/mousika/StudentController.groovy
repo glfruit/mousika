@@ -31,13 +31,21 @@ class StudentController {
         courses = Course.findAll() {
         }
 
-        myCourses = Course.findAll() {
-            deliveredBy == loginUser
+//        myCourses = Course.findAll() {
+//            deliveredBy == loginUser
+//        }
+
+        def courseApplications = CourseApplication.findAll(){
+            applicant == loginUser && (status =="approved"||status=="submitted")
         }
 
-//        notRegCourses = Course.findAll() {
-//            courseMembers.user != loginUser
+//        myCourses = Course.findAll() {
+//            courseMembers.user == loginUser
 //        }
+        myCourses = new ArrayList();
+        for(CourseApplication ca :courseApplications){
+            myCourses.add(ca.applyFor)
+        }
 
         notRegCourses = new ArrayList();
         boolean isReg = false;
@@ -74,9 +82,9 @@ class StudentController {
     def works() {
         def count
         if (isStudent) {
-            count = Course.createCriteria().count {
-                'in'('id', myCourses.id)
-            }
+//            count = Course.createCriteria().count {
+//                'in'('id', myCourses.id)
+//            }
         }
 
         [courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses, assignments: assignments]
@@ -155,6 +163,19 @@ class StudentController {
             def course = Course.findById(courseId);
             CourseApplication application =
                 new CourseApplication(applicant: user, applyFor: course, applyDate: new Date(), status: CourseApplication.STATUS_SUBMITTED)
+
+//            def sRole =  Role.findByName("学生")
+//            def cm = CourseMember.findByCourseAndUserAndRole(course,loginUser,sRole);
+//            if(cm!=null){
+//            }else {
+//                cm  = new CourseMember();
+//                cm.setRole(sRole)
+//            }
+//            cm.setCourse(course)
+//            cm.setUser(loginUser)
+//            cm.setStatus(1);
+//            cm.save();
+
             if (application.save(flush: true)) {
                 redirect(action: "regCourseList", params: params)
                 return

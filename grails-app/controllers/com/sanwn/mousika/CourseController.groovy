@@ -35,7 +35,7 @@ class CourseController {
             courses = Course.where {
                 deliveredBy == deliveredBy
             }.list(params)
-            total = Course.countByDeliveredBy()
+            total = Course.countByDeliveredBy(deliveredBy)
         }
 
         [courseInstanceList: courses, courseInstanceTotal: total]
@@ -76,15 +76,35 @@ class CourseController {
         def courses = Course.where {
             deliveredBy == user //TODO: 加上课程是否仍有效的过滤条件
         }.list(order: 'courseToken')
-        render contentType: 'text/json', text: "{" +
-                "identifier: 'id', label: 'description', items: [" +
-                "{ id: 987987, description:\"Order 987987\", priority:\"Next Day Air\"" +
-                "}," +
-                "{ id: 988855, description:\"Order 988855\"," +
-                "priority:\"2nd Day Air\" }," +
-                "{ id: 988900, description:\"Order 988900\", priority:\"2nd Day Air\"" +
-                "} ]" +
-                "}"
+//        withFormat {
+//            html {
+//                [courses: courses]
+//            }
+//            json {
+        def result = courses.collect { course ->
+            [
+                    id: course.id,
+                    title: course.title,
+                    type: 'course',
+                    units: course.units.collect { unit ->
+                        [
+                                id: unit.id,
+                                title: unit.title,
+                                type: 'unit',
+                                unitItems: unit.items.collect { unitItem ->
+                                    [
+                                            id: unitItem.id,
+                                            title: unitItem.title,
+                                            type: 'unitItem'
+                                    ]
+                                }
+                        ]
+                    }
+            ]
+        }
+        render contentType: 'text/json', text: "{identifier:'id',label:'title',items:${gsonBuilder.create().toJson(result)}}"
+//            }
+//        }
     }
 
     def examine(Long id) {
@@ -167,6 +187,10 @@ class CourseController {
             return
         }
         redirect(action: 'editCopy', id: course.id)
+    }
+
+    def copyResource() {
+
     }
 
     def save() {
@@ -355,7 +379,8 @@ class CourseController {
         }
         try {
             if ("resource" == params.type) {
-                render view: 'searchResource', model: [searchResult: UnitItem.search(params.q, params)]
+                def searchResult = UnitItem.search(params.q, params)
+                render view: 'searchResource', model: [searchResult: searchResult]
                 return
             }
             return [searchResult: Course.search(params.q, params)]

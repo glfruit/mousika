@@ -15,7 +15,7 @@
     </head>
 
     <body onload="focusQueryInput();">
-        <div id="header">
+        <div id="header" style="padding-top: 20px;">
             <h4>"${params.q}"的搜索结果</h4>
         </div>
 
@@ -73,55 +73,89 @@
                                 </g:link>
                             </td>
                             <td>
-                                <a role="button" data-toggle="modal"
-                                   href="#copyResource"><i
-                                        class="icon-download-alt"></i>
+                                <a role="button" data-toggle="modal" href="#"
+                                   class="copy-resource-${result.id} copy-resource-link">
+                                    <i class="icon-download-alt copy-resource-${result.id}"></i>
                                 </a>
                             </td>
                         </tr>
                     </g:each>
                 </table>
 
-                <div>
-                    <div class="paging">
-                        <g:if test="${haveResults}">
-                            第
-                            <g:set var="totalPages"
-                                   value="${Math.ceil(searchResult.total / searchResult.max)}"/>
-                            <g:if test="${totalPages == 1}"><span
-                                    class="currentStep">1</span>页，共1页</g:if>
-                            <g:else><g:paginate controller="course"
-                                                action="search"
-                                                params="[q: params.q, type: 'resource']"
-                                                total="${searchResult.total}"
-                                                prev="&lt; previous"
-                                                next="next &gt;"/></g:else>
-                        </g:if>
+                <div dojoType="dijit.Dialog" jsId="courseDialog"
+                     data-dojo-props="title:'导入课程资源'"
+                     style="width: 400px;display: none;">
+                    <div>
+                        <div dojoType="dojo.data.ItemFileWriteStore"
+                             url="${createLink(controller: 'course', action: 'listMine')}"
+                             jsId="courseStore"></div>
+
+                        <div dojoType="dijit.tree.ForestStoreModel"
+                             rootLabel="我的课程" store="courseStore"
+                             childrenAttrs="units,unitItems"
+                             jsId="ordModel"></div>
+
+                        <div dojoType="dijit.Tree" id="ordTree"
+                             model="ordModel">
+                            <script type="dojo/method" event="onClick"
+                                    args="item,node">
+                                selectedOne = {
+                                id: item.id[0],
+                                title: item.title[0],
+                                type: item.type[0]
+                                };
+                            </script>
+                        </div>
+                    </div>
+
+                    <div class="pull-right" style="margin-bottom: 10px;">
+                        <button id="copyResourceBtn"
+                                class="btn btn-primary">导入</button>
+                        <button class="btn" id="cancelBtn">取消</button>
                     </div>
                 </div>
+
+                <div>
+                    <g:if test="${haveResults}">
+                        <mousika:paginate controller="course"
+                                          class="pagination pagination-centered"
+                                          action="search"
+                                          params="[q: params.q, type: 'resource']"
+                                          total="${searchResult.total}"/>
+                    </g:if>
+                </div>
             </g:if>
-            <div>
-                <div dojoType="dojo.data.ItemFileReadStore"
-                     url="${createLink(controller: 'course', action: 'listMine')}"
-                     jsId="ordJson"></div>
-
-                <div dojoType="dijit.tree.ForestStoreModel"
-                     rootLabel="我的课程"
-                     store="ordJson" jsId="ordModel"></div>
-
-                <div dojoType="dijit.Tree" id="ordTree"
-                     model="ordModel"></div>
-            </div>
             <script>
-                require(['dijit/Dialog', 'dojo/query', 'dojo/data/ItemFileReadStore', 'dijit/tree/ForestStoreModel', 'dijit/Tree', 'bootstrap/Modal', 'dojo/domReady!'],
-                        function (Dialog, query) {
-                            myDialog = new Dialog({
-                                title: "导入课程资源",
-                                content: "Test content.",
-                                style: "width: 300px"
+                require(['dojo/_base/event', 'dojo/query', 'dojo/_base/array', 'dojo/request', 'dojo/json', 'dijit/Dialog', 'dojo/data/ItemFileReadStore', 'dijit/tree/ForestStoreModel', 'dijit/Tree', 'bootstrap/Modal', 'dojo/domReady!'],
+                        function (event, query, arrayUtils, request, json) {
+                            query('.copy-resource-link').on('click', function (e) {
+                                event.stop(e);
+                                var cls = query(e.target).attr('class')[0].split(' ');
+                                var itemId = -1;
+                                arrayUtils.forEach(cls, function (c) {
+                                    if (c.startsWith('copy-resource')) {
+                                        itemId = c.split('-')[2];
+                                    }
+                                });
+                                if (itemId == -1) {
+                                    console.error("Someting must be wrong!");
+                                }
+                                courseDialog.set('itemId', itemId);
+                                courseDialog.show();
                             });
-                            query('.icon-download-alt').on('click', function () {
-                                myDialog.show();
+                            query('#cancelBtn').on('click', function () {
+                                courseDialog.hide();
+                            })
+                            query('#copyResourceBtn').on('click', function (e) {
+                                event.stop(e);
+                                var itemId = courseDialog.get('itemId');
+                                request.post("${request.contextPath}/unitItem/copy",
+                                        {data: {
+                                            type: selectedOne.type,
+                                            sourceId: itemId,
+                                            targetId: selectedOne.id}}).then(function (response) {
+                                            courseStore.newItem(json.parse(response));
+                                        });
                             });
                         });
             </script>

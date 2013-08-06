@@ -42,12 +42,9 @@
                     </ul>
                 </section>
             </g:each>
-            <g:paginate controller="course"
-                        action="list"
-                        params="${params}"
-                        total="${courseInstanceTotal}"
-                        prev="&lt; previous"
-                        next="next &gt;"></g:paginate>
+            <mousika:paginate controller="course" class="pagination pagination-centered"
+                              action="list"
+                              total="${courseInstanceTotal}"/>
         </g:if>
         <g:else>
             <p>暂时没有任何课程</p>

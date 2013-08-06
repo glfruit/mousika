@@ -20,8 +20,13 @@ class UnitItemController {
             log.error("删除课程单元内容失败：${e.message}")
             render contentType: "application/json", text: '{"success":false}'
         } catch (Exception ex) {
-            log.error("未知错误：${e}")
+            log.error("未知错误：${ex}")
             render contentType: "application/json", text: '{"success":false,"error":"未知错误"}'
         }
+    }
+
+    def copy(Long sourceId, Long targetId, String type) {
+        println "sourceId:${sourceId}-targetId:${targetId}-type:${type}"
+        render contentType: 'application/json', text: '{"success":true}'
     }
 }

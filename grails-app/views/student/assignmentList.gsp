@@ -24,7 +24,7 @@
                             <td width="140" height="28" align="left" style="font-weight: bold">
                                 【${ca.getKey().title}】
                             </td>
-                            <td><table><tr>
+                            <td><table width="100%"><tr>
                                 <g:each in="${ca.getValue()}" var="assignment">
                                     <td>
                                         <g:link action="resource" params="['id':assignment.id]">${assignment.title}</g:link>

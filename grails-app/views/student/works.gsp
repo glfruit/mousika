@@ -25,7 +25,7 @@
                             <td width="140" height="28" align="left" style="font-weight: bold">
                                 【${ca.getKey().title}】
                             </td>
-                            <td><table><tr>
+                            <td><table width="100%"><tr>
                             <g:each in="${ca.getValue()}" var="assignment">
                                 <td>
                                     <g:link action="resource" params="['id':assignment.id]">${assignment.title}</g:link>
@@ -33,6 +33,11 @@
                             </g:each>
                             </tr></table></td></tr>
                 </g:each>
+                <g:if test="${assignments.size>3}">
+                    <tr><td align="right">
+                        <g:link action="assignmentList">查看全部&gt;&gt;</g:link>
+                    </td></tr>
+                    </g:if>
                 </table>
             </g:if>
             <g:else>

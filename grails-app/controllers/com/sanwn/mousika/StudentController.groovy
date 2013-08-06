@@ -3,6 +3,8 @@ package com.sanwn.mousika
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
 
+import java.text.SimpleDateFormat
+
 class StudentController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
@@ -90,9 +92,12 @@ class StudentController {
             for(CourseUnit courseUnit:course.units){
                 for(UnitItem unitItem:courseUnit.items){
                     if(unitItem.content instanceof  Assignment){
-                        if(assignmentList==null)
-                            assignmentList = new ArrayList()
-                        assignmentList.add((Assignment)unitItem.content)
+                        Assignment a = unitItem.content
+                        if(new Date()<=a.dueDate){
+                            if(assignmentList==null)
+                                assignmentList = new ArrayList()
+                            assignmentList.add((Assignment)unitItem.content)
+                        }
                     }
                 }
             }

@@ -163,33 +163,22 @@
                     </div>
                 </shiro:hasRole>
                 <shiro:hasRole name="教师">
-                    <div>
-                        <p id="courseAdminTitle" style="cursor: pointer;"><i
-                                id="titleIcon"
-                                class="icon-chevron-right"></i><span>课程管理</span>
-                        </p>
-                        <ul id="courseAdmin" style="list-style: none;">
-                            <li><i class="icon-edit"></i>打开编辑</li>
-                            <li><i class="icon-pencil"></i>编辑设置</li>
-                            <li><i class="icon-user"></i>成员</li>
-                            <li><i class="icon-list"></i> 成绩</li>
-                            <li><i class="icon-arrow-up"></i> 导入</li>
-                        </ul>
-                    </div>
-                    <script>
-                        require(['dojo/on', 'dojo/dom', 'dojo/dom-style', 'dojo/dom-class'], function (on, dom, domStyle, domClass) {
-                            on(dom.byId('courseAdminTitle'), "click", function () {
-                                if (domClass.contains("titleIcon", "icon-chevron-right")) {
-                                    domClass.replace("titleIcon", "icon-chevron-down", "icon-chevron-right");
-                                } else {
-                                    domClass.replace("titleIcon", "icon-chevron-right", "icon-chevron-down");
-                                }
-                                var display = domStyle.get(dom.byId('courseAdmin'), 'display');
-                                display = display == "none" ? "block" : "none";
-                                domStyle.set(dom.byId('courseAdmin'), 'display', display);
-                            });
-                        });
-                    </script>
+                    <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate'] ||
+                            request.forwardURI =~ /\/course\/\d+\//}">
+                        <div>
+                            <p id="courseAdminTitle" style="cursor: pointer;"><i
+                                    id="titleIcon"
+                                    class="icon-chevron-right"></i><span>课程管理</span>
+                            </p>
+                            <ul id="courseAdmin" style="list-style: none;">
+                                <li><i class="icon-edit"></i>打开编辑</li>
+                                <li><i class="icon-pencil"></i>编辑设置</li>
+                                <li><i class="icon-user"></i>成员</li>
+                                <li><i class="icon-list"></i> 成绩</li>
+                                <li><i class="icon-arrow-up"></i> 导入</li>
+                            </ul>
+                        </div>
+                    </g:if>
                 </shiro:hasRole>
                 <shiro:authenticated>
                     <div data-dojo-type="dijit/TitlePane"

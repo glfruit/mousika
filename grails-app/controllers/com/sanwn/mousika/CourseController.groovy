@@ -372,7 +372,7 @@ class CourseController {
         }
         def token = course.courseToken
         SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, token)
-        redirect(controller: 'fileRepository', action: 'list')
+        [course: course]
     }
 
     def search() {

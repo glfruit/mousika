@@ -1,3 +1,4 @@
+<%@ page import="com.sanwn.mousika.FileRepository" %>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="zh-CN" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="zh-CN" class="no-js ie7"> <![endif]-->
@@ -150,7 +151,7 @@
                         </li>
                     </ul>
                 </div>
-                <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate'] ||
+                <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate', 'listMaterials'] ||
                         request.forwardURI =~ /\/course\/\d+\//}">
                     <shiro:hasAnyRole in="['教师', '系统管理员']">
                         <shiro:hasPermission permission="course:*:${params.id}">
@@ -162,11 +163,11 @@
                                     style="list-style: none;text-align: left;margin:0;padding:0;">
                                     <li><i class="icon-list-alt"></i><span
                                             style="padding-left: 5px;">
-                                        <a href="${createLink(controller: 'course', action: 'show', id: params.id)}">课程首页</a>
+                                        <a href="${createLink(controller: 'course', action: 'show', id: params.courseId ?: params.id)}">课程首页</a>
                                     </span></li>
                                     <li><i class="icon-briefcase"></i><span
                                             style="padding-left: 5px;">
-                                        <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.id)}">课程资料</a>
+                                        <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.courseId ?: params.id)}">课程资料</a>
                                     </span></li>
                                     <g:if test="${params.controller == 'course' && params.action == 'show'}">
                                         <li id="turn-edit-on-or-off"><i
@@ -180,17 +181,17 @@
                                     </g:if>
                                     <li><i class="icon-pencil"></i><span
                                             style="padding-left: 5px;"><a
-                                                href="${createLink(controller: 'course', action: 'edit', id: params.id)}">编辑设置</a>
+                                                href="${createLink(controller: 'course', action: 'edit', id: params.courseId ?: params.id)}">编辑设置</a>
                                     </span>
                                     </li>
                                     <li><i class="icon-user"></i><span
                                             style="padding-left: 5px;"><a
-                                                href="${createLink(controller: 'course', action: 'enrol', id: params.id)}">成员</a>
+                                                href="${createLink(controller: 'course', action: 'enrol', id: params.courseId ?: params.id)}">成员</a>
                                     </span>
                                     </li>
                                     <li><i class="icon-list"></i><span
                                             style="padding-left: 5px;">
-                                        <a href="${createLink(controller: 'course', action: 'grade', id: params.id)}">成绩</a>
+                                        <a href="${createLink(controller: 'course', action: 'grade', id: params.courseId ?: params.id)}">成绩</a>
                                     </span>
                                     </li>
                                 </ul>

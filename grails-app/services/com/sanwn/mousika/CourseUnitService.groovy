@@ -72,6 +72,8 @@ class CourseUnitService {
         if (!targetUnitItem.save() || !sourceUnitItem.save()) {
             throw new CourseUnitException(message: "更新内容序列时出错", courseUnit: unit)
         }
+        sourceUnitItem.reindex()
+        targetUnitItem.reindex()
     }
 
     def moveUnitItem(Long courseId, int sourceUnitSeq, int targetUnitSeq, int sourceUnitItemSeq, int targetUnitItemSeq, boolean before) {

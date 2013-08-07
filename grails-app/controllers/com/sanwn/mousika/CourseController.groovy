@@ -91,11 +91,13 @@ class CourseController {
                                 id: unit.id,
                                 title: unit.title,
                                 type: 'unit',
+                                parentId: course.id,
                                 unitItems: unit.items.collect { unitItem ->
                                     [
                                             id: unitItem.id,
                                             title: unitItem.title,
-                                            type: 'unitItem'
+                                            type: 'unitItem',
+                                            parentId: unit.id
                                     ]
                                 }
                         ]

@@ -28,6 +28,21 @@ class CourseUnitService {
         throw new CourseUnitException(message: "创建单元内容失败：${unitItem.hasErrors() ? unitItem.errors : unit.errors}")
     }
 
+    def addUnitItem(CourseUnit unit, UnitItem newItem, int sequence) {
+        def itemsToUpdate = UnitItem.where {
+            sequence >= sequence
+        }.list()
+        itemsToUpdate.each { item ->
+            item.sequence = item.sequence + 1
+        }
+        newItem.sequence = sequence
+        unit.addToItems(newItem)
+        if (newItem.validate() && unit.save(flush: true)) {
+            return unit
+        }
+        throw new CourseUnitException(message: "添加单元内容失败", courseUnit: unit)
+    }
+
     def moveContent(courseId, sectionSeq, oldPos, newPos) {
         def course = Course.get(courseId)
         if (course == null) {

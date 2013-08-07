@@ -99,10 +99,13 @@
                              model="ordModel">
                             <script type="dojo/method" event="onClick"
                                     args="item,node">
+                                if(!item.id) return;
                                 selectedOne = {
+                                item: item,
                                 id: item.id[0],
                                 title: item.title[0],
-                                type: item.type[0]
+                                type: item.type[0],
+                                parentId: item.parentId ? item.parentId[0] : null
                                 };
                             </script>
                         </div>
@@ -126,7 +129,7 @@
                 </div>
             </g:if>
             <script>
-                require(['dojo/_base/event', 'dojo/query', 'dojo/_base/array', 'dojo/request', 'dojo/json', 'dijit/Dialog', 'dojo/data/ItemFileReadStore', 'dijit/tree/ForestStoreModel', 'dijit/Tree', 'bootstrap/Modal', 'dojo/domReady!'],
+                require(['dojo/_base/event', 'dojo/query', 'dojo/_base/array', 'dojo/request', 'dojo/json', 'dijit/Dialog', 'dojo/data/ItemFileWriteStore', 'dijit/tree/ForestStoreModel', 'dijit/Tree', 'bootstrap/Modal', 'dojo/domReady!'],
                         function (event, query, arrayUtils, request, json) {
                             query('.copy-resource-link').on('click', function (e) {
                                 event.stop(e);
@@ -145,16 +148,41 @@
                             });
                             query('#cancelBtn').on('click', function () {
                                 courseDialog.hide();
-                            })
+                            });
                             query('#copyResourceBtn').on('click', function (e) {
                                 event.stop(e);
                                 var itemId = courseDialog.get('itemId');
+                                var parentItem;
+                                if (selectedOne.type == 'unit') {
+                                    parentItem = selectedOne.item;
+                                } else if (selectedOne.type == 'unitItem') {
+                                    courseStore.fetchItemByIdentity({
+                                        identity: selectedOne.parentId,
+                                        onItem: function (item) {
+                                            if (!item.id) return;
+                                            parentItem = item;
+                                        },
+                                        onError: function (e) {
+                                            console.log("Item Not Found");
+                                        }
+                                    });
+                                } else {
+                                    alert('请选择一个单元或者内容节点！');
+                                    return;
+                                }
                                 request.post("${request.contextPath}/unitItem/copy",
-                                        {data: {
-                                            type: selectedOne.type,
-                                            sourceId: itemId,
-                                            targetId: selectedOne.id}}).then(function (response) {
-                                            courseStore.newItem(json.parse(response));
+                                        {
+                                            data: {
+                                                type: selectedOne.type,
+                                                sourceId: itemId,
+                                                targetId: selectedOne.id}}).then(function (response) {
+                                            var result = json.parse(response);
+                                            if (!result.success) {
+                                                if (result.error) alert(result.error);
+                                                else alert('出现未知错误！');
+                                                return;
+                                            }
+                                            courseStore.newItem(json.parse(response), {parent: parentItem, attribute: "unitItems"});
                                         });
                             });
                         });

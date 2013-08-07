@@ -87,12 +87,18 @@
                             <g:form class="form-search"
                                     url="[controller: 'course', action: 'search']"
                                     method='get'>
-                                <g:hiddenField name="type" value="resource"/>
-                                <g:textField name="q" value="${params.q}"
-                                             size="50"
-                                             class="input-xlarge search-query"/>
-                                <button type="submit" class="btn"><g:message
-                                        code="courseResource.search.label"/></button>
+                                <div class="input-append">
+                                    <g:hiddenField name="type"
+                                                   value="resource"/>
+                                    <g:textField name="q" value="${params.q}"
+                                                 size="50"
+                                                 class="input-xlarge search-query"/>
+                                    <button type="submit" class="btn">
+                                        <i class="icon-search"></i>
+                                        <g:message
+                                                code="courseResource.search.label"/>
+                                    </button>
+                                </div>
                             </g:form>
                         </div>
 

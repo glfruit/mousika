@@ -95,7 +95,10 @@
                              childrenAttrs="units,unitItems"
                              jsId="ordModel"></div>
 
-                        <div dojoType="dijit.Tree" id="ordTree"
+                        <div dojoType="dijit.Tree" jsId="courseTree"
+                             %{--dndController="dijit.tree.dndSource"--}%
+                             %{--checkItemAcceptance="canAccept"--}%
+                             %{--onDndDrop="dndDrop"--}%
                              model="ordModel">
                             <script type="dojo/method" event="onClick"
                                     args="item,node">
@@ -129,8 +132,15 @@
                 </div>
             </g:if>
             <script>
-                require(['dojo/_base/event', 'dojo/query', 'dojo/_base/array', 'dojo/request', 'dojo/json', 'dijit/Dialog', 'dojo/data/ItemFileWriteStore', 'dijit/tree/ForestStoreModel', 'dijit/Tree', 'bootstrap/Modal', 'dojo/domReady!'],
-                        function (event, query, arrayUtils, request, json) {
+                require(['dojo/_base/event', 'dojo/query', 'dojo/_base/array', 'dojo/request', 'dojo/json', 'dijit/dijit', 'dijit/Dialog', 'dojo/data/ItemFileWriteStore',
+                    'dijit/tree/ForestStoreModel', 'dijit/Tree', 'dijit/tree/dndSource', 'bootstrap/Modal', 'dojo/domReady!'],
+                        function (event, query, arrayUtils, request, json, dijit) {
+                            canAccept = function (target) {
+                                var targetType = dijit.getEnclosingWidget(target).item.type;
+                                if (!targetType) return;
+                                targetType = targetType[0];
+                                return 'unit' == targetType;
+                            };
                             query('.copy-resource-link').on('click', function (e) {
                                 event.stop(e);
                                 var cls = query(e.target).attr('class')[0].split(' ');

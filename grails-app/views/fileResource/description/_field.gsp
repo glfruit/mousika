@@ -8,12 +8,12 @@
         %{--<div>--}%
             %{--<g:render template="/uploader"/>--}%
         %{--</div>--}%
-        %{--<ckeditor:editor name="${property}" height="400px" width="80%"--}%
-        %{--filebrowserBrowseUrl="${request.contextPath}/ckfinder/ckfinder.html"--}%
-        %{--filebrowserImageBrowseUrl="${request.contextPath}/ckfinder/ckfinder.html?Type=Images"--}%
-        %{--filebrowserUploadUrl="${request.contextPath}/ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Files"--}%
-        %{--filebrowserImageUploadUrl="${request.contextPath}/ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images">--}%
-        %{--${value}--}%
-        %{--</ckeditor:editor>--}%
+        <ckeditor:editor name="${property}" height="400px" width="80%"
+        filebrowserBrowseUrl="${request.contextPath}/ckfinder/ckfinder.html"
+        filebrowserImageBrowseUrl="${request.contextPath}/ckfinder/ckfinder.html?Type=Images"
+        filebrowserUploadUrl="${request.contextPath}/ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Files"
+        filebrowserImageUploadUrl="${request.contextPath}/ckfinder/core/connector/java/connector.java?command=QuickUpload&type=Images">
+        ${value}
+        </ckeditor:editor>
     </div>
 </div>

@@ -149,6 +149,18 @@
                                 <a href="${createLink(controller: 'course', action: 'list')}">课程</a>
                             </span>
                         </li>
+                        <li>
+                            <i class="icon-folder-close"></i>
+                            <span style="padding-left: 5px;">
+                                <a href="${createLink(controller: 'fileRepository', action: 'list')}">我的文件</a>
+                            </span>
+                        </li>
+                        <li>
+                            <i class="icon-list"></i>
+                            <span style="padding-left: 5px;">
+                                <a href="${createLink(controller: 'course', action: 'list')}">我的课程</a>
+                            </span>
+                        </li>
                     </ul>
                 </div>
                 <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate', 'listMaterials'] ||
@@ -203,25 +215,12 @@
                     <div data-dojo-type="dijit/TitlePane"
                          data-dojo-props="title: '系统管理'"
                          style="padding-bottom: 10px;">
-                        <p><i class="icon-user"></i> <a
-                                href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
+                        <p>
+                            <i class="icon-user"></i>
+                            <a style="padding-left: 5px;" href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
                         </p>
                     </div>
                 </shiro:hasRole>
-                <div data-dojo-type="dijit/TitlePane"
-                     data-dojo-props="title: '我的个人文件'"
-                     style="padding-bottom: 10px;">
-                    <p>
-                        <g:if test="${fileRepository?.items?.size() > 0}">
-                            <!-- TODO -->
-                        </g:if>
-                        <g:else>
-                            没有任何文件
-                        </g:else>
-                    </p>
-                    <a class="btn"
-                       href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
-                </div>
             </div>
 
             <div class="span7">

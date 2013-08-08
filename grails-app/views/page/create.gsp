@@ -3,29 +3,9 @@
 <html>
     <head>
         <meta name="layout" content="course">
-        <g:javascript src="../tiny_mce/tiny_mce.js"/>
-        <r:script>
-            tinyMCE.init({
-                mode: "textareas",
-                theme: "advanced",
-                language: "cn",
-                plugins: "autoresize,autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",
-                theme_advanced_buttons3_add: "emotions",
-                theme_advanced_buttons3_add: "fullscreen",
-                fullscreen_new_window: true,
-                fullscreen_settings: {
-                    theme_advanced_path_location: "top"
-                },
-                dialog_type: "modal",
-                theme_advanced_buttons3_add: "preview",
-                plugin_preview_width: "500",
-                plugin_preview_height: "600"
-            });
-        </r:script>
-        <g:set var="entityName"
-               value="${message(code: 'page.label', default: 'Page')}"/>
-        <title><g:message code="default.create.label"
-                          args="[entityName]"/></title>
+        %{--<g:javascript src="../tinymce/tinymce.min.js"/>--}%
+        <mousika:editor/>
+        <title>创建页面</title>
     </head>
 
     <body>
@@ -33,7 +13,8 @@
             <h3><g:message code="page.create.label"
                            args="[entityName]"/></h3>
             <g:if test="${flash.message}">
-                <div class="message" role="status" style="color: red;">${flash.message}</div>
+                <div class="message" role="status"
+                     style="color: red;">${flash.message}</div>
             </g:if>
             <g:hasErrors bean="${pageInstance}">
                 <ul class="errors" role="alert">

@@ -75,7 +75,7 @@
                             <a href="#"><i class="icon-pencil"></i></a>
                             <a href="#" style="cursor: move;"><i
                                     class="icon-move dojoDndHandle"></i></a>
-                            <a href="#"><i class="icon-eye-open"></i></a>
+                            <a href="#"><i class="icon-eye-open ${courseSectionId}"></i></a>
                         </span>
                     </div>
                 </div>

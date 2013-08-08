@@ -165,4 +165,28 @@ class MousikaTagLib {
 
         writer << '</ul></div>'
     }
+
+    def editor = { attrs ->
+        def provider = attrs.provider
+        if (!provider) {
+            provider = "tinymce"
+            out << "<script type='text/javascript' src='${request.contextPath}/tinymce/tinymce.min.js'></script>"
+            out << """
+                <script type="text/javascript">
+                tinyMCE.init({
+                selector: "textarea",
+                theme: "modern",
+                language: "zh_CN",
+                plugins: [
+                    "advlist autolink lists link image charmap print preview anchor pagebreak",
+                    "searchreplace visualblocks code fullscreen textcolor",
+                    "insertdatetime media table contextmenu paste emoticons"
+                ],
+                toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons",
+                image_advtab: true,
+                height: 300});
+                </script>
+            """
+        }
+    }
 }

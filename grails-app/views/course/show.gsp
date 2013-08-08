@@ -246,8 +246,14 @@
     </g:each>
 </div>
 <script>
-    require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event', 'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
-            function (query, topic, request, domAttr, on, Source, ioQuery, $, event) {
+    require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event', 'dojo/dom-style',
+        'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
+            function (query, topic, request, domAttr, on, Source, ioQuery, $, event, domStyle) {
+                query(".icon-eye-open").on('click', function (e) {
+                    event.stop(e);
+                    var section = query(e.target).attr('class')[0].split(' ')[1];
+                    domStyle.set(section, 'opacity', 0.7);
+                });
                 define.amd.jQuery = true;
                 query(".addContent").on('click', function (e) {
                     var csid = query(e.target).parent().attr('id');

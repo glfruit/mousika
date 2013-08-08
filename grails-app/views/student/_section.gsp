@@ -44,11 +44,25 @@
                 <div style="display: inline;">
                     <div style="float: left; padding-right: 3em;">
                         <g:if test="${item.content.type == 'urlResource'}">
-                            <a href="${item.content.location}"
+                            <a href="http://${item.content.location}"
                                target="_blank">${item.title}</a>
                         </g:if>
                         <g:elseif test="${item.content.type == 'forum'}">
                             <a href="${request.contextPath}/course/${course.id}/forum/${item.content.id}">${item.title}</a>
+                        </g:elseif>
+                        <g:elseif test="${item.content.type == 'assignment'}">
+                        %{--<a href="${createLink(controller: content.type, action: 'show', id: content.id)}">--}%
+                            <a href="${createLink(controller: 'student', action: 'resource', id: item.content.id)}">
+                                ${item.title}
+                            </a>
+                            <span class="resource-link-details"></span>
+                        </g:elseif>
+                        <g:elseif test="${item.content.type == 'page'}">
+                        %{--<a href="${createLink(controller: content.type, action: 'show', id: content.id)}">--}%
+                            <a href="${createLink(controller: 'student', action: 'page', id: item.content.id)}">
+                                ${item.title}
+                            </a>
+                            <span class="resource-link-details"></span>
                         </g:elseif>
                         <g:elseif test="${item.content.type != 'label'}">
                             <g:if test="${item.content.type == 'fileResource'}">

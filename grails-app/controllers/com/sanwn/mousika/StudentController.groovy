@@ -1,7 +1,9 @@
 package com.sanwn.mousika
 
+import org.apache.commons.io.FileUtils
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.web.multipart.commons.CommonsMultipartFile
 
 import java.text.SimpleDateFormat
 
@@ -250,24 +252,69 @@ class StudentController {
         [assignment: assignment, attempt: attempt, courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses]
     }
 
+    boolean uploadedFile(Assignment assignment, CommonsMultipartFile uploadedFile){
+        boolean result = false
+        def filename = uploadedFile.originalFilename
+        def filePath = "courseFiles/assignment/"+loginUser.id+"/"+assignment.id
+        def fileRepo = new File(".", filePath)
+        if (!fileRepo.exists()) {
+            FileUtils.forceMkdir(fileRepo)
+        }
+        def newFile = new File(fileRepo, filename)
+        uploadedFile.transferTo(newFile)
+        def fileType
+        def pos = filename.lastIndexOf('.')
+        if (pos == -1) {
+            fileType = '*' //unknown file type
+        } else {
+            fileType = filename.substring(pos + 1)
+        }
+        try {
+            assignment.setFilePath(filePath+"/"+filename)
+            //assignment.save()
+            result = true
+        } catch (Exception e) {
+            newFile.delete()
+            flash.message = e.message
+        }
+
+        return result
+    }
+
+
     def createAttempt() {
         def attempt;
         def assignment = Assignment.get(params.assignmentId)
+        def file = request.getFile('assignmentFile')
         if (assignment.attempts != null && assignment.attempts.size() > 0) {
             attempt = assignment.attempts.first()
             attempt.attemptContent = params.attemptContent
         } else {
             attempt = new Attempt(params)
             attempt.submittedBy = loginUser
+            attempt.score = 0
+            attempt.submittedDate = new Date()
             assignment.addToAttempts(attempt)
         }
-        if (attempt.validate() && assignment.save()) {
+
+        if (attempt.validate() &&assignment.save()&&(file.size==0||(file.size>0&&uploadedFile(assignment,file)))) {
             flash.message = "保存答案成功"
             redirect(action: 'resource', id: assignment.id)
             return
         }
         flash.message = "保存答案失败"
         render(view: 'resource', model: [assignment: assignment, attempt: attempt])
+    }
+
+    def page(Long id) {
+        def pageInstance = Page.get(id)
+        if (!pageInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'page.label', default: 'Page'), id])
+            //redirect(action: "list")
+            return
+        }
+
+        [pageInstance: pageInstance, courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses]
     }
 
     def show(Long id) {

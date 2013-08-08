@@ -137,7 +137,7 @@
                         <li>
                             <i class="icon-home"></i>
                             <span style="padding-left: 5px;">
-                                <a href="${request.contextPath}">首页</a>
+                                <a href="${request.contextPath}">首页B</a>
                             </span>
                         </li>
                         <li>

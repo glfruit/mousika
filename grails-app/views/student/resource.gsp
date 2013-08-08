@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="layout" content="student"/>
         <g:set var="entityName" value="${message(code: 'course.label')}"/>
         <title><g:message code="default.list.label" args="[entityName]"/></title>
         <g:javascript src="../tiny_mce/tiny_mce.js"/>
@@ -38,7 +39,7 @@
              data-dojo-props="title: '我的作业'"
              style="padding-bottom: 10px;">
                 <g:if test="${assignment}">
-                    <g:form action="createAttempt">
+                    <g:uploadForm action="createAttempt">
                     <table width="96%" border="0">
                         <tr>
                             %{--<th width="90">--}%
@@ -72,6 +73,14 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>
+                                提交文件：
+                            </th>
+                            <td colspan="3">
+                                <input type="file" name="assignmentFile" size="40"/>
+                            </td>
+                        </tr>
+                        <tr>
                             <g:if test="${flash.message}">
                                 <th><a style="color: blue;">操作提示：</a></th>
                                 <td colspan="4" align="left" height="30">
@@ -87,7 +96,7 @@
                             </td>
                         </tr>
                     </table>
-                    </g:form>
+                    </g:uploadForm>
                 </g:if>
                 <g:else>
                     无该作业

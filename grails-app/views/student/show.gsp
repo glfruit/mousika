@@ -1,5 +1,6 @@
 <html>
 <head>
+    <meta name="layout" content="student"/>
     <title>${courseInstance?.title}</title>
     <style>
     .commands {

@@ -12,8 +12,6 @@ class User implements Comparable {
 
     String fullname
 
-    String email
-
     Date dateCreated
 
     static hasMany = [roles: Role, permissions: String]
@@ -24,7 +22,6 @@ class User implements Comparable {
         username blank: false, unique: true, size: 5..20
         fullname blank: false
         profile nullable: true
-        email nullable: true
     }
 
     static mapping = {

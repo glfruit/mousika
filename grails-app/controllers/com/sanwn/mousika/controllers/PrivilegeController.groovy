@@ -16,7 +16,8 @@ class PrivilegeController {
 
     def list() {
         def role = Role.get(1L)
-        [permissions:role.permissions]
+        def privilegeResourceInstanceList = PrivilegeResource.getAll();
+        [privilegeResourceInstanceList:privilegeResourceInstanceList, permissions:role.permissions, role:role]
     }
 
     def create() {

@@ -196,8 +196,17 @@
                     <div data-dojo-type="dijit/TitlePane"
                          data-dojo-props="title: '系统管理'"
                          style="padding-bottom: 10px;">
-                        <p><i class="icon-user"></i> <a
-                                href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
+                        <p>
+                            <i class="icon-user"></i>
+                            <a href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
+                        </p>
+                        <p>
+                            <i class="icon-lock"></i>
+                            <a href="${createLink(controller: 'privilege', action: 'list')}">权限管理</a>
+                        </p>
+                        <p>
+                            <i class="icon-briefcase"></i>
+                            <a href="${createLink(controller: 'backup', action: 'list')}">系统备份</a>
                         </p>
                     </div>
                 </shiro:hasRole>
@@ -214,6 +223,22 @@
                     </p>
                     <a class="btn"
                        href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
+                </div>
+                <div data-dojo-type="dijit/TitlePane"
+                     data-dojo-props="title: '个人信息管理'"
+                     style="padding-bottom: 10px;">
+                    <p>
+                        <i class="icon-pencil"></i>
+                        <a href="${createLink(controller: 'user', action: 'information')}">编辑个人信息</a>
+                    </p>
+                    <p>
+                        <i class="icon-user"></i>
+                        <a href="${createLink(controller: 'user', action: 'updatePasswordIndex')}">更改密码</a>
+                    </p>
+                    <p>
+                        <i class="icon-pencil"></i>
+                        <a href="${createLink(controller: 'user', action: 'uploadPhotoIndex')}">上传头像</a>
+                    </p>
                 </div>
             </div>
 

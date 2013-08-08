@@ -52,7 +52,6 @@
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'roles', 'error')} ">
 	<label for="roles">
 		<g:message code="user.roles.label" default="Roles" />
-		
 	</label>
 	<g:select name="roles" from="${com.sanwn.mousika.Role.list()}" multiple="multiple" optionKey="id" size="5" value="${userInstance?.roles*.id}" class="many-to-many"/>
 </div>

@@ -42,7 +42,7 @@
             <li id="${courseSectionId}item${s}"
                 class="dojoDndItem" dndType="content">
                 <div style="display: inline;">
-                    <div style="float: left; padding-right: 3em;">
+                    <div style="float: left; padding-right: 3em;" class="${courseSectionId}Item${item.sequence}">
                         <g:if test="${item.content.type == 'urlResource'}">
                             <a href="${item.content.location}"
                                target="_blank">${item.title}</a>
@@ -75,7 +75,7 @@
                             <a href="#"><i class="icon-pencil"></i></a>
                             <a href="#" style="cursor: move;"><i
                                     class="icon-move dojoDndHandle"></i></a>
-                            <a href="#"><i class="icon-eye-open ${courseSectionId}"></i></a>
+                            <a href="#"><i class="icon-eye-open"></i></a>
                         </span>
                     </div>
                 </div>

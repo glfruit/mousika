@@ -164,7 +164,7 @@
                     </ul>
                 </div>
                 <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate', 'listMaterials'] ||
-                        request.forwardURI =~ /\/course\/\d+\//}">
+                        request.forwardURI =~ /\/course\/\d+\//} || ${params.controller in ['page', 'urlResource', 'label', 'assignment', 'fileResource']}">
                     <shiro:hasAnyRole in="['教师', '系统管理员']">
                         <shiro:hasPermission permission="course:*:${params.id}">
                             <div id="course-admin-panel"
@@ -217,7 +217,8 @@
                          style="padding-bottom: 10px;">
                         <p>
                             <i class="icon-user"></i>
-                            <a style="padding-left: 5px;" href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
+                            <a style="padding-left: 5px;"
+                               href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
                         </p>
                     </div>
                 </shiro:hasRole>

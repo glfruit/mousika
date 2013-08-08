@@ -19,7 +19,7 @@ class FileResourceController {
     }
 
     def create() {
-        [fileResourceInstance: new FileResource(params), sectionSeq: params.sectionSeq, courseId: params.courseId]
+        [fileResourceInstance: new FileResource(params), sectionSeq: params.sectionSeq, courseId: params.courseId,course:Course.get(params.courseId)]
     }
 
     def upload() {

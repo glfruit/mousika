@@ -10,8 +10,9 @@
 
     <body>
         <div id="create-page" class="content scaffold-create" role="main">
-            <h3><g:message code="page.create.label"
-                           args="[entityName]"/></h3>
+            <h4 style="padding-top: 20px;">
+                <a href="${createLink(controller: 'course', action: 'show', id: params.courseId)}">${course.title}</a>->
+                <g:message code="page.create.label"/></h4>
             <g:if test="${flash.message}">
                 <div class="message" role="status"
                      style="color: red;">${flash.message}</div>

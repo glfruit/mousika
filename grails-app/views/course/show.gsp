@@ -14,6 +14,7 @@
     <link rel="stylesheet"
           href="${resource(dir: 'css', file: 'jplayer/jplayer.blue.monday.css')}"
           type="text/css"/>
+    <mousika:tinymce/>
 </head>
 
 <body>
@@ -253,6 +254,16 @@
                     event.stop(e);
                     var section = query(e.target).attr('class')[0].split(' ')[1];
                     domStyle.set(section, 'opacity', 0.7);
+                });
+                query(".icon-pencil").on('click', function (e) {
+                    event.stop(e);
+                    var section = query(e.target).attr('class')[0].split(' ')[1];
+                    tinymce.init({
+                        selector: "div." + section,
+                        inline: true,
+                        toolbar: "undo redo",
+                        menubar: false
+                    });
                 });
                 define.amd.jQuery = true;
                 query(".addContent").on('click', function (e) {

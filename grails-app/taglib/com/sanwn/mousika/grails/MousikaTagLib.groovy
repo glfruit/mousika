@@ -166,6 +166,10 @@ class MousikaTagLib {
         writer << '</ul></div>'
     }
 
+    def tinymce = { attrs ->
+        out << "<script type='text/javascript' src='${request.contextPath}/tinymce/tinymce.min.js'></script>"
+    }
+
     def editor = { attrs ->
         def provider = attrs.provider
         if (!provider) {

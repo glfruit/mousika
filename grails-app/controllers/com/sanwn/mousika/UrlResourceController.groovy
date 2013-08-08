@@ -18,7 +18,7 @@ class UrlResourceController {
     }
 
     def create() {
-        [urlResource: new UrlResource(params), courseId: params.courseId, sectionSeq: params.sectionSeq]
+        [urlResource: new UrlResource(params), courseId: params.courseId, sectionSeq: params.sectionSeq,course:Course.get(params.courseId)]
     }
 
     def save() {

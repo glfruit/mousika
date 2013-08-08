@@ -20,7 +20,8 @@ class PageController {
     }
 
     def create() {
-        [pageInstance: new Page(params), sectionSeq: params.sectionSeq, courseId: params.courseId]
+        def course = Course.get(params.courseId)
+        [pageInstance: new Page(params), sectionSeq: params.sectionSeq, courseId: params.courseId, course: course]
     }
 
     def save() {

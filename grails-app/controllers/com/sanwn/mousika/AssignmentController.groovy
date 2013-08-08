@@ -13,7 +13,8 @@ class AssignmentController {
     def courseUnitService
 
     def create() {
-        [assignment: new Assignment(params), sectionSeq: params.sectionSeq, courseId: params.courseId]
+        def course = Course.get(params.courseId)
+        [assignment: new Assignment(params), sectionSeq: params.sectionSeq, courseId: params.courseId, course: course]
     }
 
     def save() {

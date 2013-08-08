@@ -2,32 +2,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="dojo">
-        <g:javascript src="../tiny_mce/tiny_mce.js"/>
-        <r:script>
-            tinyMCE.init({
-                mode: "textareas",
-                theme: "advanced",
-                language: "cn",
-                plugins: "autoresize,autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",
-                theme_advanced_buttons3_add: "emotions",
-                theme_advanced_buttons3_add: "fullscreen",
-                fullscreen_new_window: true,
-                fullscreen_settings: {
-                    theme_advanced_path_location: "top"
-                },
-                dialog_type: "modal",
-                theme_advanced_buttons3_add: "preview",
-                plugin_preview_width: "500",
-                plugin_preview_height: "600"
-            });
-        </r:script>
+        <meta name="layout" content="course">
+        <mousika:editor/>
         <title><g:message code="assignment.create.label"/></title>
     </head>
 
     <body>
         <div id="create-assignment" class="content scaffold-create" role="main">
-            <h3><g:message code="assignment.create.label"/></h3>
+            <h4 style="padding-top: 20px;">
+                <a href="${createLink(controller: 'course', action: 'show', id: params.courseId)}">${course.title}</a>->
+            <g:message code="assignment.create.label"/>
+            </h4>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>

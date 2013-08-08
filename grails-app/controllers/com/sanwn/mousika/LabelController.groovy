@@ -18,8 +18,7 @@ class LabelController {
     }
 
     def create() {
-        def section = CourseUnit.findBySequence(params.sectionSeq)
-        [labelInstance: new Label(params), sectionSeq: section.sequence, courseId: section.course.id]
+        [labelInstance: new Label(params), sectionSeq: params.sectionSeq, courseId: params.courseId, course: Course.get(params.courseId)]
     }
 
     def save() {

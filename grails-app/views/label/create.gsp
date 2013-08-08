@@ -9,7 +9,10 @@
 
     <body>
         <div id="create-label" class="content scaffold-create" role="main">
-            <h3><g:message code="label.create.label"/></h3>
+            <h4 class="content-top">
+                <a href="${createLink(controller: 'course', action: 'show', id: params.courseId)}">${course.title}</a>->
+                <g:message code="label.create.label"/>
+            </h4>
             <g:if test="${flash.message}">
                 <div class="message" role="status"
                      style="color: red;">${flash.message}</div>

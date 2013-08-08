@@ -98,12 +98,12 @@
                                    value="${Math.ceil(searchResult.total / searchResult.max)}"/>
                             <g:if test="${totalPages == 1}"><span
                                     class="currentStep">1</span>页，共1页</g:if>
-                            <g:else><g:paginate controller="course"
-                                                action="search"
-                                                params="[q: params.q]"
-                                                total="${searchResult.total}"
-                                                prev="&lt; previous"
-                                                next="next &gt;"/></g:else>
+                            <g:else>
+                                <mousika:paginate controller="course"
+                                                  action="search"
+                                                  params="[q: params.q]"
+                                                  total="${searchResult.total}"/>
+                            </g:else>
                         </g:if>
                     </div>
                 </div>

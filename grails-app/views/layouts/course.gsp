@@ -150,46 +150,52 @@
                         </li>
                     </ul>
                 </div>
-                <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate']}">
-                    <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
-                        <div id="course-admin-panel"
-                             data-dojo-type="dijit/TitlePane"
-                             data-dojo-props="title: '课程管理'"
-                             style="padding-bottom: 10px;">
-                            <ul id="courseAdmin"
-                                style="list-style: none;text-align: left;margin:0;padding:0;">
-                                <li><i class="icon-list-alt"></i><span
-                                        style="padding-left: 5px;">
-                                    <a href="${createLink(controller: 'course', action: 'show', id: params.id)}">课程首页</a>
-                                </span></li>
-                                <li><i class="icon-briefcase"></i><span
-                                        style="padding-left: 5px;">
-                                    <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.id)}">课程资料</a>
-                                </span></li>
-                                <li id="turn-edit-on-or-off"><i
-                                        class="icon-edit"></i><a href="#"
-                                                                 style="padding-left: 5px;"><span
-                                            class="edit-course-region hide">打开编辑</span>
-                                    <span class="edit-course-region">关闭编辑</span>
-                                </a>
-                                </li>
-                                <li><i class="icon-pencil"></i><span
-                                        style="padding-left: 5px;"><a
-                                            href="${createLink(controller: 'course', action: 'edit', id: params.id)}">编辑设置</a>
-                                </span>
-                                </li>
-                                <li><i class="icon-user"></i><span
-                                        style="padding-left: 5px;"><a
-                                            href="${createLink(controller: 'course', action: 'enrol', id: params.id)}">成员</a>
-                                </span>
-                                </li>
-                                <li><i class="icon-list"></i><span
-                                        style="padding-left: 5px;">
-                                    <a href="${createLink(controller: 'course', action: 'grade', id: params.id)}">成绩</a>
-                                </span>
-                                </li>
-                            </ul>
-                        </div>
+                <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate'] ||
+                        request.forwardURI =~ /\/course\/\d+\//}">
+                    <shiro:hasAnyRole in="['教师', '系统管理员']">
+                        <shiro:hasPermission permission="course:*:${params.id}">
+                            <div id="course-admin-panel"
+                                 data-dojo-type="dijit/TitlePane"
+                                 data-dojo-props="title: '课程管理'"
+                                 style="padding-bottom: 10px;">
+                                <ul id="courseAdmin"
+                                    style="list-style: none;text-align: left;margin:0;padding:0;">
+                                    <li><i class="icon-list-alt"></i><span
+                                            style="padding-left: 5px;">
+                                        <a href="${createLink(controller: 'course', action: 'show', id: params.id)}">课程首页</a>
+                                    </span></li>
+                                    <li><i class="icon-briefcase"></i><span
+                                            style="padding-left: 5px;">
+                                        <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.id)}">课程资料</a>
+                                    </span></li>
+                                    <g:if test="${params.controller == 'course' && params.action == 'show'}">
+                                        <li id="turn-edit-on-or-off"><i
+                                                class="icon-edit"></i><a
+                                                href="#"
+                                                style="padding-left: 5px;"><span
+                                                    class="edit-course-region hide">打开编辑</span>
+                                            <span class="edit-course-region">关闭编辑</span>
+                                        </a>
+                                        </li>
+                                    </g:if>
+                                    <li><i class="icon-pencil"></i><span
+                                            style="padding-left: 5px;"><a
+                                                href="${createLink(controller: 'course', action: 'edit', id: params.id)}">编辑设置</a>
+                                    </span>
+                                    </li>
+                                    <li><i class="icon-user"></i><span
+                                            style="padding-left: 5px;"><a
+                                                href="${createLink(controller: 'course', action: 'enrol', id: params.id)}">成员</a>
+                                    </span>
+                                    </li>
+                                    <li><i class="icon-list"></i><span
+                                            style="padding-left: 5px;">
+                                        <a href="${createLink(controller: 'course', action: 'grade', id: params.id)}">成绩</a>
+                                    </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </shiro:hasPermission>
                     </shiro:hasAnyRole>
                 </g:if>
                 <shiro:hasRole name="系统管理员">

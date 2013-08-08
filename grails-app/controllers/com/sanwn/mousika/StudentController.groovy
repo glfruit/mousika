@@ -453,4 +453,12 @@ class StudentController {
         def contentType = params.itemContentType
         redirect(controller: contentType, action: 'create', params: [sectionSeq: params.sectionSeq, courseId: params.courseId])
     }
+
+    def fileList(){
+        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_TYPE, FileRepository.REPOSITORY_TYPE_FILE)
+        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, SecurityUtils.subject.principal)
+
+        params.max = Math.min(max ?: 10, 100)
+        [fileRepositoryInstanceList: FileRepository.list(params), fileRepositoryInstanceTotal: FileRepository.count()]
+    }
 }

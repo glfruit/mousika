@@ -152,11 +152,11 @@
                                     <!-- TODO -->
                                 </g:if>
                                 <g:else>
-                                    没有任何文件
+                                    %{--没有任何文件--}%
                                 </g:else>
                             </p>
-                            <a class="btn"
-                               href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
+                            <g:link controller="student" action="fileList">管理我的个人文件</g:link>
+                            %{--<a class="btn"  href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>--}%
                         </div>
                     </shiro:hasRole>
                 </g:if>

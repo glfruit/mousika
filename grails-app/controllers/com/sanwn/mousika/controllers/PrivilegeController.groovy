@@ -79,6 +79,7 @@ class PrivilegeController {
 
         roleInstance.save(failOnError: true)
         flash.message = "保存角色权限成功"
+
         redirect(action: "list", params: params)
     }
 

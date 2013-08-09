@@ -21,15 +21,15 @@
 
 <div id="list-user" class="content scaffold-list" role="main">
     <h4 style="border-bottom: 1px solid black;">用户管理</h4>
+    <g:if test="${flash.message}">
+        <div class="message" role="status">${flash.message}</div>
+    </g:if>
     <form class="form-search">
         <input id="searchBy" placeholder="查找用户" type="text"
                class="input-medium search-query">
         <button id="searchUserBtn" type="submit" class="btn">搜索</button>
     </form>
-    <g:link controller="user" class="btn create" action="create"><g:message code="user.create.label"/></g:link>&nbsp;&nbsp;&nbsp;&nbsp;<g:link controller="user" class="btn create"  action="batchImportIndex"><g:message code="user.batch.import.label" args="[entityName]" /></g:link></li>
-    <g:if test="${flash.message}">
-        <div class="message" role="status">${flash.message}</div>
-    </g:if>
+    <g:link controller="user" class="btn create" action="create"><g:message code="user.create.label"/></g:link>&nbsp;&nbsp;&nbsp;&nbsp;<g:link controller="user" class="btn create"  action="batchImportIndex"><g:message code="user.batch.import.label" args="[entityName]" /></g:link>
     <table class="table table-striped" id="userTbl">
         <thead>
         <tr>

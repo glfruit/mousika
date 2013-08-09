@@ -76,28 +76,26 @@
                     <table>
                         <g:if test="${privilegeResourceInstanceList}">
                             <g:each in="${privilegeResourceInstanceList}" var="privilegeResourceInstance">
-                                <tr>
-                                    <td>
-                                        <table class="table table-striped table-bordered table-condensed">
-                                            <thead>
+                                <td>
+                                    <table class="table table-striped table-bordered table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                <input id="${privilegeResourceInstance.controllerEn}" type="checkbox" onclick='chooseChild(this)'> ${privilegeResourceInstance.controllerCn}
+                                            </th>
+                                        <tr>
+                                        </thead>
+                                        <tbody>
+                                        <g:each in="${privilegeResourceInstance.privilegeResourceMethods}" var="privilegeResourceMethod">
                                             <tr>
-                                                <th>
-                                                    <input id="${privilegeResourceInstance.controllerEn}" type="checkbox" onclick='chooseChild(this)'> ${privilegeResourceInstance.controllerCn}
-                                                </th>
-                                            <tr>
-                                            </thead>
-                                            <tbody>
-                                            <g:each in="${privilegeResourceInstance.privilegeResourceMethods}" var="privilegeResourceMethod">
-                                                <tr>
-                                                    <td>
-                                                        <input id="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" name="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" value="${privilegeResourceMethod.methodEn}"  type="checkbox" onclick="chooseParent(this)">${privilegeResourceMethod.methodCn}
-                                                    </td>
-                                                </tr>
-                                            </g:each>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
+                                                <td>
+                                                    <input id="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" name="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" value="${privilegeResourceMethod.methodEn}"  type="checkbox" onclick="chooseParent(this)">${privilegeResourceMethod.methodCn}
+                                                </td>
+                                            </tr>
+                                        </g:each>
+                                        </tbody>
+                                    </table>
+                                </td>
                             </g:each>
                         </g:if>
                     </table>
@@ -105,7 +103,7 @@
             </tr>
         </table>
     </div>
-    <g:each in="${grailsApplication.controllerClasses}" var="c">
+    %{--<g:each in="${grailsApplication.controllerClasses}" var="c">
     <li>
         <input id="${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}" type="checkbox" onclick='chooseChild(this)'> ${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}
         <ul>
@@ -120,7 +118,7 @@
             </g:each>
         </ul>
     </li>
-</g:each>
+</g:each>--}%
     %{--<div class="container-fluid">
         <g:form action="save" >
             <fieldset class="buttons">

@@ -229,7 +229,7 @@
                  style="padding-bottom: 10px;">
                 <p>
                     <i class="icon-user"></i>
-                    <a href="${createLink(controller: 'user', action: 'information')}">编辑个人资料</a>
+                    <a href="${createLink(controller: 'user', action: 'updateInformationIndex')}">编辑个人信息</a>
                 </p>
                 <p>
                     <i class="icon-lock"></i>

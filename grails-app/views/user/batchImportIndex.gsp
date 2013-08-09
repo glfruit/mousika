@@ -19,6 +19,9 @@
 <body>
 <div class="sub">
     <h4 style="border-bottom: 1px solid black;"><g:message code="user.batch.import.label"/></h4>
+    <g:if test="${flash.message}">
+        <div class="message" role="status">${flash.message}</div>
+    </g:if>
     <form  method="POST" action="batchImport" name="batchImport" id="batchImport" enctype="multipart/form-data">
         <dl class="addForm mT5">
             <dd>

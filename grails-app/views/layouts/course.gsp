@@ -234,17 +234,16 @@
                      data-dojo-props="title: '个人信息管理'"
                      style="padding-bottom: 10px;">
                     <p>
-                        <i class="icon-pencil"></i>
-                        <a href="${createLink(controller: 'user', action: 'information')}">编辑个人信息</a>
+                        <i class="icon-user"></i>
+                        <a href="${createLink(controller: 'user', action: 'updateInformationIndex')}">编辑个人信息</a>
                     </p>
                     <p>
-                        <i class="icon-user"></i>
+                        <i class="icon-lock"></i>
                         <a href="${createLink(controller: 'user', action: 'updatePasswordIndex')}">更改密码</a>
                     </p>
                     <p>
-                        <i class="icon-pencil"></i>
+                        <i class="icon-picture"></i>
                         <a href="${createLink(controller: 'user', action: 'uploadPhotoIndex')}">上传头像</a>
-                    </p>
                 </div>
             </div>
 

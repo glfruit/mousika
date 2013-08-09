@@ -154,22 +154,28 @@ class UserController {
                     break;
                 }
                 fullname = sheet.getCell(1,row-1).getContents()
-                email = sheet.getCell(2,row-1).getContents()
+                /*email = sheet.getCell(2,row-1).getContents()*/
                 if (username == null || "".equals(username) || fullname == null || "".equals(fullname)){
-                    errorMessage += "第"+row+"行的用户名或姓名不能为空;"
+                    errorMessage += "导入失败：第"+row+"行的用户名或姓名不能为空；"
                     break
                 }
 
+                //通过username查看用户是否存在存在就用原来的用户并且删除原来的角色
+                def userInstance = User.findByUsername(username)
+                if (userInstance != null){
+                    errorMessage += "导入失败：第"+row+"行的用户名已经存在；"
+                    break
+                }else{
+                    userInstance = new User()
+                }
                 passwordHash = new Sha256Hash("username").toHex()
-                def userInstance = new User()
                 userInstance.setUsername(username)
                 userInstance.setFullname(fullname)
-                userInstance.setEmail(email)
                 userInstance.setDateCreated(dateCreated)
                 userInstance.setPasswordHash(passwordHash)
 
                 //角色
-                roleNames = sheet.getCell(3,row-1).getContents()
+                roleNames = sheet.getCell(2,row-1).getContents()
                 if (roleNames != null && !("".equals(roleNames))){
                     roleNameList = roleNames.split(",")
                     for(int roleNameIndex=0; roleNameIndex<roleNameList.size();roleNameIndex++){
@@ -196,8 +202,11 @@ class UserController {
         }else{
             errorMessage += "excel存在问题。"
         }
+        if(errorMessage.equals("")){
+            errorMessage += "导入成功"
+        }
         flash.message = message(code: errorMessage)
-        redirect(action: "list")
+        redirect(action: "batchImportIndex")
     }
 
     def search() {
@@ -272,7 +281,7 @@ class UserController {
         }
     }
 
-    def information(){
+    def updateInformationIndex(){
         def subject = SecurityUtils.getSubject();
         def userInstance = User.findByUsername(subject.getPrincipal())
         [userInstance:userInstance]
@@ -284,7 +293,7 @@ class UserController {
         userInstance.profile.email = params.get("email")
         userInstance.profile.interests = params.get("interests")
         userInstance.save(failOnError: true)
-        redirect(action: "information")
+        redirect(action: "updateInformationIndex")
     }
 
     def uploadPhotoIndex(){

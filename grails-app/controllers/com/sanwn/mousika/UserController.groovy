@@ -47,7 +47,7 @@ class UserController {
 
     def save() {
         def userInstance = new User(params)
-        userInstance.setPasswordHash( new Sha256Hash(userInstance.getUsername()).toHex())
+        userInstance.setPasswordHash(new Sha256Hash(userInstance.getUsername()).toHex())
         if (!userInstance.save(flush: true)) {
             render(view: "create", model: [userInstance: userInstance])
             return
@@ -345,5 +345,16 @@ class UserController {
         response.setContentLength(photoByte.length)
         response.outputStream << photoByte
         response.outputStream.close()
+    }
+
+
+    def resetPassword(){
+        def userInstance = User.get(params.get("id"))
+        userInstance.setPasswordHash(new Sha256Hash(userInstance.getUsername()).toHex())
+        if (!userInstance.save(flush: true)) {
+            flash.message = "重置密码成功"
+        }
+
+        redirect(action: "list")
     }
 }

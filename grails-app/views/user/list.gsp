@@ -74,6 +74,7 @@
                                   date="${userInstance.profile?.lastAccessed}"/></td>
                 <td>
                     <g:link controller="user"  id ="${userInstance.id}" action="show">查看</g:link>
+                    <g:link controller="user"  id ="${userInstance.id}" action="resetPassword">重置密码</g:link>
                     <g:link controller="user"  id ="${userInstance.id}" action="edit">修改</g:link>
                     <g:link controller="user"  id ="${userInstance.id}" action="delete" onclick="return confirm('${message(code: 'user.button.delete.confirm.message', default: '确定要删除该用户吗?')}');">删除</g:link>
                 </td>

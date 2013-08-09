@@ -1,7 +1,5 @@
 <%@ page import="com.sanwn.mousika.User" %>
 
-
-
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'username', 'error')} required">
 	<label for="username">
 		<g:message code="user.username.label" default="Username" />
@@ -28,7 +26,7 @@
 %{--<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'profile', 'error')} ">
 	<label for="profile">
 		<g:message code="user.profile.label" default="Profile" />
-		
+
 	</label>
 	<g:select id="profile" name="profile.id" from="${com.sanwn.mousika.Profile.list()}" optionKey="id" value="${userInstance?.profile?.id}" class="many-to-one" noSelection="['null': '']"/>
 </div>
@@ -36,7 +34,7 @@
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'passwordHash', 'error')} ">
 	<label for="passwordHash">
 		<g:message code="user.passwordHash.label" default="Password Hash" />
-		
+
 	</label>
 	<g:textField name="passwordHash" value="${userInstance?.passwordHash}"/>
 </div>--}%
@@ -44,9 +42,9 @@
 %{--<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'permissions', 'error')} ">
 	<label for="permissions">
 		<g:message code="user.permissions.label" default="Permissions" />
-		
+
 	</label>
-	
+
 </div>--}%
 
 <div class="fieldcontain ${hasErrors(bean: userInstance, field: 'roles', 'error')} ">

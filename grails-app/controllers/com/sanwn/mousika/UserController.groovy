@@ -10,7 +10,7 @@ import jxl.*
 class UserController {
 
     private File excelFile
-    static allowedMethods = [save: "POST", update: "POST"]
+    static allowedMethods = [update: "POST"]
 
     def gsonBuilder
 
@@ -318,8 +318,13 @@ class UserController {
     }
 
     def displayPhoto(){
-        def subject = SecurityUtils.getSubject();
-        def userInstance = User.findByUsername(subject.getPrincipal())
+        def userInstance
+        if (params.get("id")!=null){
+            userInstance = User.get(params.get("id"))
+        } else{
+            def subject = SecurityUtils.getSubject();
+            userInstance = User.findByUsername(subject.getPrincipal())
+        }
         def photoByte
         if (userInstance.getProfile()!=null&&userInstance.getProfile().getPhoto()!=null&&userInstance.getProfile().getPhoto().length!=0){
             photoByte = userInstance.profile.photo

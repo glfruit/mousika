@@ -57,7 +57,7 @@
         <g:each in="${userInstanceList}" status="i" var="userInstance">
             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
-                <td><g:link action="show" id="${userInstance.id}">${fieldValue(bean: userInstance, field: "username")}</g:link></td>
+                <td>${fieldValue(bean: userInstance, field: "username")}</td>
 
                 <td>${fieldValue(bean: userInstance, field: "fullname")}</td>
 
@@ -73,6 +73,7 @@
                 <td><g:formatDate format="yyyy-MM-dd HH:mm:ss"
                                   date="${userInstance.profile?.lastAccessed}"/></td>
                 <td>
+                    <g:link controller="user"  id ="${userInstance.id}" action="show">查看</g:link>
                     <g:link controller="user"  id ="${userInstance.id}" action="edit">修改</g:link>
                     <g:link controller="user"  id ="${userInstance.id}" action="delete" onclick="return confirm('${message(code: 'user.button.delete.confirm.message', default: '确定要删除该用户吗?')}');">删除</g:link>
                 </td>
@@ -146,7 +147,7 @@
                                 else{
                                     domConstruct.create("td", {innerHTML: ''}, tr);
                                 }
-                                domConstruct.create("td", {innerHTML: "<a href='/mousika/user/edit/"+user.id+"'>修改</a>"+"&nbsp;&nbsp;"+"<a href='/mousika/user/edit/"+user.id+"' onclick=\"return confirm('确定要删除该用户吗?')\">删除</a>"}, tr);
+                                domConstruct.create("td", {innerHTML: "<a href='/mousika/user/show/"+user.id+"'>查看</a>"+"&nbsp;&nbsp;"+"<a href='/mousika/user/edit/"+user.id+"'>修改</a>"+"&nbsp;&nbsp;"+"<a href='/mousika/user/edit/"+user.id+"' onclick=\"return confirm('确定要删除该用户吗?')\">删除</a>"}, tr);
                             });
                             searchTotal = searchResult.total;
                 });

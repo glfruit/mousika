@@ -9,6 +9,8 @@ class CourseUnit {
 
     String title
 
+    boolean visible = true
+
     static searchable = true
 
     static belongsTo = [course: Course]

@@ -69,10 +69,20 @@
 
                     <div class="edit-course-region">
                         <span class="commands">
-                            <a href="#"><i class="icon-pencil"></i></a>
-                            <a href="#" style="cursor: move;"><i
-                                    class="icon-move dojoDndHandle"></i></a>
-                            <a href="#"><i class="icon-eye-open"></i></a>
+                            <a href="#" rel="tooltip" title="编辑标题">
+                                <i class="icon-pencil"></i>
+                            </a>
+                            <a href="#" rel="tooltip" title="移动内容"
+                               style="cursor: move;">
+                                <i class="icon-move dojoDndHandle"></i>
+                            </a>
+                            <a href="${createLink(controller: item.content.type, action: 'edit', id: item.content.id, params: [courseId: course.id])}"
+                               rel="tooltip" title="编辑内容">
+                                <i class="icon-edit"></i>
+                            </a>
+                            <a href="#" rel="tooltip" title="隐藏或显示内容">
+                                <i class="${item.visible ? 'icon-eye-open' : 'icon-eye-close'} ${courseSectionId}item${s}"></i>
+                            </a>
                             <a id="removeUnit${section.sequence}Item${item.sequence}"
                                class="remove-unit-item" href="#delConfirm"
                                role="button" data-toggle="modal">

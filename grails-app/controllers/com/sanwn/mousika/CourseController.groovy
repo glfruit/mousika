@@ -408,4 +408,42 @@ class CourseController {
         def total = 10 //TODO: 获取totoal总数
         [assignments: items, course: course, total: total]
     }
+
+    def toggleUnitOrItem(Long courseId, int unitSeq, int itemSeq) {
+        def course = Course.get(courseId)
+        if (!course) {
+            render contentType: 'application/json', text: "{\"success\":false,\"error\":\"未找到id为${courseId}的课程\"}"
+            return
+        }
+        def unit = CourseUnit.where {
+            course == course && sequence == unitSeq
+        }.find()
+        if (!unit) {
+            render contentType: 'application/json', text: "{\"success\":true,\"error\":\"未在id为${courseId}的课程里找到序列号为${unitSeq}的课程单元\"}"
+            return
+        }
+        if (itemSeq == -1) {
+            unit.visible = params.boolean('visible')
+            if (unit.save(flush: true)) {
+                render contentType: 'application/json', text: '{"success":true}'
+            } else {
+                render contentType: 'application/json', text: '{"success":false,"error":"更新失败"}'
+            }
+        } else {
+            def unitItem = UnitItem.where {
+                unit == unit && sequence == itemSeq
+            }.find()
+            if (!unitItem) {
+                render contentType: 'application/json',
+                        text: "{\"success\":false,\"error\":\"未在id为${courseId}的课程序列号为${unitSeq}的课程单元里找到${itemSeq}的课程内容\"}"
+                return
+            }
+            unitItem.visible = params.boolean('visible')
+            if (unitItem.save(flush: true)) {
+                render contentType: 'application/json', text: '{"success":true}'
+            } else {
+                render contentType: 'application/json', text: '{"success":false,"error":"更新失败"}'
+            }
+        }
+    }
 }

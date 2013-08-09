@@ -62,27 +62,28 @@ class PageController {
         def pageInstance = Page.get(id)
         if (!pageInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'page.label', default: 'Page'), id])
-            redirect(action: "list")
+            redirect(controller: 'course', action: "show", id: params.courseId)
             return
         }
 
-        [pageInstance: pageInstance]
+        [pageInstance: pageInstance, course: Course.get(params.courseId)]
     }
 
     def update(Long id, Long version) {
         def pageInstance = Page.get(id)
         if (!pageInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'page.label', default: 'Page'), id])
-            redirect(action: "list")
+            redirect(controller: 'course', action: "show", id: params.courseId)
             return
         }
 
+        def course = Course.get(params.courseId)
         if (version != null) {
             if (pageInstance.version > version) {
                 pageInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
                         [message(code: 'page.label', default: 'Page')] as Object[],
                         "Another user has updated this Page while you were editing")
-                render(view: "edit", model: [pageInstance: pageInstance])
+                render(view: "edit", model: [pageInstance: pageInstance, course: course])
                 return
             }
         }

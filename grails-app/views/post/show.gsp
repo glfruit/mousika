@@ -40,8 +40,8 @@
                             <p class="post-content-title">
                                 发表时间：<g:formatDate date="${post.dateCreated}"
                                                    format="yyyy-MM-dd HH:mm:ss"/>
-                                <g:if test="${post.dateCreated < post.lastUpdated}">
-                                    更新于：<g:formatDate date="${post.lastUpdated}"
+                                <g:if test="${post.dateCreated < post.lastModified}">
+                                    更新于：<g:formatDate date="${post.lastModified}"
                                                       format="yyyy-MM-dd HH:mm:ss"/>
                                 </g:if>
                             </p>

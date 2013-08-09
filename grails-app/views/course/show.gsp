@@ -247,23 +247,42 @@
     </g:each>
 </div>
 <script>
-    require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event', 'dojo/dom-style',
+    require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event',
+        'dojo/dom-style', 'dojo/dom-class', 'dojo/json',
         'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
-            function (query, topic, request, domAttr, on, Source, ioQuery, $, event, domStyle) {
-                query(".icon-eye-open").on('click', function (e) {
+            function (query, topic, request, domAttr, on, Source, ioQuery, $, event, domStyle, domClass, json) {
+                query("i.icon-eye-open,i.icon-eye-close").on('click', function (e) {
                     event.stop(e);
-                    var section = query(e.target).attr('class')[0].split(' ')[1];
-                    domStyle.set(section, 'opacity', 0.7);
-                });
-                query(".icon-pencil").on('click', function (e) {
-                    event.stop(e);
-                    var section = query(e.target).attr('class')[0].split(' ')[1];
-                    tinymce.init({
-                        selector: "div." + section,
-                        inline: true,
-                        toolbar: "undo redo",
-                        menubar: false
-                    });
+                    var classes = query(e.target).attr('class')[0].split(' ');
+                    for (var i = 0; i < classes.length; i++) {
+                        var c = classes[i];
+                        var matched = c.match(/^courseSection(\d+)($|item(\d+)$)/);
+                        if (matched) {
+                            var opacity = domStyle.get(c, 'opacity');
+                            opacity = parseFloat(opacity) < 1 ? 1 : 0.5;
+                            request.post("${request.contextPath}/course/toggleUnitOrItem", {
+                                data: {
+                                    courseId: ${courseInstance.id},
+                                    unitSeq: matched[1],
+                                    itemSeq: matched[3] ? matched[3] : -1,
+                                    visible: opacity == 1
+                                }}).then(function (response) {
+                                        var result = json.parse(response);
+                                        if (result.success) {
+                                            if (parseFloat(opacity) < 1) {
+                                                domStyle.set(c, 'opacity', opacity);
+                                                query(e.target).replaceClass('icon-eye-close', 'icon-eye-open');
+                                            } else {
+                                                domStyle.set(c, 'opacity', opacity);
+                                                query(e.target).replaceClass('icon-eye-open', 'icon-eye-close');
+                                            }
+                                        } else {
+                                            console.error(result.error);
+                                        }
+                                    });
+                            break;
+                        }
+                    }
                 });
                 define.amd.jQuery = true;
                 query(".addContent").on('click', function (e) {

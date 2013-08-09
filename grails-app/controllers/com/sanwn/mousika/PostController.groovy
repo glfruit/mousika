@@ -33,6 +33,7 @@ class PostController {
             username == SecurityUtils.subject.principal
         }.find()
         post.postedBy = user
+        post.lastModified = new Date()
         def forum = Forum.where {
             id == params.forumId
         }.find()

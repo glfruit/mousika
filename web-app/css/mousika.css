@@ -6,6 +6,14 @@
     width: 100%;
 }
 
+.hide-unit-or-item {
+    opacity: 0.5;
+}
+
+.show-unit-or-item {
+    opacity: 1;
+}
+
 .section-side {
     width: 5%;
     display: table-cell;

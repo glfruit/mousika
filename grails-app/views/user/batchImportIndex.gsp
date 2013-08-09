@@ -9,7 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html>
 <head>
-    <meta name="layout" content="user">
+    <meta name="layout" content="system">
     <title><g:message code="user.batch.import.label"/></title>
     <style type="text/css">
     ul{list-style:none;}
@@ -18,8 +18,10 @@
 </head>
 <body>
 <div class="sub">
-    <h4 style="text-align: center;"><g:message
-            code="user.batch.import.label"/></h4>
+    <h4 style="border-bottom: 1px solid black;"><g:message code="user.batch.import.label"/></h4>
+    <g:if test="${flash.message}">
+        <div class="message" role="status">${flash.message}</div>
+    </g:if>
     <form  method="POST" action="batchImport" name="batchImport" id="batchImport" enctype="multipart/form-data">
         <dl class="addForm mT5">
             <dd>
@@ -30,7 +32,7 @@
                         </td>--}%
                         <td>
                             <fieldset class="buttons">
-                                <g:submitButton name="batchImport" class="batchImport" value="${message(code: 'user.batch.import.label', default: '导入')}" onclick="if (!importTable()) return false;"/>
+                                <g:submitButton name="batchImport" class="batchImport" value="${message(code: 'user.button.batch.import.label', default: '导入')}"/>
                             </fieldset>
                         </td>
                     </tr>
@@ -39,22 +41,5 @@
         </dl>
     </form>
 </div>
-<g:javascript>
-    function importTable(){
-        alert("aaa");
-        var result = true;
-        //var params = "recordId="+$("#recordId").val()+"&";
-        $.ligerDialog.waitting("正在导入,请稍候...");
-
-        $("form :input.notEmpty").each(function() {
-            if(this.value.Trim()==""){
-                $.ligerDialog.warn("必填项填写不正确！");
-                result = false;
-                return false;
-            }
-        });
-        return result;
-    }
-</g:javascript>
 </body>
 </html>

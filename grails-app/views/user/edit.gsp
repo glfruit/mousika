@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="user">
+    <meta name="layout" content="system">
     <title><g:message code="user.edit.label"/></title>
     <style type="text/css">
     ul{list-style:none;}
@@ -18,10 +18,10 @@
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>--}%
-		<div id="edit-user" class="content scaffold-edit" role="main">
-			<h1><g:message code="default.edit.label" args="[entityName]" /></h1>
+		<div id="edit-user" class="content scaffold-edit" role="user" align="center">
+       　　 <h4 style="border-bottom: 1px solid black;" align="left"><g:message code="user.edit.label"/></h4>
 			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
+			<div class="message" role="status" align="center">${flash.message}</div>
 			</g:if>
 			<g:hasErrors bean="${userInstance}">
 			<ul class="errors" role="alert">
@@ -30,15 +30,15 @@
 				</g:eachError>
 			</ul>
 			</g:hasErrors>
-			<g:form method="post" >
+			<g:form method="post">
 				<g:hiddenField name="id" value="${userInstance?.id}" />
 				<g:hiddenField name="version" value="${userInstance?.version}" />
 				<fieldset class="form">
 					<g:render template="form"/>
 				</fieldset>
 				<fieldset class="buttons">
-					<g:actionSubmit class="save" action="update" value="${message(code: 'default.button.update.label', default: 'Update')}" />
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+					<g:actionSubmit class="save" action="update" value="${message(code: 'user.button.update.label', default: '修改')}" />
+					%{--<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" formnovalidate="" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />--}%
 				</fieldset>
 			</g:form>
 		</div>

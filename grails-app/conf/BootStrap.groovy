@@ -1,4 +1,6 @@
 import com.sanwn.mousika.Backup
+import com.sanwn.mousika.PrivilegeResource
+import com.sanwn.mousika.PrivilegeResourceMethod
 import com.sanwn.mousika.Role
 import com.sanwn.mousika.User
 import org.apache.shiro.crypto.hash.Sha256Hash
@@ -36,9 +38,9 @@ class BootStrap {
                     studentRole.addToPermissions("feedback:show")
                     studentRole.save(failOnError: true)
 
-                    def teachingAffairsRole = new Role(name: "教务处")
+                    /*def teachingAffairsRole = new Role(name: "教务处")
                     teachingAffairsRole.addToPermissions("*:*")
-                    teachingAffairsRole.save(failOnError: true)
+                    teachingAffairsRole.save(failOnError: true)*/
 
                     def user = new User(username: "admin", fullname: "无名氏", email: "ppller25@126.com", dateCreated: new Date(), passwordHash: new Sha256Hash("admin").toHex())
                     user.addToRoles(adminRole)
@@ -57,6 +59,27 @@ class BootStrap {
 
                     def backup = new Backup(dataBasePath: "D:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe",backupDelay: 0, autoBackupPeriod: 1.0)
                     backup.save(failOnError: true)
+
+                    def privilegeResource = new PrivilegeResource(controllerEn: "course", controllerCn: "课程")
+                    def privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "create", methodCn:"创建课程")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    def privilegeResourceMethod2 = new PrivilegeResourceMethod(methodEn: "delete", methodCn:"删除课程")
+                    privilegeResourceMethod2.save(failOnError: true)
+                    def privilegeResourceMethod3 = new PrivilegeResourceMethod(methodEn: "list", methodCn:"列表")
+                    privilegeResourceMethod3.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod2)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod3)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "user", controllerCn: "用户")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "create", methodCn:"创建用户")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResourceMethod2 = new PrivilegeResourceMethod(methodEn: "delete", methodCn:"删除用户")
+                    privilegeResourceMethod2.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod2)
+                    privilegeResource.save(failOnError: true)
                 }
             }
         }

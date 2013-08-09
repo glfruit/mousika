@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="user">
+    <meta name="layout" content="system">
     <title><g:message code="backup.list.label"/></title>
     <style type="text/css">
     ul{list-style:none;}
@@ -13,7 +13,7 @@
 <body>
 
 <div id="list-privilege" class="content scaffold-show" role="main">
-    <h4 style="text-align: center;"><g:message  code="backup.list.label"/></h4>
+    <h4 style="border-bottom: 1px solid black;"><g:message  code="backup.list.label"/></h4>
     <div class="container">
         <p>
             <label>备份设置</label>

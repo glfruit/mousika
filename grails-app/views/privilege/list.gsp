@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="user">
+    <meta name="layout" content="system">
     <title><g:message code="privilege.list.label"/></title>
     <style type="text/css">
     ul{list-style:none;}
@@ -10,6 +10,7 @@
     </style>
     <g:javascript library="jquery" plugin="jquery"/>
     <script type="text/javascript">
+    alert("${privilegeResourceInstanceList}");
         function chooseAll(item)
         {
             var inputs = document.getElementsByTagName("input");
@@ -23,8 +24,12 @@
         }
         function chooseChild(item)
         {
-            for(var i=0;i<item.parentElement.children[1].childElementCount;i++){
-                item.parentElement.children[1].children[i].children[0].checked=item.checked;
+            var inputs =  document.getElementsByTagName("input");
+            for (var inputsIndex=0; inputsIndex < inputs.length; inputsIndex++){
+                if (inputs[inputsIndex].type == "checkbox" && inputs[inputsIndex].name.indexOf(item.id+":")==0 )
+                {
+                    inputs[inputsIndex].checked = item.checked;
+                }
             }
         }
         function chooseParent(item)
@@ -51,14 +56,75 @@
 <div id="error" style="display: none"></div>
 
 <div id="list-privilege" class="content scaffold-show" role="main">
-    <h4 style="text-align: center;"><g:message
+    <h4 style="border-bottom: 1px solid black;"><g:message
             code="privilege.list.label"/></h4>
-    <div class="container-fluid">
+    <div class="container">
+        <table>
+            <tr>
+                <td width="40px">
+                    <label class="control-label" for="roles">角色</label>
+                </td>
+                <td>
+                    <g:select name="roles" from="${com.sanwn.mousika.Role.list()}" value="${role.id}" optionKey="id" optionValue="name" onchange="${remoteFunction(action:'getRolePermission',update:[success:'rolePermissions', failure:'error'], params: '\'role=\' + this.value')}"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="40px">
+                    <label class="control-label" for="roles">权限</label>
+                </td>
+                <td>
+                    <table>
+                        <g:if test="${privilegeResourceInstanceList}">
+                            <g:each in="${privilegeResourceInstanceList}" var="privilegeResourceInstance">
+                                <td>
+                                    <table class="table table-striped table-bordered table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                <input id="${privilegeResourceInstance.controllerEn}" type="checkbox" onclick='chooseChild(this)'> ${privilegeResourceInstance.controllerCn}
+                                            </th>
+                                        <tr>
+                                        </thead>
+                                        <tbody>
+                                        <g:each in="${privilegeResourceInstance.privilegeResourceMethods}" var="privilegeResourceMethod">
+                                            <tr>
+                                                <td>
+                                                    <input id="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" name="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" value="${privilegeResourceMethod.methodEn}"  type="checkbox" onclick="chooseParent(this)">${privilegeResourceMethod.methodCn}
+                                                </td>
+                                            </tr>
+                                        </g:each>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </g:each>
+                        </g:if>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    %{--<g:each in="${grailsApplication.controllerClasses}" var="c">
+    <li>
+        <input id="${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}" type="checkbox" onclick='chooseChild(this)'> ${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}
+        <ul>
+            <%
+                List<String> actions = new ArrayList<String>()
+                actions = c.getURIs().collect({ uri ->
+                    c.getMethodActionName(uri)
+                }).unique().sort()
+            %>
+            <g:each in="${actions}" var="action">
+                <li><input id="${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}:${action}" name="${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}:${action}" value="${action}"  type="checkbox" onclick="chooseParent(this)">${action}</li>
+            </g:each>
+        </ul>
+    </li>
+</g:each>--}%
+    %{--<div class="container-fluid">
         <g:form action="save" >
             <fieldset class="buttons">
                 <g:submitButton name="save" class="save" value="${message(code: 'privilege.save.label', default: 'Save')}" />
             </fieldset>
-        %{--<button class="btn" type="button" style="width:100px;" oncick="display()">保存</button>--}%
+        --}%%{--<button class="btn" type="button" style="width:100px;" oncick="display()">保存</button>--}%%{--
         <div class="row-fluid">
             <div class="span4">
                 <label>角色</label>
@@ -82,32 +148,27 @@
                 <ul id="actionTree">
                     <label>权限</label>
                     <li><input id="all" name="all" type="checkbox" value="*" onclick='chooseAll(this)'> 全选
-                    <g:each in="${grailsApplication.controllerClasses}" var="c">
-                        <li>
-                            <input id="${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}" type="checkbox" onclick='chooseChild(this)'> ${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}
-                            <ul>
-                                <%
-                                    List<String> actions = new ArrayList<String>()
-                                    actions = c.getURIs().collect({ uri ->
-                                        c.getMethodActionName(uri)
-                                    }).unique().sort()
-                                %>
-                                <g:each in="${actions}" var="action">
-                                    <li><input id="${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}:${action}" name="${c.name.replace(c.name.charAt(0), c.name.charAt(0).toLowerCase())}:${action}" value="${action}"  type="checkbox" onclick="chooseParent(this)">${action}</li>
+                    <g:if test="${privilegeResourceInstanceList}">
+                        <g:each in="${privilegeResourceInstanceList}" var="privilegeResourceInstance">
+                            <li>
+                                <input id="${privilegeResourceInstance.controllerEn}" type="checkbox" onclick='chooseChild(this)'> ${privilegeResourceInstance.controllerCn}
+                                <ul>
+                                    <g:each in="${privilegeResourceInstance.privilegeResourceMethods}" var="privilegeResourceMethod">
+                                    <li><input id="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" name="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" value="${privilegeResourceMethod.methodEn}"  type="checkbox" onclick="chooseParent(this)">${privilegeResourceMethod.methodCn}</li>
                                 </g:each>
-                            </ul>
-                        </li>
-                    </g:each>
+                                </ul>
+                            </li>
+                        </g:each>
+                    </g:if>
                 </ul>
             </div>
         </div>
         </g:form>
-    </div>
+    </div>--}%
 </div>
 <script type="text/javascript">
 
     var permissions = "${permissions}";
-    document.getElementById("role1").checked = true;
     initCheckBox(permissions);
 
     function setCheckBox(){

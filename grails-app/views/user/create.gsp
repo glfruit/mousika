@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="user">
+    <meta name="layout" content="system">
     <title><g:message code="user.create.label"/></title>
     <style type="text/css">
     ul{list-style:none;}
@@ -10,8 +10,8 @@
     </style>
 </head>
 	<body>
-		<div id="create-user" class="content scaffold-create" role="main">
-			<h1><g:message code="user.create.label" args="[entityName]" /></h1>
+		<div id="create-user" class="content scaffold-create" role="system" style="text-align:center;">
+            <h4 style="border-bottom: 1px solid black;" align="left"><g:message code="user.create.label"/></h4>
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>

@@ -2,22 +2,102 @@
 <%@ page import="com.sanwn.mousika.User" %>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'user.label', default: 'User')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
-	</head>
+    <head>
+        <meta name="layout" content="system">
+        <title><g:message code="user.create.label"/></title>
+        <style type="text/css">
+        ul{list-style:none;}
+        li{list-style:none;}
+        </style>
+    </head>
 	<body>
+        <div id="updateInformation-user" class="content scaffold-list" role="system">
+            <h4 style="border-bottom: 1px solid black;">用户详细信息</h4>
+            <g:if test="${flash.message}">
+                <div class="message" role="error">${flash.message}</div>
+            </g:if>
+            <div class="container">
+                <form class="form-horizontal" action="show">
+                    <div class="control-group">
+                        <label class="control-label" for="userPhoto">用户头像</label>
+                        <div class="controls">
+                            <img id="userPhoto" name="userPhoto" src="${createLink(controller: 'user', action: 'displayPhoto', id:"${userInstance.id}")}" width="100" height="100"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="username">用户名</label>
+                        <div class="controls">
+                            <input type="text" id="username" name="username"  value="${fieldValue(bean: userInstance, field: "username")}" disabled='disabled'>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="fullname">姓名</label>
+                        <div class="controls">
+                            <input type="text" id="fullname" name="fullname"  value="${fieldValue(bean: userInstance, field: "fullname")}" disabled='disabled'>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="roles">角色</label>
+                        <div class="controls">
+                            <g:select name="roles" from="${com.sanwn.mousika.Role.list()}" multiple="multiple" optionKey="id" size="5" value="${userInstance?.roles*.id}" class="many-to-many" disabled='disabled'/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="email">email</label>
+                        <div class="controls">
+                            <input type="text" id="email" name="email"  value="${userInstance?.profile?.email}" disabled='disabled>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="interests">兴趣</label>
+                        <div class="controls">
+                            <textarea rows="3" id="interests" name="interests"  value="${userInstance?.profile?.interests}" disabled='disabled'>${userInstance?.profile?.interests}</textarea>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="dateCreated">创建日期</label>
+                        <div class="controls">
+                            <label id="dateCreated"  name="dateCreated">
+                                <g:formatDate format="yyyy-MM-dd HH:mm:ss" date="${userInstance.dateCreated}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="firstAccessed">第一次访问时间</label>
+                        <div class="controls">
+                            <label id="firstAccessed"  name="firstAccessed">
+                                <g:formatDate format="yyyy-MM-dd HH:mm:ss" date="${userInstance?.profile?.firstAccessed}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="lastAccessed">最后一次访问时间</label>
+                        <div class="controls">
+                            <label id="lastAccessed"  name="lastAccessed">
+                                <g:formatDate format="yyyy-MM-dd HH:mm:ss" date="${userInstance?.profile?.lastAccessed}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <fieldset class="buttons">
+                                <g:link name="back" class="btn list" action="list">返回</g:link>
+                            </fieldset>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 		%{--<a href="#show-user" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>--}%
-		<div class="nav" role="navigation">
+		%{--<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
 				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
 				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
 			</ul>
-		</div>
-		<div id="show-user" class="content scaffold-show" role="main">
-			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
+		</div>--}%
+		%{--<div id="show-user" class="content scaffold-show" role="system">
+			<h1><g:message code="user.show.label" args="[entityName]" /></h1>
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
@@ -41,16 +121,16 @@
 				</li>
 				</g:if>
 
-                <g:if test="${userInstance?.email}">
+               --}%%{-- <g:if test="${userInstance?.email}">
                     <li class="fieldcontain">
                         <span id="email-label" class="property-label"><g:message code="user.email.label" default="邮箱" /></span>
 
                         <span class="property-value" aria-labelledby="email-label"><g:fieldValue bean="${userInstance}" field="email"/></span>
 
                     </li>
-                </g:if>
+                </g:if>--}%%{--
 			
-				%{--<g:if test="${userInstance?.profile}">
+				--}%%{--<g:if test="${userInstance?.profile}">
 				<li class="fieldcontain">
 					<span id="profile-label" class="property-label"><g:message code="user.profile.label" default="Profile" /></span>
 					
@@ -84,7 +164,7 @@
 						<span class="property-value" aria-labelledby="permissions-label"><g:fieldValue bean="${userInstance}" field="permissions"/></span>
 					
 				</li>
-				</g:if>--}%
+				</g:if>--}%%{--
 			
 				<g:if test="${userInstance?.roles}">
 				<li class="fieldcontain">
@@ -105,6 +185,6 @@
 					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
 				</fieldset>
 			</g:form>
-		</div>
+		</div>--}%
 	</body>
 </html>

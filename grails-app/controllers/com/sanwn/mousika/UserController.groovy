@@ -20,6 +20,7 @@ class UserController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
+        params.sort = "username"
         withFormat {
             html {
                 [userInstanceList: User.list(params), userInstanceTotal: User.count()]
@@ -53,14 +54,13 @@ class UserController {
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
+        flash.message = "用户创建成功"
         redirect(action: "show", id: userInstance.id)
     }
 
     def show(Long id) {
         def userInstance = User.get(id)
         if (!userInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), id])
             redirect(action: "list")
             return
         }
@@ -351,8 +351,10 @@ class UserController {
     def resetPassword(){
         def userInstance = User.get(params.get("id"))
         userInstance.setPasswordHash(new Sha256Hash(userInstance.getUsername()).toHex())
-        if (!userInstance.save(flush: true)) {
+        if (userInstance.save(flush: true)) {
             flash.message = "重置密码成功"
+        }else{
+            flash.message = "重置密码失败"
         }
 
         redirect(action: "list")

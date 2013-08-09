@@ -1,7 +1,9 @@
 import com.sanwn.mousika.Backup
+import com.sanwn.mousika.Course
 import com.sanwn.mousika.PrivilegeResource
 import com.sanwn.mousika.PrivilegeResourceMethod
 import com.sanwn.mousika.Role
+import com.sanwn.mousika.Teaching
 import com.sanwn.mousika.User
 import org.apache.shiro.crypto.hash.Sha256Hash
 
@@ -56,6 +58,12 @@ class BootStrap {
 
                     user = new User(username: "test1", fullname: "彭启华", email: "ppller25@126.com", dateCreated: new Date(), passwordHash: new Sha256Hash("test").toHex())
                     user.save(failOnError: true)
+
+                    /*def course = new Course(code:"1234567",courseToken: "aaaaaaa",title: "计算机网络",description:"测试",startDate:new Date(),guestVisible:true,available: true,numberOfWeeks:18,deliveredBy:User.findByUsername("系统管理员"))
+                    course.save(failOnError: true)
+
+                    def teaching = new Teaching(course:course,capability: 10,frequency: 3,assignmentTimes: 2,checkTimes: 6,time: 100)
+                    teaching.save(failOnError: true)*/
 
                     def backup = new Backup(dataBasePath: "D:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe",backupDelay: 0, autoBackupPeriod: 1.0)
                     backup.save(failOnError: true)

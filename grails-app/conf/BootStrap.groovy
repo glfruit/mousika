@@ -80,6 +80,60 @@ class BootStrap {
                     privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
                     privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod2)
                     privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "student", controllerCn: "学生")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "list", methodCn:"列表")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "fileResource", controllerCn: "文件资源")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "list", methodCn:"列表")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "backup", controllerCn: "备份")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "list", methodCn:"列表")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "assignment", controllerCn: "作业")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "save", methodCn:"保存")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "auth", controllerCn: "认证")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "signIn", methodCn:"登录")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "forum", controllerCn: "论坛")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "show", methodCn:"显示")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "gradeBook", controllerCn: "成绩")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "show", methodCn:"显示")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "resource", controllerCn: "资源")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "save", methodCn:"保存")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "unitItem", controllerCn: "课程单元")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "copy", methodCn:"复制")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
                 }
             }
         }

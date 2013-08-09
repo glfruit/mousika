@@ -15,7 +15,7 @@ class PrivilegeResourceMethod {
 
     static constraints = {
         methodEn blank: false
-        methodCn blank: false,unique:true
+        methodCn blank: false
     }
 
     static belongsTo = PrivilegeResource

@@ -6,18 +6,41 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class PrivilegeController {
 
-
-
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
+
+    def gsonBuilder
 
     def index() {
         redirect(action: "list", params: params)
     }
 
     def list() {
-        def role = Role.get(1L)
+        def role = Role.findByName("系统管理员")
         def privilegeResourceInstanceList = PrivilegeResource.getAll();
-        [privilegeResourceInstanceList:privilegeResourceInstanceList, permissions:role.permissions, role:role]
+        [privilegeResourceInstanceList: privilegeResourceInstanceList, role: role, permissions:role.permissions]
+        /*withFormat {
+            html {
+                [privilegeResourceInstanceList: privilegeResourceInstanceList, role: role]
+            }
+            json {
+                def json = PrivilegeResource.getAll().collect {
+                    [
+                            id: it.id,
+                            controllerEn: it.controllerEn,
+                            controllerCn: it.controllerCn,
+                            privilegeResourceMethods: it.privilegeResourceMethods.collect {
+                                [
+                                        id: it.id,
+                                        methodEn: it.methodEn,
+                                        methodCn: it.methodCn
+                                ]
+                            }
+                    ]
+                }
+                def gson = gsonBuilder.create()
+                render contentType: "text/json", text: gson.toJson(json)
+            }
+        }*/
     }
 
     def create() {
@@ -55,6 +78,7 @@ class PrivilegeController {
         }
 
         roleInstance.save(failOnError: true)
+        flash.message = "保存角色权限成功"
         redirect(action: "list", params: params)
     }
 

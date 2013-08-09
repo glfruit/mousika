@@ -18,12 +18,12 @@
 	<g:textField name="fullname" required="" value="${userInstance?.fullname}"/>
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'email', 'error')}">
+%{--<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'email', 'error')}">
     <label for="email">
         <g:message code="user.email.label" default="邮箱" />
     </label>
     <g:textField name="email" required="" value="${userInstance?.email}"/>
-</div>
+</div>--}%
 
 %{--<div class="fieldcontain ${hasErrors(bean: userInstance, field: 'profile', 'error')} ">
 	<label for="profile">

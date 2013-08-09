@@ -221,6 +221,7 @@ class UserController {
                                         username: it.username,
                                         fullname: it.fullname,
                                         email: it.profile?.email,
+                                        firstAccessed: it.profile?.firstAccessed,
                                         lastAccessed: it.profile?.lastAccessed,
                                         roles: it.roles.collect { [id: it.id, name: it.name] }
                                 ]

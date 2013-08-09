@@ -1,7 +1,7 @@
 
 <%@ page import="com.sanwn.mousika.User" %>
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="layout" content="system">
     <title><g:message code="user.list.label"/></title>
@@ -21,11 +21,16 @@
 
 <div id="list-user" class="content scaffold-list" role="main">
     <h4 style="border-bottom: 1px solid black;">用户管理</h4>
+    <form class="form-search">
+        <input id="searchBy" placeholder="查找用户" type="text"
+               class="input-medium search-query">
+        <button id="searchUserBtn" type="submit" class="btn">搜索</button>
+    </form>
     <g:link controller="user" class="btn create" action="create"><g:message code="user.create.label"/></g:link>&nbsp;&nbsp;&nbsp;&nbsp;<g:link controller="user" class="btn create"  action="batchImportIndex"><g:message code="user.batch.import.label" args="[entityName]" /></g:link></li>
     <g:if test="${flash.message}">
         <div class="message" role="status">${flash.message}</div>
     </g:if>
-    <table class="table table-striped">
+    <table class="table table-striped" id="userTbl">
         <thead>
         <tr>
             %{--<g:sortableColumn property="username" title="${message(code: 'user.username.label', default: '用户名')}" />
@@ -48,7 +53,7 @@
 
         </tr>
         </thead>
-        <tbody>
+        <tbody id="userRows">
         <g:each in="${userInstanceList}" status="i" var="userInstance">
             <tr class="${(i % 2) == 0 ? 'even' : 'odd'}">
 
@@ -56,7 +61,12 @@
 
                 <td>${fieldValue(bean: userInstance, field: "fullname")}</td>
 
-                <td>${fieldValue(bean: userInstance, field: "roles")}</td>
+                <td>
+                    <g:each in="${userInstance.roles}" var="role">
+                        ${role.name}；
+                    </g:each>
+                </td>
+                %{--<td>${fieldValue(bean: userInstance, field: "roles")}</td>--}%
 
                 <td><g:formatDate format="yyyy-MM-dd HH:mm:ss"
                                   date="${userInstance.profile?.firstAccessed}"/></td>
@@ -76,4 +86,72 @@
     </div>
 </div>
 </body>
+<g:javascript>
+    require(["dojo/query",
+        "dojo/ready",
+        "dojo/_base/event",
+        "dojo/dom",
+        "dojo/dom-class",
+        "dojo/request",
+        "dojo/dom-construct",
+        "dojo/json",
+        "dojo/_base/array",
+        "bootstrap/Modal"], function (query, ready, event, dom, domClass, request, domConstruct, json, arrayUtil) {
+        ready(function () {
+            var searchTotal = -1;
+            query("#searchUserBtn").on("click", function (e) {
+                event.stop(e);
+                domClass.add(dom.byId('searchUserBtn'), 'inSearch');
+                request.get("${request.contextPath}/user/search", {
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    query: {
+                        max: 20,
+                        offset: 0,
+                        sort: 'username',
+                        q: dom.byId('searchBy').value
+                    }
+                }).then(function (response) {
+                            domConstruct.empty(dom.byId('userRows'));
+                            var searchResult = json.parse(response);
+                            var users = searchResult.users;
+                            arrayUtil.forEach(users, function (user, i) {
+                                var userDiv = dom.byId('userRows');
+                                var tr = domConstruct.create('tr', null, userDiv);
+                                domConstruct.create("td", {innerHTML: user.username}, tr)
+                                domConstruct.create("td", {innerHTML: user.fullname}, tr);
+                                var roles = '';
+                                arrayUtil.forEach(user.roles, function (role) {
+                                    roles = roles + role.name + ';';
+                                });
+                                domConstruct.create("td", {innerHTML: roles}, tr);
+                                var firstAccessed;
+                                if (user.firstAccessed!=null&&user.firstAccessed!="") {
+                                    firstAccessed = locale.format(user.firstAccessed, {
+                                        datePattern: 'yyyy-MM-dd hh:mm:ss'
+                                    });
+                                    domConstruct.create("td", {innerHTML: firstAccessed}, tr);
+                                }
+                                else{
+                                    domConstruct.create("td", {innerHTML: ''}, tr);
+                                }
+                                var lastAccessed;
+                                if (user.lastAccessed) {
+                                    lastAccessed = locale.format(user.lastAccessed, {
+                                        datePattern: 'yyyy-MM-dd hh:mm:ss'
+                                    });
+                                domConstruct.create("td", {innerHTML: lastAccessed}, tr);
+                                }
+                                else{
+                                    domConstruct.create("td", {innerHTML: ''}, tr);
+                                }
+                                domConstruct.create("td", {innerHTML: "<a href='/mousika/user/edit/"+user.id+"'>修改</a>"+"&nbsp;&nbsp;"+"<a href='/mousika/user/edit/"+user.id+"' onclick=\"return confirm('确定要删除该用户吗?')\">删除</a>"}, tr);
+                            });
+                            searchTotal = searchResult.total;
+                });
+            });
+        });
+    });
+</g:javascript>
 </html>

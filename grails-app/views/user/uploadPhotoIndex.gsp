@@ -20,7 +20,7 @@
     <div class="container">
         <g:uploadForm action="uploadPhoto">
             <input type="file" name="photo" />
-            <input type="submit" value="上传"/>
+            <input type="submit" value="上传"/> 　(请选择jpeg、bmp、png或gif格式并且小于200KB的图片上传)
         </g:uploadForm>
     </div>
 </div>

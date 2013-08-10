@@ -16,6 +16,50 @@
 			<g:if test="${flash.message}">
 			<div class="message" role="status">${flash.message}</div>
 			</g:if>
+            <g:form action="displayWarningCourse">
+                <table>
+                    <tr>
+                        <td>
+                            <label class="control-label">预警条件</label>
+                        </td>
+                        <td>
+                            <table class="table table-striped" style="width: 300px;text-align: center">
+                                <thead>
+                                <tr>
+
+                                    <th>课程容量</th>
+
+                                    <th>更新频次</th>
+
+                                    <th>作业次数</th>
+
+                                    <th>批改次数</th>
+
+                                    <th>使用时间</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input name="capability" type="text" style="width: 60px"/></td>
+                                    <td><input name="frequency" type="text" style="width: 60px"/></td>
+                                    <td><input name="assignmentTimes" type="text" style="width: 60px"/></td>
+                                    <td><input name="checkTimes" type="text" style="width: 60px"/></td>
+                                    <td><input type="time" style="width: 60px"/></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="submit" name="displayWarningCourse">预警课程</button>
+                            &nbsp;&nbsp;
+                            <g:link controller="teaching" class="btn list" action="list">所有课程</g:link>
+                        </td>
+                    </tr>
+                </table>
+            </g:form>
+
 			<table class="table table-striped">
 				<thead>
 					<tr>

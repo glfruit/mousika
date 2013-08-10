@@ -99,4 +99,42 @@ class TeachingController {
             redirect(action: "show", id: id)
         }
     }
+
+    def displayWarningCourse(){
+        def capabilityValue,frequencyValue,assignmentTimesValue,checkTimesValue,timeValue
+        try{
+            capabilityValue = params.float("capability")
+            if (capabilityValue==null){
+                capabilityValue = 0
+            }
+            frequencyValue = params.float("frequency")
+            if (frequencyValue==null){
+                frequencyValue = 0
+            }
+            assignmentTimesValue = params.float("assignmentTimes")
+            if (assignmentTimesValue==null){
+                assignmentTimesValue = 0
+            }
+            checkTimesValue = params.float("checkTimes")
+            if (checkTimesValue==null){
+                checkTimesValue = 0
+            }
+            timeValue = params.float("time")
+            if (timeValue==null){
+                timeValue = 0
+            }
+        }catch(Exception exception){
+            flash.message = "预警条件请输入数字"
+        }
+
+        def teachingInstanceList = Teaching.where {
+                (capability < capabilityValue)  ||
+                (frequency < frequencyValue)    ||
+                (assignmentTimes < assignmentTimesValue) ||
+                (checkTimes < checkTimesValue) ||
+                (time < timeValue)
+             }.list(order: 'id')
+
+        render(view: "list",model: [teachingInstanceList:teachingInstanceList,teachingInstanceTotal:teachingInstanceList.size()])
+    }
 }

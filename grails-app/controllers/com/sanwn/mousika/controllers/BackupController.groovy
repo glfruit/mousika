@@ -48,6 +48,8 @@ class BackupController {
         def userDir = System.getProperty("user.dir")
         def os = System.getProperty("os.name").toLowerCase();
         def backupCommandLocation = "/grails-app/command/backup.bat"
+        //备份到该系统的根目录下的backup文件夹下
+        def backupPath = userDir+"/backup"
         if(os.indexOf( "win" ) >= 0){
             dataBasePath = "\""+dataBasePath+"\""
             FileWriter fileWriter = new FileWriter(userDir+backupCommandLocation)
@@ -55,7 +57,7 @@ class BackupController {
 
             bufferedWriter.append("set PGPASSWORD=mousika_dev\n")
             bufferedWriter.append(dataBasePath)
-            bufferedWriter.append(" --host localhost --port 5432 --username \"mousika_dev\" --format custom --blobs --verbose --file \"C:\\mousika_dev-%date:~0,4%-%date:~5,2%-%date:~8,2%-%time:~0,2%-%time:~3,2%-%time:~6,2%.dump\"")
+            bufferedWriter.append(" --host localhost --port 5432 --username \"mousika_dev\" --format custom --blobs --verbose --file \""+backupPath+"/mousika_dev-%date:~0,4%-%date:~5,2%-%date:~8,2%-%time:~0,2%-%time:~3,2%-%time:~6,2%.dump\"")
             bufferedWriter.append("\nexit")
             bufferedWriter.flush()
             fileWriter.close()

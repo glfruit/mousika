@@ -10,10 +10,10 @@ class Teaching {
     Float frequency
 
     //作业次数
-    Integer assignmentTimes
+    Float assignmentTimes
 
     //批改次数
-    Integer checkTimes
+    Float checkTimes
 
     //学生这门课程使用时间
     Float time

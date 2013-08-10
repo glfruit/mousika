@@ -292,7 +292,12 @@ class UserController {
         def userInstance = User.findByUsername(subject.getPrincipal())
         userInstance.profile.email = params.get("email")
         userInstance.profile.interests = params.get("interests")
-        userInstance.save(failOnError: true)
+        try{
+            userInstance.save(flash: true)
+        }
+        catch(Exception exception) {
+            flash.message = "email格式错误"
+        }
         redirect(action: "updateInformationIndex")
     }
 

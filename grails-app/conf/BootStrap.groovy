@@ -65,7 +65,7 @@ class BootStrap {
                     def teaching = new Teaching(course:course,capability: 10,frequency: 3,assignmentTimes: 2,checkTimes: 6,time: 100)
                     teaching.save(failOnError: true)*/
 
-                    def backup = new Backup(dataBasePath: "D:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe",backupDelay: 0, autoBackupPeriod: 1.0)
+                    def backup = new Backup(dataBasePath: "C:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe",backupDelay: 0, autoBackupPeriod: 1.0)
                     backup.save(failOnError: true)
 
                     def privilegeResource = new PrivilegeResource(controllerEn: "course", controllerCn: "课程")

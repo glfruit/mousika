@@ -61,6 +61,7 @@ class Course {
 
     static hasOne = [gradeBook: GradeBook, forum: Forum]
 
+    static belongsTo = Teaching
 
     static constraints = {
         courseToken unique: true, blank: false

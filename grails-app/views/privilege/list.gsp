@@ -10,7 +10,7 @@
     </style>
     <g:javascript library="jquery" plugin="jquery"/>
     <script type="text/javascript">
-    alert("${privilegeResourceInstanceList}");
+
         function chooseAll(item)
         {
             var inputs = document.getElementsByTagName("input");
@@ -55,28 +55,35 @@
 <div id="rolePermissions" name="rolePermissions" style="display: none"></div>
 <div id="error" style="display: none"></div>
 
-<div id="list-privilege" class="content scaffold-show" role="main">
+<div id="list-privilege" class="content scaffold-show" role="system">
     <h4 style="border-bottom: 1px solid black;"><g:message
             code="privilege.list.label"/></h4>
     <div class="container">
-        <table>
-            <tr>
-                <td width="40px">
-                    <label class="control-label" for="roles">角色</label>
-                </td>
-                <td>
-                    <g:select name="roles" from="${com.sanwn.mousika.Role.list()}" value="${role.id}" optionKey="id" optionValue="name" onchange="${remoteFunction(action:'getRolePermission',update:[success:'rolePermissions', failure:'error'], params: '\'role=\' + this.value')}"/>
-                </td>
-            </tr>
-            <tr>
-                <td width="40px">
-                    <label class="control-label" for="roles">权限</label>
-                </td>
-                <td>
-                    <table>
-                        <g:if test="${privilegeResourceInstanceList}">
-                            <g:each in="${privilegeResourceInstanceList}" var="privilegeResourceInstance">
-                                <td>
+        <g:form action="save">
+            <table>
+                <tr>
+                    <td width="7%">
+                        <label class="control-label" for="role">角色</label>
+                    </td>
+                    <td width="93%">
+                        <g:select style="width:150px;" name="role" id="role" from="${com.sanwn.mousika.Role.list([sort:"id"])}" value="${role.id}" optionKey="id" optionValue="name" onchange="${remoteFunction(action:'getRolePermission',onSuccess:"setCheckBox()",update:[success:'rolePermissions', failure:'error'], params: '\'role=\' + this.value')}"/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <g:submitButton name="save" controller="privilege" action="save" value="保存"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="7%">
+                        <label class="control-label">权限</label>
+                    </td>
+                    <td width="93%">
+                        <table id="privilegeTable" >
+                            <g:if test="${privilegeResourceInstanceList}">
+                            <g:each in="${privilegeResourceInstanceList}" var="privilegeResourceInstance" status="i">
+                            <g:if test="${i==0}">
+                            <tr>
+                            </g:if>
+                                <g:if test="${i<=7}">
+                                <td style="vertical-align: top">
                                     <table class="table table-striped table-bordered table-condensed">
                                         <thead>
                                         <tr>
@@ -96,12 +103,79 @@
                                         </tbody>
                                     </table>
                                 </td>
+                                </g:if>
+                            <g:if test="${i==7}"> %{--如果小于7的时候会导致</tr>不能输出--}%
+                            </tr>
+                            </g:if>
+
+
+                            <g:if test="${i==8}">
+                            <tr>
+                            </g:if>
+                            <g:if test="${i<=15&&i>=8}">
+                                <td style="vertical-align: top">
+                                    <table class="table table-striped table-bordered table-condensed">
+                                        <thead>
+                                        <tr>
+                                            <th>
+                                                <input id="${privilegeResourceInstance.controllerEn}" type="checkbox" onclick='chooseChild(this)'> ${privilegeResourceInstance.controllerCn}
+                                            </th>
+                                        <tr>
+                                        </thead>
+                                        <tbody>
+                                        <g:each in="${privilegeResourceInstance.privilegeResourceMethods}" var="privilegeResourceMethod">
+                                            <tr>
+                                                <td>
+                                                    <input id="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" name="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" value="${privilegeResourceMethod.methodEn}"  type="checkbox" onclick="chooseParent(this)">${privilegeResourceMethod.methodCn}
+                                                </td>
+                                            </tr>
+                                        </g:each>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </g:if>
+                            <g:if test="${i==15}">
+                            </tr>
+                            </g:if>
+
+
+                            <g:if test="${i==16}">
+                                <tr>
+                            </g:if>
+                                <g:if test="${i<=23&&i>=16}">
+                                    <td style="vertical-align: top">
+                                        <table class="table table-striped table-bordered table-condensed">
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    <input id="${privilegeResourceInstance.controllerEn}" type="checkbox" onclick='chooseChild(this)'> ${privilegeResourceInstance.controllerCn}
+                                                </th>
+                                            <tr>
+                                            </thead>
+                                            <tbody>
+                                            <g:each in="${privilegeResourceInstance.privilegeResourceMethods}" var="privilegeResourceMethod">
+                                                <tr>
+                                                    <td>
+                                                        <input id="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" name="${privilegeResourceInstance.controllerEn}:${privilegeResourceMethod.methodEn}" value="${privilegeResourceMethod.methodEn}"  type="checkbox" onclick="chooseParent(this)">${privilegeResourceMethod.methodCn}
+                                                    </td>
+                                                </tr>
+                                            </g:each>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </g:if>
+                                <g:if test="${i==23}">
+                                    </tr>
+                                </g:if>
+
+
                             </g:each>
-                        </g:if>
-                    </table>
-                </td>
-            </tr>
-        </table>
+                            </g:if>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </g:form>
     </div>
     %{--<g:each in="${grailsApplication.controllerClasses}" var="c">
     <li>
@@ -169,30 +243,55 @@
 <script type="text/javascript">
 
     var permissions = "${permissions}";
-    initCheckBox(permissions);
+    document.getElementById("role").value="${role.id}";
+    initCheckBox(permissions)
+
+    /*require(["dojo/query",
+        "dojo/ready",
+        "dojo/_base/event",
+        "dojo/dom",
+        "dojo/dom-class",
+        "dojo/request",
+        "dojo/dom-construct",
+        "dojo/json",
+        "dojo/_base/array",
+        "bootstrap/Modal"], function (query, ready, event, dom, domClass, request, domConstruct, json, arrayUtil) {
+        initPrivilegeTable();
+        function initPrivilegeTable() {
+            domConstruct.empty(dom.byId('privilegeTable'));
+            request.get("${request.contextPath}/privilege/list", {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(function (response) {
+                  alert(json.parse(response));
+            });
+        }
+    })*/
 
     function setCheckBox(){
         var div = document.getElementById("rolePermissions");
         permissions = div.innerHTML;
+        alert(permissions)
         initCheckBox(permissions)
     }
 
-    function initCheckBox(permissions){
+    function initCheckBox(args){
 
-        permissions = permissions.replace("[","");
+        var permissions = args.replace("[","");
         permissions = permissions.replace("]","");
 
         var permissionsArray = permissions.split(", ");
         var controller;
         var methodAll;
-        var checkBoxs;
+        var inputs;
 
         //初始化为全未选
-        checkBoxs = document.getElementsByTagName("input");
-        for(var checkBoxsIndex=0; checkBoxsIndex < checkBoxs.length; checkBoxsIndex++){
-            if (checkBoxs[checkBoxsIndex].type == "checkbox")
+        inputs = document.getElementsByTagName("input");
+        for(var inputsIndex=0; inputsIndex < inputs.length; inputsIndex++){
+            if (inputs[inputsIndex].type == "checkbox")
             {
-                checkBoxs[checkBoxsIndex].checked = false;
+                inputs[inputsIndex].checked = false;
             }
         }
 
@@ -201,27 +300,27 @@
             methodAll = permissionsArray[permissionsArrayIndex].split(":")[1];
             //具有所有权限
             if(controller=="*"&&methodAll=="*"){
-                checkBoxs = document.getElementsByTagName("input");
-                for(var checkBoxsIndex=0; checkBoxsIndex < checkBoxs.length; checkBoxsIndex++){
-                    if (checkBoxs[checkBoxsIndex].type == "checkbox")
+                inputs = document.getElementsByTagName("input");
+                for(var inputsIndex=0; inputsIndex < inputs.length; inputsIndex++){
+                    if (inputs[inputsIndex].type == "checkbox")
                     {
-                        checkBoxs[checkBoxsIndex].checked = true;
+                        inputs[inputsIndex].checked = true;
                     }
                 }
             } else if(methodAll=="*"){
-                checkBoxs =  document.getElementsByTagName("input");;
-                for (var checkBoxsIndex=0; checkBoxsIndex < checkBoxs.length; checkBoxsIndex++){
-                    if (checkBoxs[checkBoxsIndex].type == "checkbox" && checkBoxs[checkBoxsIndex].name.indexOf(controller+":")==0 )
+                inputs =  document.getElementsByTagName("input");;
+                for (var inputsIndex=0; inputsIndex < inputs.length; inputsIndex++){
+                    if (inputs[inputsIndex].type == "checkbox" && inputs[inputsIndex].name.indexOf(controller+":")==0 )
                     {
-                        checkBoxs[checkBoxsIndex].checked = true;
+                        inputs[inputsIndex].checked = true;
                     }
                 }
             } else{
                 var methodAllArray = methodAll.split(",");
                 for(var methodAllArrayIndex=0;methodAllArrayIndex<methodAllArray.length;methodAllArrayIndex++){
-                    checkBoxs = document.getElementById(controller+":"+methodAllArray[methodAllArrayIndex]);
-                    if (checkBoxs!=undefined){
-                        checkBoxs.checked = true;
+                    inputs = document.getElementById(controller+":"+methodAllArray[methodAllArrayIndex]);
+                    if (inputs!=undefined){
+                        inputs.checked = true;
                     }
                 }
             }

@@ -20,6 +20,7 @@ class UserController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
+        params.sort = "username"
         withFormat {
             html {
                 [userInstanceList: User.list(params), userInstanceTotal: User.count()]
@@ -47,20 +48,19 @@ class UserController {
 
     def save() {
         def userInstance = new User(params)
-        userInstance.setPasswordHash( new Sha256Hash(userInstance.getUsername()).toHex())
+        userInstance.setPasswordHash(new Sha256Hash(userInstance.getUsername()).toHex())
         if (!userInstance.save(flush: true)) {
             render(view: "create", model: [userInstance: userInstance])
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'user.label', default: 'User'), userInstance.id])
+        flash.message = "用户创建成功"
         redirect(action: "show", id: userInstance.id)
     }
 
     def show(Long id) {
         def userInstance = User.get(id)
         if (!userInstance) {
-            flash.message = message(code: 'default.not.found.message', args: [message(code: 'user.label', default: 'User'), id])
             redirect(action: "list")
             return
         }
@@ -292,7 +292,12 @@ class UserController {
         def userInstance = User.findByUsername(subject.getPrincipal())
         userInstance.profile.email = params.get("email")
         userInstance.profile.interests = params.get("interests")
-        userInstance.save(failOnError: true)
+        try{
+            userInstance.save(flash: true)
+        }
+        catch(Exception exception) {
+            flash.message = "email格式错误"
+        }
         redirect(action: "updateInformationIndex")
     }
 
@@ -345,5 +350,18 @@ class UserController {
         response.setContentLength(photoByte.length)
         response.outputStream << photoByte
         response.outputStream.close()
+    }
+
+
+    def resetPassword(){
+        def userInstance = User.get(params.get("id"))
+        userInstance.setPasswordHash(new Sha256Hash(userInstance.getUsername()).toHex())
+        if (userInstance.save(flush: true)) {
+            flash.message = "重置密码成功"
+        }else{
+            flash.message = "重置密码失败"
+        }
+
+        redirect(action: "list")
     }
 }

@@ -1,7 +1,9 @@
 import com.sanwn.mousika.Backup
+import com.sanwn.mousika.Course
 import com.sanwn.mousika.PrivilegeResource
 import com.sanwn.mousika.PrivilegeResourceMethod
 import com.sanwn.mousika.Role
+import com.sanwn.mousika.Teaching
 import com.sanwn.mousika.User
 import org.apache.shiro.crypto.hash.Sha256Hash
 
@@ -57,7 +59,13 @@ class BootStrap {
                     user = new User(username: "test1", fullname: "彭启华", email: "ppller25@126.com", dateCreated: new Date(), passwordHash: new Sha256Hash("test").toHex())
                     user.save(failOnError: true)
 
-                    def backup = new Backup(dataBasePath: "D:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe",backupDelay: 0, autoBackupPeriod: 1.0)
+                    /*def course = new Course(code:"1234567",courseToken: "aaaaaaa",title: "计算机网络",description:"测试",startDate:new Date(),guestVisible:true,available: true,numberOfWeeks:18,deliveredBy:User.findByUsername("系统管理员"))
+                    course.save(failOnError: true)
+
+                    def teaching = new Teaching(course:course,capability: 10,frequency: 3,assignmentTimes: 2,checkTimes: 6,time: 100)
+                    teaching.save(failOnError: true)*/
+
+                    def backup = new Backup(dataBasePath: "C:/Program Files/PostgreSQL/9.1/bin/pg_dump.exe",backupDelay: 0, autoBackupPeriod: 1.0)
                     backup.save(failOnError: true)
 
                     def privilegeResource = new PrivilegeResource(controllerEn: "course", controllerCn: "课程")
@@ -79,6 +87,60 @@ class BootStrap {
                     privilegeResourceMethod2.save(failOnError: true)
                     privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
                     privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod2)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "student", controllerCn: "学生")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "list", methodCn:"列表")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "fileResource", controllerCn: "文件资源")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "list", methodCn:"列表")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "backup", controllerCn: "备份")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "list", methodCn:"列表")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "assignment", controllerCn: "作业")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "save", methodCn:"保存")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "auth", controllerCn: "认证")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "signIn", methodCn:"登录")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "forum", controllerCn: "论坛")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "show", methodCn:"显示")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "gradeBook", controllerCn: "成绩")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "show", methodCn:"显示")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "resource", controllerCn: "资源")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "save", methodCn:"保存")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
+                    privilegeResource.save(failOnError: true)
+
+                    privilegeResource = new PrivilegeResource(controllerEn: "unitItem", controllerCn: "课程单元")
+                    privilegeResourceMethod1 = new PrivilegeResourceMethod(methodEn: "copy", methodCn:"复制")
+                    privilegeResourceMethod1.save(failOnError: true)
+                    privilegeResource.addToPrivilegeResourceMethods(privilegeResourceMethod1)
                     privilegeResource.save(failOnError: true)
                 }
             }

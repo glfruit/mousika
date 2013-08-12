@@ -3,16 +3,29 @@
 <html>
     <head>
         <meta name="layout" content="course">
-        <mousika:editor query="[courseId:course.id]"/>
-        <title><g:message code="assignment.create.label"/></title>
+        <mousika:editor query="[courseId: course.id]"/>
+        <title><g:message code="assignment.edit.label"/></title>
     </head>
 
     <body>
-        <div id="create-assignment" class="content scaffold-create" role="main">
-            <h4 style="padding-top: 20px;">
-                <a href="${createLink(controller: 'course', action: 'show', id: params.courseId)}">${course.title}</a>->
-            <g:message code="assignment.create.label"/>
-            </h4>
+        <div id="edit-assignment" class="content scaffold-create" role="main">
+            <ul class="breadcrumb" style="margin-top: 20px;">
+                <li>
+                    <a href="${createLink(controller: 'course', action: 'show', id: params.courseId)}">
+                        ${course.title}
+                        <span class="divider">/</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="${createLink(controller: 'courseUnit', action: 'show', id: params.unitId)}">
+                        ${unit.title}
+                        <span class="divider">/</span>
+                    </a>
+                </li>
+                <li class="active">
+                    ${assignment.title}
+                </li>
+            </ul>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -24,15 +37,15 @@
                     </g:eachError>
                 </ul>
             </g:hasErrors>
-            <g:form action="save" class="form-horizontal">
+            <g:form action="update" class="form-horizontal">
                 <fieldset class="form">
                     <f:with bean="assignment">
                         <g:hiddenField name="courseId" id="courseId"
-                                       value="${courseId}"/>
-                        <g:hiddenField name="sectionSeq" id="sectionSeq"
-                                       value="${sectionSeq}"/>
-                        <g:hiddenField name="returnToCourse" id="returnToCourse"
-                                       value="false"/>
+                                       value="${course.id}"/>
+                        <g:hiddenField name="id" value="${assignment.id}"/>
+                        <g:hiddenField name="unitId" value="${params.unitId}"/>
+                        <g:hiddenField name="version"
+                                       value="${assignment.version}"/>
                         <f:field property="title" required="true"/>
                         <f:field property="description" required="true"/>
                         <f:field property="style" required="true"/>
@@ -42,14 +55,10 @@
                     </f:with>
                 </fieldset>
                 <fieldset class="buttons">
-                    <g:submitButton id="createAndShowBtn" name="create"
-                                    class="btn"
-                                    value="${message(code: 'button.assignment.create.label', default: 'Create')}"/>
-                    <g:submitButton id="createAndReturnBtn"
-                                    name="createAndReturn" class="btn"
-                                    value="创建并返回到课程"/>
+                    <g:submitButton name="create" class="btn btn-primary"
+                                    value="${message(code: 'default.button.update.label', default: 'Create')}"/>
                     <a class="btn"
-                       href="${createLink(controller: 'course', action: 'show', id: courseId)}">${message(code: 'default.cancel.label')}</a>
+                       href="${createLink(controller: 'course', action: 'show', id: course.id)}">${message(code: 'default.cancel.label')}</a>
                 </fieldset>
             </g:form>
             <script>

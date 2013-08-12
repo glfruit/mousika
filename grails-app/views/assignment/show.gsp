@@ -9,6 +9,23 @@
 
     <body>
         <div id="show-assignment" class="content scaffold-create" role="main">
+            <ul class="breadcrumb" style="margin-top: 30px;">
+                <li>
+                    <a href="${createLink(controller: 'course', action: 'show', id: params.courseId)}">
+                        ${course.title}
+                        <span class="divider">/</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="${createLink(controller: 'courseUnit', action: 'show', id: params.unitId)}">
+                        ${unit.title}
+                        <span class="divider">/</span>
+                    </a>
+                </li>
+                <li class="active">
+                    ${assignment.title}
+                </li>
+            </ul>
             <h3 style="text-align: center;">${assignment?.title}</h3>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>

@@ -184,11 +184,11 @@
                 </g:if>
                 <g:else>
                     <g:set var="fileType"
-                           value="${file.getName().substring(file.getName().lastIndexOf('.') + 1)}"/>
+                           value="${file.getName().substring(file.getName().lastIndexOf('.') + 1).toLowerCase()}"/>
                     <g:if test="${com.sanwn.mousika.FileManagerController.IMAGES[fileType]}">
                         <div class="thumbnail" style="text-align: center;">
                             <g:set var="imgPath"
-                                   value="${org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator('courseFiles/' + course.courseToken + '/' + currentPath)}"/>
+                                   value="${org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator('courseFiles/' + course.courseToken + '/repo/' + currentPath)}"/>
                             <g:img dir="${imgPath}"
                                    class="file-item"
                                    file="${file.name}"></g:img>
@@ -365,12 +365,15 @@
             else
                 fileLink = '<a href="' + href + '">' + filename + '</a>';
             var imgTarget = $('.mce-img_' + track, parent.document);
+            var mediaTarget = $('.mce-video3_' + track, parent.document);
             if (imgTarget.length > 0) {
                 imgTarget.children('input').val(href);
+            } else if (mediaTarget.length > 0) {
+                mediaTarget.val(href);
             } else {
                 $(target).contents().find('#tinymce').append(fileLink);
             }
-            $('.mce-filemanager',parent.document).find('.mce-close').trigger('click');
+            $('.mce-filemanager', parent.document).find('.mce-close').trigger('click');
         });
     });
 </script>

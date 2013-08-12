@@ -25,7 +25,11 @@ class FileManagerController {
 
     private def getCourseFileRepo(course) {
         def path = request.servletContext.getRealPath(".")
-        return new File(path, "courseFiles/${course.courseToken}")
+        def fileRepo = new File(path, "courseFiles/${course.courseToken}/repo")
+        if (!fileRepo.exists()) {
+            FileUtils.forceMkdir(fileRepo)
+        }
+        return fileRepo
     }
 
     def index() {
@@ -89,14 +93,17 @@ class FileManagerController {
         def fileRepo = getCourseFileRepo(course)
         def filepath = FilenameUtils.normalizeNoEndSeparator(params.currentPath) + '/' + params.filename
         def file = new File(fileRepo, filepath)
-        response.setContentType("application/octet-stream")
+        def fileType = file.name.substring(file.name.lastIndexOf('.') + 1)
+        def contentType = FileResource.FILE_TYPES[fileType]
+        contentType = contentType ?: 'application/octet-stream'
+        response.setContentType(contentType)
         response.setContentLength(file.size().toInteger())
         response.setCharacterEncoding("UTF-8")
         def filename = new String(file.name.getBytes("UTF-8"), "ISO-8859-1")
         filename = URLEncoder.encode(filename, "UTF-8")
         response.setHeader("Content-disposition", "attachment;filename=${filename}")
         response.outputStream << file.newInputStream()
-        response.outputStream.flush()
+//        response.outputStream.flush()
     }
 
     def remove() {

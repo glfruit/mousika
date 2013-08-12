@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta name="layout" content="course">
-        <mousika:editor/>
+        <mousika:editor query="[courseId: params.courseId]"/>
         <title><g:message code="fileResource.button.create.label"/></title>
     </head>
 

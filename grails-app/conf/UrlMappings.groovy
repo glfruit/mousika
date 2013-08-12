@@ -14,15 +14,14 @@ class UrlMappings {
                 id(matches: /\d+/)
             }
         }
-        "/course/$courseId/forum/$id"
-                {
-                    controller: 'forum'
-                    action: 'show'
-                    constraints {
-                        courseId(matches: /\d+/)
-                        id(matches: /\d+/)
-                    }
-                }
+        "/course/$courseId/forum/$id" {
+            controller: 'forum'
+            action: 'show'
+            constraints {
+                courseId(matches: /\d+/)
+                id(matches: /\d+/)
+            }
+        }
         "/course/$courseId/forum/$forumId/post/$action/$id?"(controller: 'post')
 
         name mousika: "/course/$courseId/unit/$unitId/$controller/$action?/$id?" {

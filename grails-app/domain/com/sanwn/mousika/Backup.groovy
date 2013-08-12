@@ -17,6 +17,6 @@ class Backup {
     float autoBackupPeriod
 
     static mapping = {
-        table 'backup'
+        table 'mousika_backups'
     }
 }

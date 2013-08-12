@@ -299,6 +299,7 @@
                                 }
                                 //remove unit or item
                                 domConstruct.destroy(removed);
+                                query("#delConfirm").hide();
                             });
                 });
                 define.amd.jQuery = true;

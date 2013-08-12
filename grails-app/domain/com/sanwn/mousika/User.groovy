@@ -28,7 +28,7 @@ class User implements Comparable {
     }
 
     static mapping = {
-        table 'mousika_user'
+        table 'mousika_users'
     }
 
     int compareTo(obj) {

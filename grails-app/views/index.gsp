@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="course"/>
+        <meta name="layout" content="dojo"/>
     </head>
 
     <body>
@@ -17,6 +17,18 @@
                     class="btn create"><g:message
                     code="course.create.label"/></g:link>
         </shiro:hasPermission>
+        <g:form style="float: right;" class="form-search"
+                url="[controller: 'course', action: 'search']" method='get'>
+            <g:textField name="q" value="${params.q}" size="50"
+                         class="input-medium search-query"/>
+            <button type="submit" class="btn"><g:message
+                    code="course.search.label"/></button>
+        </g:form>
+    %{--<g:form url='[controller: "course", action: "search"]'--}%
+    %{--id="searchableForm" name="searchableForm" method="get">--}%
+    %{--<g:textField name="q" value="${params.q}" size="50"/> <input--}%
+    %{--type="submit" value="Search"/>--}%
+    %{--</g:form>--}%
         <script>
             require(['dojo/request', 'dojo/domReady!'], function (request) {
                 request.get("${createLink(controller: 'course', action: 'listPublic')}", {

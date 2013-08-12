@@ -52,7 +52,7 @@ class CourseController {
             courses = Course.findAllByGuestVisible(true, params)
         withFormat {
             html {
-                courses: courses
+                [courses: courses]
             }
             json {
                 def results = courses.collect { course ->

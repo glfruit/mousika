@@ -319,8 +319,8 @@ class StudentController {
         if ("学生" == role.name) {
             user.addToPermissions("course:show:${courseId}")
         }
-        def member = new CourseMember(user: user, role: role)
-        course.addToCourseMembers(member)
+//        def member = new CourseMember(user: user, role: role)
+//        course.addToCourseMembers(member)
         course.save(flush: true)
         render(contentType: "text/json") {  //TODO: handle failure
             [success: !course.hasErrors()]

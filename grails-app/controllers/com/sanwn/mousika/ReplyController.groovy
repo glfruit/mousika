@@ -16,6 +16,11 @@ class ReplyController {
         [reply: new Reply(params), post: post]
     }
 
+    private def getCourseForumRepo(String courseToken) {
+        def path = request.servletContext.getRealPath(".")
+        return new File(path, "forumFiles/${courseToken}")
+    }
+
     def save() {
         def post = Post.get(params.postId)
         def reply = new Reply(params);
@@ -31,7 +36,7 @@ class ReplyController {
             if (attachmentFile.size != 0) {
                 reply.attachment = attachmentFile.originalFilename
                 def course = post.forum.course
-                def fileRepo = new File(".", "courseFiles/${course.courseToken}/forum/${post.id}/")
+                def fileRepo = getCourseForumRepo(course.courseToken)
                 if (!fileRepo.exists()) {
                     FileUtils.forceMkdir(fileRepo)
                 }
@@ -55,7 +60,7 @@ class ReplyController {
         def course = Course.where {
             id == params.courseId
         }.find()
-        def file = new File(".", "courseFiles/${course.courseToken}/forum/${params.postId}/${id}")
+        def file = getCourseForumRepo(course.courseToken)
         response.setContentType("application/octet-stream")
         response.setContentLength(file.size().toInteger())
         def filename = new String(id.getBytes("UTF-8"), "ISO-8859-1")

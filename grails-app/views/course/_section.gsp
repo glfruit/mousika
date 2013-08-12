@@ -45,18 +45,19 @@
                             <a href="${request.contextPath}/course/${course.id}/forum/${item.content.id}">${item.title}</a>
                         </g:elseif>
                         <g:elseif test="${item.content.type != 'label'}">
-                            <g:if test="${item.content.type == 'fileResource'}">
-                                <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id,
-                                        params: ['type': item.content.fileType])}"
-                                   class="fileType">
-                                    ${item.title}
-                                </a>
-                            </g:if>
-                            <g:else>
-                                <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id)}">
-                                    ${item.title}
-                                </a>
-                            </g:else>
+                        %{--<g:if test="${item.content.type == 'fileResource'}">--}%
+                        %{--<a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id,--}%
+                        %{--params: ['type': item.content.fileType])}"--}%
+                        %{--class="fileType">--}%
+                        %{--${item.title}--}%
+                        %{--</a>--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                            <a href="${createLink(mapping: 'mousika', controller: item.content.type, action: 'show', id: item.content.id,
+                                    params: [courseId: course.id, unitId: section.id])}">
+                                ${item.title}
+                            </a>
+                        %{--</g:else>--}%
                             <span class="resource-link-details"></span>
                         </g:elseif>
                         <g:else>
@@ -79,12 +80,6 @@
                             </a>
                             <a href="#" rel="tooltip" title="隐藏或显示内容">
                                 <i class="${item.visible ? 'icon-eye-open' : 'icon-eye-close'} ${courseSectionId}item${s}"></i>
-                            </a>
-                            <a id="removeUnit${section.sequence}Item${item.sequence}"
-                               class="remove-unit-item" href="#delConfirm"
-                               role="button" data-toggle="modal">
-                                <i id="icon-removeUnit${section.sequence}Item${item.sequence}"
-                                   class="icon-remove"></i>
                             </a>
                         </span>
                     </div>

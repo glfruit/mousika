@@ -19,7 +19,12 @@ class FileResourceController {
     }
 
     def create() {
-        [fileResourceInstance: new FileResource(params), sectionSeq: params.sectionSeq, courseId: params.courseId,course:Course.get(params.courseId)]
+        [fileResourceInstance: new FileResource(params), sectionSeq: params.sectionSeq, courseId: params.courseId, course: Course.get(params.courseId)]
+    }
+
+    private def getFileRepo(String courseToken) {
+        def path = request.servletContext.getRealPath(".")
+        return new File(path, "courseFiles/${courseToken}")
     }
 
     def upload() {
@@ -28,7 +33,7 @@ class FileResourceController {
         def course = Course.get(params.courseId)
         def uploadedFile = request.getFile('qqfile')
         def filename = uploadedFile.originalFilename
-        def fileRepo = new File(".", "courseFiles/${course.courseToken}")
+        def fileRepo = getFileRepo(course.courseToken)
         if (!fileRepo.exists()) {
             FileUtils.forceMkdir(fileRepo)
         }
@@ -105,7 +110,7 @@ class FileResourceController {
             return
         }
 
-        [fileResourceInstance: fileResourceInstance]
+        [fileResourceInstance: fileResourceInstance, course: Course.get(params.courseId)]
     }
 
     def update(Long id, Long version) {
@@ -121,15 +126,25 @@ class FileResourceController {
                 fileResourceInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
                         [message(code: 'fileResource.label', default: 'FileResource')] as Object[],
                         "Another user has updated this FileResource while you were editing")
-                render(view: "edit", model: [fileResourceInstance: fileResourceInstance])
+                render(view: "edit", model: [fileResourceInstance: fileResourceInstance, course: Course.get(params.courseId)])
                 return
             }
         }
 
         fileResourceInstance.properties = params
+        def uploadedFile = request.getFile('qqfile')
+        def fileRepo = getFileRepo(Course.get(params.courseId).courseToken)
+        def filename = uploadedFile.originalFilename
+        def updatedFile = new File(fileRepo, filename)
+        uploadedFile.transferTo(updatedFile)
+        def oldFile = new File(fileResourceInstance.filePath)
+        oldFile.delete()
+        fileResourceInstance.filePath = updatedFile.getCanonicalPath()
+        def pos = filename.lastIndexOf('.')
+        fileResourceInstance.fileType = pos == -1 ? "*" : filename.substring(pos + 1)
 
         if (!fileResourceInstance.save(flush: true)) {
-            render(view: "edit", model: [fileResourceInstance: fileResourceInstance])
+            render(view: "edit", model: [fileResourceInstance: fileResourceInstance, course: Course.get(params.courseId)])
             return
         }
 

@@ -55,7 +55,7 @@ class PageController {
             return
         }
 
-        [pageInstance: pageInstance]
+        [pageInstance: pageInstance, course: Course.get(params.courseId), unit: CourseUnit.get(params.unitId)]
     }
 
     def edit(Long id) {

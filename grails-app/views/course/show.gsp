@@ -18,7 +18,7 @@
 </head>
 
 <body>
-<h4 style="border-bottom: 1px solid #000;color: #777777;">
+<h4 style="border-bottom: 1px solid #DEDEDE;color: #777777;padding-bottom: 5px;padding-top: 20px;">
     ${courseInstance?.title}
 </h4>
 <g:if test="${flash.message}">
@@ -200,7 +200,7 @@
         <h4 id="myModalLabel">添加活动或资源</h4>
     </div>
 
-    <g:form class="form-horizontal" action="addResource">
+    <g:form class="form-horizontal" controller="course" action="addResource">
         <div class="modal-body">
             <input type="hidden" id="sectionSeq" name="sectionSeq"/>
             <input type="hidden" id="courseId" name="courseId"

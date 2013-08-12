@@ -21,6 +21,7 @@ class CourseUnit {
     }
 
     static mapping = {
+        table 'mousika_course_units'
         sort sequence: 'asc'
         items sort: "sequence", order: "asc"
     }

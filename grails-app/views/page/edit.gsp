@@ -3,8 +3,8 @@
 <html>
     <head>
         <meta name="layout" content="course">
-        <mousika:editor/>
-        <title>创建页面</title>
+        <mousika:editor query="[courseId: course.id]"/>
+        <title><g:message code="page.edit.label"/></title>
     </head>
 
     <body>

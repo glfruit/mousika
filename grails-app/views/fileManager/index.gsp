@@ -107,6 +107,7 @@
                         class="icon-home"></i></a>
                 <span class="divider">/</span>
             </li>
+            <input id="editor_track" type="hidden" value="${editor}"/>
             <g:set var="normalizedPath"
                    value="${org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator(currentPath)}"/>
             <input class="norm-path" type="hidden" name="normalizedPath"
@@ -133,8 +134,9 @@
             </g:if>
             <li class="pull-right">
                 <a id="refresher"
-                   href="${request.contextPath}/fileManager?courseId=${course.id}&currentPath=${FilenameUtils.normalizeNoEndSeparator(currentPath)}"><i
-                        class="icon-refresh"></i></a>
+                   href="${request.contextPath}/fileManager?courseId=${course.id}&currentPath=${FilenameUtils.normalizeNoEndSeparator(currentPath)}">
+                    <i class="icon-refresh"></i>
+                </a>
             </li>
         </ul>
     </div>
@@ -185,22 +187,28 @@
                            value="${file.getName().substring(file.getName().lastIndexOf('.') + 1)}"/>
                     <g:if test="${com.sanwn.mousika.FileManagerController.IMAGES[fileType]}">
                         <div class="thumbnail" style="text-align: center;">
-                            <a rel="tooltip"
-                               title="点击查看大图"
-                               href="${resource(dir: 'courseFiles/' + course.courseToken, file: file.name)}"
-                               data-dojo-type="dojox.image.Lightbox">
-                                <g:img dir="courseFiles/${course.courseToken}"
-                                       class="file-item"
-                                       file="${file.name}"></g:img>
-                            </a>
+                            <g:set var="imgPath"
+                                   value="${org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator('courseFiles/' + course.courseToken + '/' + currentPath)}"/>
+                            <g:img dir="${imgPath}"
+                                   class="file-item"
+                                   file="${file.name}"></g:img>
 
                             <div class="box">
                                 <p rel="tooltip" title="${file.getName()}"
-                                   class="file-item-title">${file.getName()}</p>
+                                   class="file-item-title">
+                                    ${file.getName()}
+                                </p>
                             </div>
 
                             <div class="commandsDiv">
                                 <ul class="item-command">
+                                    <li rel="tooltip" title="查看大图">
+                                        <a rel="tooltip"
+                                           title="点击查看大图"
+                                           href="${resource(dir: imgPath, file: file.name)}"
+                                           data-dojo-type="dojox.image.Lightbox"><i
+                                                class="icon-zoom-in"></i></a>
+                                    </li>
                                     <li rel="tooltip" title="重命名">
                                         <a href="#">
                                             <i class="icon-pencil"></i>
@@ -261,7 +269,7 @@
 </div>
 
 <script type="text/javascript">
-    require(['jquery', 'dropzone', 'dojox/image/Lightbox','dojo/domReady!'], function ($, Dropzone) {
+    require(['jquery', 'dropzone', 'dojo/query', 'dojox/image/Lightbox', 'dojo/domReady!'], function ($, Dropzone, query) {
         Dropzone.options.uploadForm = {
             dictDefaultMessage: '将文件拖至此处上传',
             dictInvalidFileType: "无效的文件类型",
@@ -338,6 +346,31 @@
                             }
                         });
             }
+        });
+        $('.file-item').click(function (e) {
+            var isDirectory = $(this).parents('.directory-link').length;
+            if (isDirectory) return;
+
+            e.preventDefault();
+            var images = {jpg: true, jpeg: true, gif: true, tif: true, png: true, bmp: true};
+            var track = $('#editor_track').val();
+            var target = $('#' + track + '_ifr', parent.document);
+            var filename = $(this).siblings('.box').children('p').text().trim();
+            var href = "${request.contextPath}/fileManager/download?courseId=${course.id}&currentPath=${FilenameUtils.normalizeNoEndSeparator(currentPath)}";
+            href = href + "&filename=" + filename;
+            var fileLink;
+            var fileType = filename.substring(filename.lastIndexOf('.') + 1);
+            if (images[fileType])
+                fileLink = '<img src="' + href + '"/>';
+            else
+                fileLink = '<a href="' + href + '">' + filename + '</a>';
+            var imgTarget = $('.mce-img_' + track, parent.document);
+            if (imgTarget.length > 0) {
+                imgTarget.children('input').val(href);
+            } else {
+                $(target).contents().find('#tinymce').append(fileLink);
+            }
+            $('.mce-filemanager',parent.document).find('.mce-close').trigger('click');
         });
     });
 </script>

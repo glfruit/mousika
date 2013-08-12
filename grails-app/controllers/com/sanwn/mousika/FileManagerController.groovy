@@ -41,7 +41,7 @@ class FileManagerController {
         def files = targetDirectory.listFiles({ file ->
             !file.isHidden()
         } as FileFilter)
-        [files: files, course: course, currentPath: currentPath]
+        [files: files, course: course, currentPath: currentPath, editor: params.editor]
     }
 
     def newFolder() {
@@ -52,7 +52,7 @@ class FileManagerController {
             render contentType: 'application/json', text: '{"success":false,"error":"已存在同名文件夹"}'
             return
         }
-        FileUtils.forceMkdir(new File(fileRepo, params.folder))
+        FileUtils.forceMkdir(new File(fileRepo, newFolderPath))
         render contentType: 'application/json', text: '{"success":true,"currentPath":"' + newFolderPath + '"}'
     }
 

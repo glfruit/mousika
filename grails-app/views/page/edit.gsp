@@ -29,6 +29,8 @@
                     <f:with bean="pageInstance">
                         <g:hiddenField name="courseId" id="courseId"
                                        value="${course.id}"/>
+                        <g:hiddenField name="unitId" id="unitId"
+                                       value="${params.unitId}"/>
                         <g:hiddenField name="id" id="id"
                                        value="${pageInstance?.id}"/>
                         <g:hiddenField name="version"
@@ -47,7 +49,7 @@
                 </fieldset>
             </g:form>
             <script>
-                require(['dojo/query', 'dojo/dom-attr'], function (query, domAttr) {
+                require(['dojo/query', 'dojo/dom-attr', 'jquery'], function (query, domAttr) {
                     query('#createAndShowBtn').on('click', function () {
                         domAttr.set(query('#returnToCourse')[0], 'value', 'false');
                     });

@@ -96,7 +96,7 @@ class PageController {
         }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'page.label', default: 'Page'), pageInstance.id])
-        redirect(action: "show", id: pageInstance.id)
+        redirect(action: "show", id: pageInstance.id, params: [courseId: course.id, unitId: params.unitId])
     }
 
     def delete(Long id) {

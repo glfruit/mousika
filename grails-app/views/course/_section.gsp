@@ -74,7 +74,8 @@
                                style="cursor: move;">
                                 <i class="icon-move dojoDndHandle"></i>
                             </a>
-                            <a href="${createLink(controller: item.content.type, action: 'edit', id: item.content.id, params: [courseId: course.id])}"
+                            <a href="${createLink(mapping: 'mousika', controller: item.content.type, action: 'edit', id: item.content.id,
+                                    params: [courseId: course.id, unitId: section.id])}"
                                rel="tooltip" title="编辑内容">
                                 <i class="icon-edit"></i>
                             </a>

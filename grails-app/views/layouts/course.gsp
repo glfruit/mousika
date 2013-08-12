@@ -5,6 +5,9 @@
 <!--[if IE 9 ]>    <html lang="zh-CN" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="zh-CN" class="no-js"><!--<![endif]-->
 <head>
+    <g:javascript library="jquery" plugin="jquery"/>
+    <script src="/js/jquery/jquery-1.9.1.min.js"></script>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><g:layoutTitle
@@ -131,14 +134,13 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div class="span2">
-                <shiro:hasAnyRole in="['学生']">
-                <h4 style="border-bottom: 1px solid #000;color: #777777;">
-                    <a class="brand" href="${request.contextPath}/student"><g:message
-                            code="label.app.menu.nav"/></a>
-                    %{--<g:link action="student"><g:message code="label.app.menu.nav"/></g:link>--}%
-                </h4>
-                </shiro:hasAnyRole>
-                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
+                %{--<shiro:hasAnyRole in="['学生']">--}%
+                %{--<h4 style="border-bottom: 1px solid #000;color: #777777;">--}%
+                    %{--<a class="brand" href="${request.contextPath}/student"><g:message--}%
+                            %{--code="label.app.menu.nav"/></a>--}%
+                %{--</h4>--}%
+                %{--</shiro:hasAnyRole>--}%
+                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人','学生']">
                 <div id="nav-panel"
                      data-dojo-type="dijit/TitlePane"
                      data-dojo-props="title: '导航'"
@@ -147,7 +149,12 @@
                         <li>
                             <i class="icon-home"></i>
                             <span style="padding-left: 5px;">
-                                <a href="${request.contextPath}">首页</a>
+                                <shiro:hasRole name="学生">
+                                    <a href="${request.contextPath}/student">首页</a>
+                                </shiro:hasRole>
+                                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
+                                    <a href="${request.contextPath}">首页</a>
+                                </shiro:hasAnyRole>
                             </span>
                         </li>
                         <li>
@@ -231,19 +238,49 @@
                 </shiro:hasRole>
                 <shiro:hasRole name="学生">
                     <div data-dojo-type="dijit/TitlePane"
-                         data-dojo-props="title: '我的课程1'"
+                         data-dojo-props="title: '我的课程'"
                          style="padding-bottom: 10px;">
-                        <g:if test="${myCourses}">
-                            <g:each in="${myCourses}" status="i" var="course">
-                                <p>
-                                    <g:link action="show" id="${course.id}"> ${course.title}</g:link>
-                                </p>
+                        <div id="myCourseList"></div>
+                        <script type="text/javascript">
+                            jQuery(function(){
+                                $.ajax("/mousika/student/myCourseList",{
+                                    type: "POST",
+//                                        data: params,
+                                    async:false,
+                                    beforeSend: function(XMLHttpRequest){
+                                        //ShowLoading();
+                                    },
+                                    success: function(data, textStatus){
+                                        var myCourseList = (data);
+                                        var linkList = "";
+                                        if(myCourseList!=null)
+                                            for(var i=0;i<myCourseList.length;i++){
+                                                linkList = linkList+"<p><a href='${request.contextPath}/course/show/"+(myCourseList[i].id)+"'>"+(myCourseList[i].title)+"</a></p>";
+                                            }
+                                        $("#myCourseList").html(linkList);
+                                    },
+                                    complete: function(XMLHttpRequest, textStatus){
+                                        //HideLoading();
+                                        //alert(12);
+                                    },
+                                    error: function(data){
+                                        //请求出错处理
+                                        //alert(13);
+                                    }
+                                });
+                            });
+                        </script>
+                        %{--<g:if test="${myCourses}">--}%
+                            %{--<g:each in="${myCourses}" status="i" var="course">--}%
+                                %{--<p>--}%
+                                    %{--<g:link action="show" id="${course.id}"> ${course.title}</g:link>--}%
+                                %{--</p>--}%
 
-                            </g:each>
-                        </g:if>
-                        <g:else>
-                            没有任何课程
-                        </g:else>
+                            %{--</g:each>--}%
+                        %{--</g:if>--}%
+                        %{--<g:else>--}%
+                            %{--没有任何课程--}%
+                        %{--</g:else>--}%
                     </div>
                     <div data-dojo-type="dijit/TitlePane"
                          data-dojo-props="title: '我的活动'"
@@ -262,7 +299,8 @@
                             <g:include view="shareto.gsp"></g:include>&nbsp;
                         </p>
                     </div>
-                </shiro:hasRole>                <div data-dojo-type="dijit/TitlePane"
+                </shiro:hasRole>
+                <div data-dojo-type="dijit/TitlePane"
                      data-dojo-props="title: '我的个人文件'"
                      style="padding-bottom: 10px;">
                     <p>

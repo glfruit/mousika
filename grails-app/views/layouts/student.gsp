@@ -1,10 +1,14 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
+
 <!--[if lt IE 7 ]> <html lang="zh-CN" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="zh-CN" class="no-js ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html lang="zh-CN" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]>    <html lang="zh-CN" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="zh-CN" class="no-js"><!--<![endif]-->
 <head>
+    <g:javascript library="jquery" plugin="jquery"/>
+    <script src="/js/jquery/jquery-1.9.1.min.js"></script>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><g:layoutTitle
@@ -118,7 +122,38 @@
                         <div data-dojo-type="dijit/TitlePane"
                              data-dojo-props="title: '我的课程'"
                              style="padding-bottom: 10px;">
-                                <g:if test="${myCourses}">
+                            <div id="myCourseList"></div>
+                            <script type="text/javascript">
+                                jQuery(function(){
+                                    $.ajax("/mousika/student/myCourseList",{
+                                        type: "POST",
+//                                        data: params,
+                                        async:false,
+                                        beforeSend: function(XMLHttpRequest){
+                                            //ShowLoading();
+                                        },
+                                        success: function(data, textStatus){
+                                            var myCourseList = (data);
+                                            var linkList = "";
+                                            if(myCourseList!=null)
+                                            for(var i=0;i<myCourseList.length;i++){
+                                                linkList = linkList+"<p><a href='show/"+(myCourseList[i].id)+"'>"+(myCourseList[i].title)+"</a></p>";
+                                            }
+                                            $("#myCourseList").html(linkList);
+                                        },
+                                        complete: function(XMLHttpRequest, textStatus){
+                                            //HideLoading();
+                                            //alert(12);
+                                        },
+                                        error: function(data){
+                                            //请求出错处理
+                                            //alert(13);
+                                        }
+                                    });
+                                });
+                            </script>
+
+                            <g:if test="${myCourses}">
                                     <g:each in="${myCourses}" status="i" var="course">
                                         <p>
                                             <g:link action="show" id="${course.id}"> ${course.title}</g:link>
@@ -145,7 +180,7 @@
                             </p>
                         </div>
                         <div data-dojo-type="dijit/TitlePane"
-                             data-dojo-props="title: '我的个人文件'"
+                             data-dojo-props="title: '个人信息'"
                              style="padding-bottom: 10px;">
                             <p>
                                 <g:if test="${fileRepository?.items?.size() > 0}">
@@ -155,8 +190,30 @@
                                     %{--没有任何文件--}%
                                 </g:else>
                             </p>
-                            <g:link controller="student" action="fileList">管理我的个人文件</g:link>
                             %{--<a class="btn"  href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>--}%
+                            <p>
+                                <g:link controller="user" action="updateInformationIndex">编辑个人信息</g:link>
+                            </p>
+                            <P>
+                            <g:link controller="user" action="updatePasswordIndex">更改密码</g:link>
+                            </p>
+                            <P>
+                            <g:link controller="user" action="uploadPhotoIndex">上传头像</g:link>
+                            </p>
+                            <P>
+                                <g:link controller="student" action="fileList">管理个人文件</g:link>
+                            </p>
+                            %{--<p>--}%
+                                %{--<i class="icon-user"></i>--}%
+                                %{--<a href="${createLink(controller: 'user', action: 'updateInformationIndex')}">编辑个人信息</a>--}%
+                            %{--</p>--}%
+                            %{--<p>--}%
+                                %{--<i class="icon-lock"></i>--}%
+                                %{--<a href="${createLink(controller: 'user', action: 'updatePasswordIndex')}">更改密码</a>--}%
+                            %{--</p>--}%
+                            %{--<p>--}%
+                                %{--<i class="icon-picture"></i>--}%
+                                %{--<a href="${createLink(controller: 'user', action: 'uploadPhotoIndex')}">上传头像</a>--}%
                         </div>
                     </shiro:hasRole>
                 </g:if>

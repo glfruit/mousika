@@ -58,7 +58,15 @@
                                     ${item.title}
                                 </a>
                             </g:if>
-                            <g:else>
+                            <g:elseif test="${item.content.type == 'assignment'}">
+                                <shiro:hasRole name="学生">
+                                    <a href="${createLink(controller: 'student', action: 'resource', id: item.content.id)}">${item.title}</a>
+                                </shiro:hasRole>
+                                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
+                                    <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id)}">${item.title}</a>
+                                </shiro:hasAnyRole>
+                                <span class="resource-link-details"></span>
+                            </g:elseif>                            <g:else>
                                 <a href="${createLink(controller: item.content.type, action: 'show', id: item.content.id)}">
                                     ${item.title}
                                 </a>
@@ -92,7 +100,9 @@
            class="addContent"
            style="text-align: right;margin-right: 5px;">
             <span>
+                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
                 <i class="icon-plus"></i> 添加一个活动或资源
+                </shiro:hasAnyRole>
             </span>
         </a>
     </div>

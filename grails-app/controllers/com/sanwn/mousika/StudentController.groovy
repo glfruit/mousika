@@ -1,5 +1,6 @@
 package com.sanwn.mousika
 
+import grails.converters.JSON
 import org.apache.commons.io.FileUtils
 import org.apache.shiro.SecurityUtils
 import org.springframework.dao.DataIntegrityViolationException
@@ -119,6 +120,11 @@ class StudentController {
         }
 
         [courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses, assignments: assignments,fileRepository:fileRepository]
+    }
+
+    def myCourseList() {
+        render myCourses as JSON
+        //[myCourses: myCourses]
     }
 
     def assignment() {
@@ -454,7 +460,7 @@ class StudentController {
         redirect(controller: contentType, action: 'create', params: [sectionSeq: params.sectionSeq, courseId: params.courseId])
     }
 
-    def fileList(){
+    def fileList(Integer max){
         SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_TYPE, FileRepository.REPOSITORY_TYPE_FILE)
         SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, SecurityUtils.subject.principal)
 

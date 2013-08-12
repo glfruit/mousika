@@ -50,6 +50,7 @@ class StudentController {
 //        }
         myCourses = new ArrayList();
         for(CourseApplication ca :courseApplications){
+            if(ca.status =="approved")
             myCourses.add(ca.applyFor)
         }
 

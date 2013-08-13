@@ -122,48 +122,48 @@
                         <div data-dojo-type="dijit/TitlePane"
                              data-dojo-props="title: '我的课程'"
                              style="padding-bottom: 10px;">
-                            %{--<div id="myCourseList"></div>--}%
-                            %{--<script type="text/javascript">--}%
-                                %{--jQuery(function(){--}%
-                                    %{--$.ajax("/mousika/student/myCourseList",{--}%
-                                        %{--type: "POST",--}%
-%{--//                                        data: params,--}%
-                                        %{--async:false,--}%
-                                        %{--beforeSend: function(XMLHttpRequest){--}%
-                                            %{--//ShowLoading();--}%
-                                        %{--},--}%
-                                        %{--success: function(data, textStatus){--}%
-                                            %{--var myCourseList = (data);--}%
-                                            %{--var linkList = "";--}%
-                                            %{--if(myCourseList!=null)--}%
-                                            %{--for(var i=0;i<myCourseList.length;i++){--}%
-                                                %{--linkList = linkList+"<p><a href='show/"+(myCourseList[i].id)+"'>"+(myCourseList[i].title)+"</a></p>";--}%
-                                            %{--}--}%
-                                            %{--$("#myCourseList").html(linkList);--}%
-                                        %{--},--}%
-                                        %{--complete: function(XMLHttpRequest, textStatus){--}%
-                                            %{--//HideLoading();--}%
-                                            %{--//alert(12);--}%
-                                        %{--},--}%
-                                        %{--error: function(data){--}%
-                                            %{--//请求出错处理--}%
-                                            %{--//alert(13);--}%
-                                        %{--}--}%
-                                    %{--});--}%
-                                %{--});--}%
-                            %{--</script>--}%
+                            <div id="myCourseList"></div>
+                            <script type="text/javascript">
+                                jQuery(function(){
+                                    $.ajax("/mousika/student/myCourseList",{
+                                        type: "POST",
+//                                        data: params,
+                                        async:false,
+                                        beforeSend: function(XMLHttpRequest){
+                                            //ShowLoading();
+                                        },
+                                        success: function(data, textStatus){
+                                            var myCourseList = (data);
+                                            var linkList = "";
+                                            if(myCourseList!=null)
+                                            for(var i=0;i<myCourseList.length;i++){
+                                                linkList = linkList+"<p><a href='show/"+(myCourseList[i].id)+"'>"+(myCourseList[i].title)+"</a></p>";
+                                            }
+                                            $("#myCourseList").html(linkList);
+                                        },
+                                        complete: function(XMLHttpRequest, textStatus){
+                                            //HideLoading();
+                                            //alert(12);
+                                        },
+                                        error: function(data){
+                                            //请求出错处理
+                                            //alert(13);
+                                        }
+                                    });
+                                });
+                            </script>
 
-                            <g:if test="${myCourses}">
-                                    <g:each in="${myCourses}" status="i" var="course">
-                                        <p>
-                                            <g:link action="show" id="${course.id}"> ${course.title}</g:link>
-                                        </p>
+                            %{--<g:if test="${myCourses}">--}%
+                                    %{--<g:each in="${myCourses}" status="i" var="course">--}%
+                                        %{--<p>--}%
+                                            %{--<g:link action="show" id="${course.id}"> ${course.title}</g:link>--}%
+                                        %{--</p>--}%
 
-                                    </g:each>
-                                </g:if>
-                                <g:else>
-                                    没有任何课程
-                                </g:else>
+                                    %{--</g:each>--}%
+                            %{--</g:if>--}%
+                            %{--<g:else>--}%
+                                %{--没有任何课程--}%
+                            %{--</g:else>--}%
                         </div>
                         <div data-dojo-type="dijit/TitlePane"
                              data-dojo-props="title: '我的活动'"

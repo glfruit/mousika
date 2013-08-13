@@ -55,7 +55,7 @@ class LabelController {
             return
         }
 
-        [labelInstance: labelInstance]
+        [labelInstance: labelInstance, course: Course.get(params.courseId), unit: CourseUnit.get(params.unitId)]
     }
 
     def update(Long id, Long version) {
@@ -84,7 +84,7 @@ class LabelController {
         }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'label.label', default: 'Label'), labelInstance.id])
-        redirect(action: "show", id: labelInstance.id)
+        redirect(controller: "course", action: "show", id: params.courseId)
     }
 
     def delete(Long id) {

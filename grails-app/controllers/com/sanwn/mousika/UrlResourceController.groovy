@@ -18,7 +18,7 @@ class UrlResourceController {
     }
 
     def create() {
-        [urlResource: new UrlResource(params), courseId: params.courseId, sectionSeq: params.sectionSeq,course:Course.get(params.courseId)]
+        [urlResource: new UrlResource(params), courseId: params.courseId, sectionSeq: params.sectionSeq, course: Course.get(params.courseId)]
     }
 
     def save() {
@@ -54,7 +54,7 @@ class UrlResourceController {
             return
         }
 
-        [urlResourceInstance: urlResourceInstance]
+        [urlResource: urlResourceInstance, course: Course.get(params.courseId)]
     }
 
     def update(Long id, Long version) {
@@ -83,7 +83,7 @@ class UrlResourceController {
         }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'urlResource.label', default: 'UrlResource'), urlResourceInstance.id])
-        redirect(action: "show", id: urlResourceInstance.id)
+        redirect(controller: 'course', action: "show", id: params.courseId)
     }
 
     def delete(Long id) {

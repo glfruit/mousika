@@ -187,6 +187,8 @@ class MousikaTagLib {
             out << """
                 <script type="text/javascript">
                 tinyMCE.init({
+                relative_urls: false,
+                document_base_url: "${request.contextPath}",
                 contextPath: "${request.contextPath}",
                 ${params ? 'params:' + params + ',' : ''}
                 selector: "textarea",

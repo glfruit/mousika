@@ -286,8 +286,8 @@
             </div>
         </div>
         <script>
-            require(['dojo/query', 'dojo/dom-class', 'dojo/request', 'dojo/json', 'dojo/_base/array', 'dijit/dijit', 'dojo/domReady!'],
-                    function (query, domClass, request, json, arrayUtils, dijit) {
+            require(['dojo/query', 'dojo/dom-class', 'dojo/request', 'dojo/json', 'dojo/_base/array', 'dijit/registry', 'dojo/domReady!'],
+                    function (query, domClass, request, json, arrayUtils, registry) {
                         query('#turn-edit-on-or-off').on('click', function () {
                             query(".edit-course-region").forEach(function (node) {
                                 domClass.toggle(node, 'hide');
@@ -304,8 +304,8 @@
                                         html = html + "<p><a href='${request.contextPath}/notification/show/" + notification.id + "'>" + notification.title + "</a></p>";
                                     });
                                     var list = "${createLink(controller: 'notification', action: 'list')}";
-                                    html = html + "<a class='pull-right' href='" + list + "'>更多...</a><div class='clear'></div>";
-                                    dijit.byId('tp2').set('content', html);
+                                    html = html + "<div style='text-align: right;'><a href='" + list + "'>更多...</a></div>";
+                                    registry.byId('tp2').set('content', html);
                                 });
                     });
         </script>

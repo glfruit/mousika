@@ -47,9 +47,10 @@ class NotificationController {
             notifications = Notification.where {
                 course == null
             }.list(params)
+            def total = Notification.countByCourseIsNull()
             withFormat {
                 html {
-                    return [notification: notifications]
+                    [notifications: notifications, total: total]
                 }
                 json {
                     def results = notifications.collect {
@@ -59,20 +60,20 @@ class NotificationController {
                         ]
                     }
                     render contentType: 'application/json', text: gsonBuilder.create().toJson(results)
-                    return
                 }
             }
 
+        } else {
+            params.max = params.max ?: 20
+            params.offset = params.offset ?: 0
+            params.sort = params.sort ?: 'dateCreated'
+            params.order = params.order ?: 'desc'
+            notifications = Notification.where {
+                course == course
+            }.list(params)
+            def total = Notification.countByCourse(course)
+            [course: course, notifications: notifications, total: total]
         }
-        params.max = params.max ?: 20
-        params.offset = params.offset ?: 0
-        params.sort = params.sort ?: 'dateCreated'
-        params.order = params.order ?: 'desc'
-        notifications = Notification.where {
-            course == course
-        }.list(params)
-        def total = Notification.countByCourse(course)
-        [course: course, notifications: notifications, total: total]
     }
 
     def show(Long id) {

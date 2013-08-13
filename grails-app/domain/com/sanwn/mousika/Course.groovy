@@ -53,6 +53,10 @@ class Course {
      */
     User deliveredBy
 
+    String deliverPlace
+
+    String deliverTime
+
     SortedSet students
 
     static searchable = true

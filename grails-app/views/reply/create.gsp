@@ -2,25 +2,7 @@
 <html>
     <head>
         <meta name="layout" content="course">
-        <g:javascript src="../tiny_mce/tiny_mce.js"/>
-        <r:script>
-            tinyMCE.init({
-                mode: "textareas",
-                theme: "advanced",
-                language: "cn",
-                plugins: "autoresize,autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",
-                theme_advanced_buttons3_add: "emotions",
-                theme_advanced_buttons3_add: "fullscreen",
-                fullscreen_new_window: true,
-                fullscreen_settings: {
-                    theme_advanced_path_location: "top"
-                },
-                dialog_type: "modal",
-                theme_advanced_buttons3_add: "preview",
-                plugin_preview_width: "500",
-                plugin_preview_height: "600"
-            });
-        </r:script>
+        <mousika:editor/>
         <title><g:message code="reply.create.label"/></title>
     </head>
 

@@ -31,10 +31,6 @@
                             <td>${post.postedBy.fullname}</td>
                             <td>${post.replies.size()}/100</td>
                             <td>${post.lastUpdated}</td>
-                            %{--<td><g:formatDate format="yyyy-MM-dd HH:mm:ss"--}%
-                            %{--date="${user.profile?.firstAccessed}"/></td>--}%
-                            %{--<td><g:formatDate format="yyyy-MM-dd HH:mm:ss"--}%
-                            %{--date="${user.profile?.lastAccessed}"/></td>--}%
                         </tr>
                     </g:each>
                 </tbody>

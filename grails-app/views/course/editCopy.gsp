@@ -264,8 +264,8 @@
     </g:each>
 </div>
 <script>
-    require(['dojo/dom', 'dojo/dom-construct','dojo/dom-class', 'dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event', 'dojo/json', 'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
-            function (dom, domConstruct, domClass,query, topic, request, domAttr, on, Source, ioQuery, $, event, json) {
+    require(['dojo/dom', 'dojo/dom-construct', 'dojo/dom-class', 'dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event', 'dojo/json', 'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
+            function (dom, domConstruct, domClass, query, topic, request, domAttr, on, Source, ioQuery, $, event, json) {
                 var delUrl;
                 var delData;
                 var removeUnit;
@@ -291,7 +291,7 @@
                     request.post(delUrl, {
                         data: delData
                     }).then(function (response) {
-                                domClass.remove("delConfirm","in");
+                                domClass.remove("delConfirm", "in");
                                 var r = json.parse(response);
                                 if (!r.success) {
                                     alert("删除失败！" + r.error ? r.error : "");
@@ -299,6 +299,7 @@
                                 }
                                 //remove unit or item
                                 domConstruct.destroy(removed);
+                                query("#delConfirm").hide();
                             });
                 });
                 define.amd.jQuery = true;

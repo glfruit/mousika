@@ -72,6 +72,7 @@ class Course {
     }
 
     static mapping = {
+        table 'mousika_courses'
         description column: "description", sqlType: "text"
         units sort: "sequence", order: "asc"
     }

@@ -26,6 +26,8 @@ class CourseService {
         def newSeq = targetUnit.sequence
         targetUnit.sequence = oldSeq
         sourceUnit.sequence = newSeq
+        sourceUnit.reindex()
+        targetUnit.reindex()
     }
 
     def removeUnit(CourseUnit courseUnit) {
@@ -40,6 +42,7 @@ class CourseService {
             course.removeFromUnits(courseUnit)
             courseUnit.delete(flush: true)
             course.save(flush: true)
+            courseUnit.reindex()
         } catch (DataIntegrityViolationException e) {
             throw new CourseException(message: "删除课程单元${courseUnit.title}失败", course: course)
         }

@@ -215,20 +215,6 @@
                 </div>
             </shiro:hasRole>
             <div data-dojo-type="dijit/TitlePane"
-                 data-dojo-props="title: '我的个人文件'"
-                 style="padding-bottom: 10px;">
-                <p>
-                    <g:if test="${fileRepository?.items?.size() > 0}">
-                        <!-- TODO -->
-                    </g:if>
-                    <g:else>
-                        没有任何文件
-                    </g:else>
-                </p>
-                <a class="btn"
-                   href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
-            </div>
-            <div data-dojo-type="dijit/TitlePane"
                  data-dojo-props="title: '个人信息管理'"
                  style="padding-bottom: 10px;">
                 <p>

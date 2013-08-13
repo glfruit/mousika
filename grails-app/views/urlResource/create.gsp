@@ -3,31 +3,16 @@
 <html>
     <head>
         <meta name="layout" content="course">
-        <g:javascript src="../tiny_mce/tiny_mce.js"/>
-        <r:script>
-            tinyMCE.init({
-                mode: "textareas",
-                theme: "advanced",
-                language: "cn",
-                plugins: "autoresize,autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",
-                theme_advanced_buttons3_add: "emotions",
-                theme_advanced_buttons3_add: "fullscreen",
-                fullscreen_new_window: true,
-                fullscreen_settings: {
-                    theme_advanced_path_location: "top"
-                },
-                dialog_type: "modal",
-                theme_advanced_buttons3_add: "preview",
-                plugin_preview_width: "500",
-                plugin_preview_height: "600"
-            });
-        </r:script>
+        <mousika:editor/>
         <title><g:message code="urlResource.create.label"/></title>
     </head>
 
     <body>
         <div id="create-url" class="content scaffold-create" role="main">
-            <h3><g:message code="urlResource.create.label"/></h3>
+            <h4 class="content-top">
+                <a href="${createLink(controller: 'course', action: 'show', id: params.courseId)}">${course.title}</a>->
+            <g:message code="urlResource.create.label"/>
+            </h4>
             <g:if test="${flash.message}">
                 <div class="message" role="status"
                      style="color: red;">${flash.message}</div>

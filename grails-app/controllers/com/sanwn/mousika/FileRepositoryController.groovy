@@ -15,7 +15,9 @@ class FileRepositoryController {
 
     def list(Integer max) {
         params.max = Math.min(max ?: 10, 100)
-        [fileRepositoryInstanceList: FileRepository.list(params), fileRepositoryInstanceTotal: FileRepository.count()]
+        def courseId = params.courseId
+        def course = Course.get(courseId)
+        [fileRepositoryInstanceList: FileRepository.list(params), fileRepositoryInstanceTotal: FileRepository.count(), course: course]
     }
 
     def create() {

@@ -14,10 +14,11 @@
     <link rel="stylesheet"
           href="${resource(dir: 'css', file: 'jplayer/jplayer.blue.monday.css')}"
           type="text/css"/>
+    <mousika:tinymce/>
 </head>
 
 <body>
-<h4 style="border-bottom: 1px solid #000;color: #777777;">
+<h4 style="border-bottom: 1px solid #DEDEDE;color: #777777;padding-bottom: 5px;padding-top: 20px;">
     ${courseInstance?.title}
 </h4>
 <g:if test="${flash.message}">
@@ -199,7 +200,7 @@
         <h4 id="myModalLabel">添加活动或资源</h4>
     </div>
 
-    <g:form class="form-horizontal" action="addResource">
+    <g:form class="form-horizontal" controller="course" action="addResource">
         <div class="modal-body">
             <input type="hidden" id="sectionSeq" name="sectionSeq"/>
             <input type="hidden" id="courseId" name="courseId"
@@ -246,8 +247,43 @@
     </g:each>
 </div>
 <script>
-    require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event', 'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
-            function (query, topic, request, domAttr, on, Source, ioQuery, $, event) {
+    require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event',
+        'dojo/dom-style', 'dojo/dom-class', 'dojo/json',
+        'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
+            function (query, topic, request, domAttr, on, Source, ioQuery, $, event, domStyle, domClass, json) {
+                query("i.icon-eye-open,i.icon-eye-close").on('click', function (e) {
+                    event.stop(e);
+                    var classes = query(e.target).attr('class')[0].split(' ');
+                    for (var i = 0; i < classes.length; i++) {
+                        var c = classes[i];
+                        var matched = c.match(/^courseSection(\d+)($|item(\d+)$)/);
+                        if (matched) {
+                            var opacity = domStyle.get(c, 'opacity');
+                            opacity = parseFloat(opacity) < 1 ? 1 : 0.5;
+                            request.post("${request.contextPath}/course/toggleUnitOrItem", {
+                                data: {
+                                    courseId: ${courseInstance.id},
+                                    unitSeq: matched[1],
+                                    itemSeq: matched[3] ? matched[3] : -1,
+                                    visible: opacity == 1
+                                }}).then(function (response) {
+                                        var result = json.parse(response);
+                                        if (result.success) {
+                                            if (parseFloat(opacity) < 1) {
+                                                domStyle.set(c, 'opacity', opacity);
+                                                query(e.target).replaceClass('icon-eye-close', 'icon-eye-open');
+                                            } else {
+                                                domStyle.set(c, 'opacity', opacity);
+                                                query(e.target).replaceClass('icon-eye-open', 'icon-eye-close');
+                                            }
+                                        } else {
+                                            console.error(result.error);
+                                        }
+                                    });
+                            break;
+                        }
+                    }
+                });
                 define.amd.jQuery = true;
                 query(".addContent").on('click', function (e) {
                     var csid = query(e.target).parent().attr('id');

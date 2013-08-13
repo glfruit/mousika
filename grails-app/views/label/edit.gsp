@@ -2,33 +2,30 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="main">
-        <g:set var="entityName"
-               value="${message(code: 'label.label', default: 'Label')}"/>
-        <title><g:message code="default.edit.label"
-                          args="[entityName]"/></title>
+        <meta name="layout" content="course">
+        <mousika:editor query="[courseId: course.id]"/>
+        <title>编辑标签</title>
     </head>
 
     <body>
-        <a href="#edit-label" class="skip" tabindex="-1"><g:message
-                code="default.link.skip.label"
-                default="Skip to content&hellip;"/></a>
-
-        <div class="nav" role="navigation">
-            <ul>
-                <li><a class="home" href="${createLink(uri: '/')}"><g:message
-                        code="default.home.label"/></a></li>
-                <li><g:link class="list" action="list"><g:message
-                        code="default.list.label"
-                        args="[entityName]"/></g:link></li>
-                <li><g:link class="create" action="create"><g:message
-                        code="default.new.label"
-                        args="[entityName]"/></g:link></li>
-            </ul>
-        </div>
-
         <div id="edit-label" class="content scaffold-edit" role="main">
-            <h1><g:message code="default.edit.label" args="[entityName]"/></h1>
+            <ul class="breadcrumb" style="margin-top: 20px;">
+                <li>
+                    <a href="${createLink(controller: 'course', action: 'show', id: params.courseId)}">
+                        ${course.title}
+                        <span class="divider">/</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="${createLink(controller: 'courseUnit', action: 'show', id: params.unitId)}">
+                        ${unit.title}
+                        <span class="divider">/</span>
+                    </a>
+                </li>
+                <li class="active">
+                    编辑标签
+                </li>
+            </ul>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>
@@ -40,20 +37,21 @@
                     </g:eachError>
                 </ul>
             </g:hasErrors>
-            <g:form method="post">
-                <g:hiddenField name="id" value="${labelInstance?.id}"/>
-                <g:hiddenField name="version"
-                               value="${labelInstance?.version}"/>
+            <g:form method="post" action="update">
                 <fieldset class="form">
-                    <g:render template="form"/>
+                    <f:with bean="labelInstance">
+                        <g:hiddenField name="courseId" value="${course.id}"/>
+                        <g:hiddenField name="id" value="${labelInstance?.id}"/>
+                        <g:hiddenField name="version"
+                                       value="${labelInstance?.version}"/>
+                        <f:field property="labelContent" required="true"/>
+                    </f:with>
                 </fieldset>
                 <fieldset class="buttons">
-                    <g:actionSubmit class="save" action="update"
-                                    value="${message(code: 'default.button.update.label', default: 'Update')}"/>
-                    <g:actionSubmit class="delete" action="delete"
-                                    value="${message(code: 'default.button.delete.label', default: 'Delete')}"
-                                    formnovalidate=""
-                                    onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');"/>
+                    <g:submitButton name="create" class="btn btn-primary"
+                                    value="${message(code: 'default.button.update.label', default: 'Create')}"/>
+                    <a class="btn"
+                       href="${createLink(controller: 'course', action: 'show', id: course.id)}">${message(code: 'default.cancel.label')}</a>
                 </fieldset>
             </g:form>
         </div>

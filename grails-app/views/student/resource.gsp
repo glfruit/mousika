@@ -2,30 +2,31 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="course"/>
+        <meta name="layout" content="student"/>
         <g:set var="entityName" value="${message(code: 'course.label')}"/>
         <title><g:message code="default.list.label" args="[entityName]"/></title>
-        <g:javascript src="../tiny_mce/tiny_mce.js"/>
-        <r:script>
-            tinyMCE.init({
-                mode: "textareas",
-                theme: "advanced",
-                language: "cn",
-                width: "98%",
-                height: 260,
-                plugins: "autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",
-                theme_advanced_buttons3_add: "emotions",
-                theme_advanced_buttons3_add: "fullscreen",
-                fullscreen_new_window: true,
-                fullscreen_settings: {
-                    theme_advanced_path_location: "top"
-                },
-                dialog_type: "modal",
-                theme_advanced_buttons3_add: "preview",
-                plugin_preview_width: "500",
-                plugin_preview_height: "600"
-            });
-        </r:script>
+        <mousika:editor/>
+        %{--<g:javascript src="../tinymce/tinymce.min.js"/>--}%
+        %{--<r:script>--}%
+            %{--tinyMCE.init({--}%
+                %{--mode: "textareas",--}%
+                %{--theme: "advanced",--}%
+                %{--language: "cn",--}%
+                %{--width: "98%",--}%
+                %{--height: 260,--}%
+                %{--plugins: "autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",--}%
+                %{--theme_advanced_buttons3_add: "emotions",--}%
+                %{--theme_advanced_buttons3_add: "fullscreen",--}%
+                %{--fullscreen_new_window: true,--}%
+                %{--fullscreen_settings: {--}%
+                    %{--theme_advanced_path_location: "top"--}%
+                %{--},--}%
+                %{--dialog_type: "modal",--}%
+                %{--theme_advanced_buttons3_add: "preview",--}%
+                %{--plugin_preview_width: "500",--}%
+                %{--plugin_preview_height: "600"--}%
+            %{--});--}%
+        %{--</r:script>--}%
     </head>
 
     <body>

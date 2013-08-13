@@ -122,36 +122,36 @@
                         <div data-dojo-type="dijit/TitlePane"
                              data-dojo-props="title: '我的课程'"
                              style="padding-bottom: 10px;">
-                            <div id="myCourseList"></div>
-                            <script type="text/javascript">
-                                jQuery(function(){
-                                    $.ajax("/mousika/student/myCourseList",{
-                                        type: "POST",
-//                                        data: params,
-                                        async:false,
-                                        beforeSend: function(XMLHttpRequest){
-                                            //ShowLoading();
-                                        },
-                                        success: function(data, textStatus){
-                                            var myCourseList = (data);
-                                            var linkList = "";
-                                            if(myCourseList!=null)
-                                            for(var i=0;i<myCourseList.length;i++){
-                                                linkList = linkList+"<p><a href='show/"+(myCourseList[i].id)+"'>"+(myCourseList[i].title)+"</a></p>";
-                                            }
-                                            $("#myCourseList").html(linkList);
-                                        },
-                                        complete: function(XMLHttpRequest, textStatus){
-                                            //HideLoading();
-                                            //alert(12);
-                                        },
-                                        error: function(data){
-                                            //请求出错处理
-                                            //alert(13);
-                                        }
-                                    });
-                                });
-                            </script>
+                            %{--<div id="myCourseList"></div>--}%
+                            %{--<script type="text/javascript">--}%
+                                %{--jQuery(function(){--}%
+                                    %{--$.ajax("/mousika/student/myCourseList",{--}%
+                                        %{--type: "POST",--}%
+%{--//                                        data: params,--}%
+                                        %{--async:false,--}%
+                                        %{--beforeSend: function(XMLHttpRequest){--}%
+                                            %{--//ShowLoading();--}%
+                                        %{--},--}%
+                                        %{--success: function(data, textStatus){--}%
+                                            %{--var myCourseList = (data);--}%
+                                            %{--var linkList = "";--}%
+                                            %{--if(myCourseList!=null)--}%
+                                            %{--for(var i=0;i<myCourseList.length;i++){--}%
+                                                %{--linkList = linkList+"<p><a href='show/"+(myCourseList[i].id)+"'>"+(myCourseList[i].title)+"</a></p>";--}%
+                                            %{--}--}%
+                                            %{--$("#myCourseList").html(linkList);--}%
+                                        %{--},--}%
+                                        %{--complete: function(XMLHttpRequest, textStatus){--}%
+                                            %{--//HideLoading();--}%
+                                            %{--//alert(12);--}%
+                                        %{--},--}%
+                                        %{--error: function(data){--}%
+                                            %{--//请求出错处理--}%
+                                            %{--//alert(13);--}%
+                                        %{--}--}%
+                                    %{--});--}%
+                                %{--});--}%
+                            %{--</script>--}%
 
                             <g:if test="${myCourses}">
                                     <g:each in="${myCourses}" status="i" var="course">
@@ -192,13 +192,13 @@
                             </p>
                             %{--<a class="btn"  href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>--}%
                             <p>
-                                <g:link controller="user" action="updateInformationIndex">编辑个人信息</g:link>
+                                <g:link controller="student" action="updateInformationIndex">编辑个人信息</g:link>
                             </p>
                             <P>
-                            <g:link controller="user" action="updatePasswordIndex">更改密码</g:link>
+                            <g:link controller="student" action="updatePasswordIndex">更改密码</g:link>
                             </p>
                             <P>
-                            <g:link controller="user" action="uploadPhotoIndex">上传头像</g:link>
+                            <g:link controller="student" action="uploadPhotoIndex">上传头像</g:link>
                             </p>
                             <P>
                                 <g:link controller="student" action="fileList">管理个人文件</g:link>

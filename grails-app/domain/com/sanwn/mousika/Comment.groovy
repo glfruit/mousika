@@ -16,7 +16,7 @@ class Comment {
     }
 
     static mapping = {
-        table name: 'mousika_comments'
+        table name: 'mousika_forum_post_comments'
         commentContent sqlType: 'text'
     }
 }

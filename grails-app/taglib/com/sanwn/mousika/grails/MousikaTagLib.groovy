@@ -165,4 +165,45 @@ class MousikaTagLib {
 
         writer << '</ul></div>'
     }
+
+    def tinymce = { attrs ->
+        out << "<script type='text/javascript' src='${request.contextPath}/tinymce/tinymce.min.js'></script>"
+    }
+
+    def editor = { attrs ->
+        def provider = attrs.provider
+        def params
+        if (attrs.query) {
+            params = "{"
+            attrs.query.each { key,value ->
+                params = params + key + ':' + value + ","
+            }
+            params = params.substring(0, params.size() - 1)
+            params = params + "}"
+        }
+        if (!provider) {
+            provider = "tinymce"
+            out << "<script type='text/javascript' src='${request.contextPath}/tinymce/tinymce.min.js'></script>"
+            out << """
+                <script type="text/javascript">
+                tinyMCE.init({
+                relative_urls: false,
+                document_base_url: "${request.contextPath}",
+                contextPath: "${request.contextPath}",
+                ${params ? 'params:' + params + ',' : ''}
+                selector: "textarea",
+                theme: "modern",
+                language: "zh_CN",
+                plugins: [
+                    "advlist autolink lists link image charmap print preview anchor pagebreak",
+                    "searchreplace visualblocks code fullscreen textcolor",
+                    "insertdatetime media table contextmenu paste emoticons filemanager"
+                ],
+                toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image filemanager | print preview media | forecolor backcolor emoticons",
+                image_advtab: true,
+                height: 300});
+                </script>
+            """
+        }
+    }
 }

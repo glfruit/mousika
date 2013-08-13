@@ -15,7 +15,8 @@
 
             %{--</label>--}%
         </div>
-        <g:checkBox name="enableDueDate" checked="true" style="margin-left: 5px;"/>
+        <g:checkBox name="enableDueDate" checked="${value}"
+                    style="margin-left: 5px;"/>
         <span>启用</span>
     </div>
 </div>

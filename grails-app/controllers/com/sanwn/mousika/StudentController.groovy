@@ -3,6 +3,7 @@ package com.sanwn.mousika
 import grails.converters.JSON
 import org.apache.commons.io.FileUtils
 import org.apache.shiro.SecurityUtils
+import org.apache.shiro.crypto.hash.Sha256Hash
 import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.web.multipart.commons.CommonsMultipartFile
 
@@ -50,7 +51,7 @@ class StudentController {
 //        }
         myCourses = new ArrayList();
         for(CourseApplication ca :courseApplications){
-            if(ca.status =="approved")
+            //if(ca.status =="approved")
             myCourses.add(ca.applyFor)
         }
 
@@ -68,6 +69,13 @@ class StudentController {
                 notRegCourses.add(c)
             }
         }
+        myCourses.clear()
+        for(CourseApplication ca :courseApplications){
+            if(ca.status =="approved")
+            myCourses.add(ca.applyFor)
+        }
+
+
 //        for(int i=notRegCourses.size()-1;i>=0;i--){
 //            Course c = notRegCourses.get(i);
 //            if(c.courseMembers!=null&&c.courseMembers.size()>0) {
@@ -468,4 +476,96 @@ class StudentController {
         params.max = Math.min(max ?: 10, 100)
         [fileRepositoryInstanceList: FileRepository.list(params), fileRepositoryInstanceTotal: FileRepository.count()]
     }
+
+    def updatePasswordIndex(){
+        /*def subject = SecurityUtils.getSubject();
+        [subject:subject]*/
+    }
+
+    def updatePassword(){
+        def subject = SecurityUtils.getSubject();
+        def userInstance = User.findByUsername(subject.getPrincipal())
+        if (!userInstance.getPasswordHash().equals(new Sha256Hash(params.get("oldPassword")).toHex())){
+            flash.message = message(code: 'user.update.password.error.message')
+            redirect(action: "updatePasswordIndex")
+        }else{
+            userInstance.setPasswordHash(new Sha256Hash(params.get("newPassword1")).toHex())
+            userInstance.save(failOnError: true)
+            flash.message = message(code: 'user.update.password.success.message')
+            redirect(action: "updatePasswordIndex")
+        }
+    }
+
+    def updateInformationIndex(){
+        def subject = SecurityUtils.getSubject();
+        def userInstance = User.findByUsername(subject.getPrincipal())
+        [userInstance:userInstance]
+    }
+
+    def updateInformation(){
+        def subject = SecurityUtils.getSubject();
+        def userInstance = User.findByUsername(subject.getPrincipal())
+        userInstance.profile.email = params.get("email")
+        userInstance.profile.interests = params.get("interests")
+        try{
+            userInstance.save(flash: true)
+        }
+        catch(Exception exception) {
+            flash.message = "email格式错误"
+        }
+        redirect(action: "updateInformationIndex")
+    }
+
+    def uploadPhotoIndex(){
+
+    }
+
+    def uploadPhoto(){
+        def propertiesMap = params.get("photo").getProperties()
+        def contentType = propertiesMap.get("contentType")
+        if (propertiesMap.get("empty")){
+            flash.message = "上传的头像为空"
+            redirect(action: "uploadPhotoIndex")
+            return
+        }else if(!(contentType.equals("image/jpeg")||contentType.equals("image/png")||contentType.equals("image/bmp")||contentType.equals("image/gif"))) {
+            flash.message = "不支持的图片格式"
+            redirect(action: "uploadPhotoIndex")
+            return
+        } else if( propertiesMap.get("size")>200*1024) {
+            flash.message = "上传的头像太大"
+            redirect(action: "uploadPhotoIndex")
+            return
+        } else{
+            FileInputStream fileInputStream =  propertiesMap.get("inputStream")
+            def subject = SecurityUtils.getSubject();
+            def userInstance = User.findByUsername(subject.getPrincipal())
+            userInstance.profile.photo = fileInputStream.bytes
+            userInstance.save(failOnError: true)
+            flash.message = "上传头像成功"
+            redirect(action: "uploadPhotoIndex")
+        }
+    }
+
+    def displayPhoto(){
+        def userInstance
+        if (params.get("id")!=null){
+            userInstance = User.get(params.get("id"))
+        } else{
+            def subject = SecurityUtils.getSubject();
+            userInstance = User.findByUsername(subject.getPrincipal())
+        }
+        def photoByte
+        if (userInstance.getProfile()!=null&&userInstance.getProfile().getPhoto()!=null&&userInstance.getProfile().getPhoto().length!=0){
+            photoByte = userInstance.profile.photo
+        }else{
+            def fileName = System.getProperty("user.dir") + "/web-app/images/defaultUserPhoto/defaultUserPhoto.jpg"
+            def file = new File(fileName)
+            photoByte = new FileInputStream(file).bytes
+        }
+        response.setContentLength(photoByte.length)
+        response.outputStream << photoByte
+        response.outputStream.close()
+    }
+
+
 }

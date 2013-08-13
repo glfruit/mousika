@@ -1,3 +1,4 @@
+<%@ page import="com.sanwn.mousika.FileRepository" %>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="zh-CN" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="zh-CN" class="no-js ie7"> <![endif]-->
@@ -75,22 +76,42 @@
 </head>
 
 <body class="tundra">
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <div class="row">
-                    <div class="span4">
-                        <a class="brand"
-                           href="${request.contextPath}"><g:message
-                                code="default.app.title"/></a>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <div class="row">
+                <div class="span4">
+                    <a class="brand"
+                       href="${request.contextPath}"><g:message
+                            code="default.app.title"/></a>
+                </div>
+                <shiro:notAuthenticated>
+                    <div class="span8">
+                        <g:form class="navbar-form pull-right"
+                                controller="auth" action="signIn">
+                            <input type="hidden" name="targetUri"
+                                   value="${targetUri}"/>
+                            <input class="span2" type="text"
+                                   name="username" value="${username}"
+                                   placeholder="<g:message
+                                           code='label.login.username'/>">
+                            <input class="span2" type="password"
+                                   name="password" value=""
+                                   placeholder="<g:message
+                                           code='label.login.password'/>">
+                            <button type="submit" class="btn"><g:message
+                                    code="label.login"/></button>
+                        </g:form>
                     </div>
-
+                </shiro:notAuthenticated>
+                <shiro:authenticated>
                     <div class="span6" style="padding-top: 10px;">
                         <g:form class="form-search"
                                 url="[controller: 'course', action: 'search']"
                                 method='get'>
                             <div class="input-append">
-                                <g:hiddenField name="type" value="resource"/>
+                                <g:hiddenField name="type"
+                                               value="resource"/>
                                 <g:textField name="q" value="${params.q}"
                                              size="50"
                                              class="input-xlarge search-query"/>
@@ -101,280 +122,193 @@
                             </div>
                         </g:form>
                     </div>
-
                     <div class="span2" style="padding-top: 10px;">
-                        <shiro:authenticated>
                             <div class="pull-right">
                                 您好,<shiro:principal/><%=link(action: 'signOut', controller: 'auth') { '（注销）' }%>
-                            </div>
-                        </shiro:authenticated>
-                        <shiro:notAuthenticated>
-                            <g:form class="navbar-form pull-right"
-                                    controller="auth" action="signIn">
-                                <input type="hidden" name="targetUri"
-                                       value="${targetUri}"/>
-                                <input class="span2" type="text"
-                                       name="username" value="${username}"
-                                       placeholder="<g:message
-                                               code='label.login.username'/>">
-                                <input class="span2" type="password"
-                                       name="password" value=""
-                                       placeholder="<g:message
-                                               code='label.login.password'/>">
-                                <button type="submit" class="btn"><g:message
-                                        code="label.login"/></button>
-                            </g:form>
-                        </shiro:notAuthenticated>
                     </div>
-                </div>
-            </div><!--/.nav-collapse -->
-        </div>
+                </shiro:authenticated>
+            </div>
+            </div>
+        </div><!--/.nav-collapse -->
     </div>
+</div>
 
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span2">
-                %{--<shiro:hasAnyRole in="['学生']">--}%
-                %{--<h4 style="border-bottom: 1px solid #000;color: #777777;">--}%
-                    %{--<a class="brand" href="${request.contextPath}/student"><g:message--}%
-                            %{--code="label.app.menu.nav"/></a>--}%
-                %{--</h4>--}%
-                %{--</shiro:hasAnyRole>--}%
-                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人','学生']">
-                <div id="nav-panel"
-                     data-dojo-type="dijit/TitlePane"
-                     data-dojo-props="title: '导航'"
-                     style="padding-bottom: 10px; padding-top: 20px;">
-                    <ul style="list-style: none;text-align: left;margin: 0;padding: 0;">
-                        <li>
-                            <i class="icon-home"></i>
-                            <span style="padding-left: 5px;">
-                                <shiro:hasRole name="学生">
-                                    <a href="${request.contextPath}/student">首页</a>
-                                </shiro:hasRole>
-                                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
-                                    <a href="${request.contextPath}">首页</a>
-                                </shiro:hasAnyRole>
-                            </span>
-                        </li>
-                        <li>
-                            <i class="icon-book"></i>
-                            <span style="padding-left: 5px;">
-                                <a href="${createLink(controller: 'course', action: 'list')}">课程</a>
-                            </span>
-                        </li>
-                    </ul>
-                </div>
+
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span2">
+            <div id="nav-panel"
+                 data-dojo-type="dijit/TitlePane"
+                 data-dojo-props="title: '导航'"
+                 style="padding-bottom: 10px; padding-top: 20px;">
+                <ul style="list-style: none;text-align: left;margin: 0;padding: 0;">
+                    <li>
+                        <i class="icon-home"></i>
+                        <span style="padding-left: 5px;">
+                            <a href="${request.contextPath}">首页</a>
+                        </span>
+                    </li>
+                    <li>
+                        <i class="icon-book"></i>
+                        <span style="padding-left: 5px;">
+                            <a href="${createLink(controller: 'course', action: 'list')}">课程</a>
+                        </span>
+                    </li>
+                    <li>
+                        <i class="icon-folder-close"></i>
+                        <span style="padding-left: 5px;">
+                            <a href="${createLink(controller: 'fileRepository', action: 'list')}">我的文件</a>
+                        </span>
+                    </li>
+                    <li>
+                        <i class="icon-list"></i>
+                        <span style="padding-left: 5px;">
+                            <a href="${createLink(controller: 'course', action: 'list')}">我的课程</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+            <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate', 'listMaterials'] ||
+                    request.forwardURI =~ /\/course\/\d+\// || params.controller in ['page', 'urlResource', 'label', 'assignment', 'fileResource']}">
+                <shiro:hasAnyRole in="['教师', '系统管理员']">
+                    <shiro:hasPermission permission="course:*:${params.id}">
+                        <div id="course-admin-panel"
+                             data-dojo-type="dijit/TitlePane"
+                             data-dojo-props="title: '课程管理'"
+                             style="padding-bottom: 10px;">
+                            <ul id="courseAdmin"
+                                style="list-style: none;text-align: left;margin:0;padding:0;">
+                                <li><i class="icon-list-alt"></i><span
+                                        style="padding-left: 5px;">
+                                    <a href="${createLink(controller: 'course', action: 'show', id: params.courseId ?: params.id)}">课程首页</a>
+                                </span></li>
+                                <li><i class="icon-briefcase"></i><span
+                                        style="padding-left: 5px;">
+                                    <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.courseId ?: params.id)}">课程资料</a>
+                                </span></li>
+                                <g:if test="${params.controller == 'course' && params.action == 'show'}">
+                                    <li id="turn-edit-on-or-off"><i
+                                            class="icon-edit"></i><a
+                                            href="#"
+                                            style="padding-left: 5px;"><span
+                                                class="edit-course-region hide">打开编辑</span>
+                                        <span class="edit-course-region">关闭编辑</span>
+                                    </a>
+                                    </li>
+
+                                </g:if>
+                                <li><i class="icon-pencil"></i><span
+                                        style="padding-left: 5px;"><a
+                                            href="${createLink(controller: 'course', action: 'edit', id: params.courseId ?: params.id)}">编辑设置</a>
+                                </span>
+                                </li>
+                                <li><i class="icon-user"></i><span
+                                        style="padding-left: 5px;"><a
+                                            href="${createLink(controller: 'course', action: 'enrol', id: params.courseId ?: params.id)}">成员</a>
+                                </span>
+                                </li>
+                                <li><i class="icon-list"></i><span
+                                        style="padding-left: 5px;">
+                                    <a href="${createLink(controller: 'course', action: 'grade', id: params.courseId ?: params.id)}">成绩</a>
+                                </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </shiro:hasPermission>
                 </shiro:hasAnyRole>
-                <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate'] ||
-                        request.forwardURI =~ /\/course\/\d+\//}">
-                    <shiro:hasAnyRole in="['教师', '系统管理员']">
-                        <shiro:hasPermission permission="course:*:${params.id}">
-                            <div id="course-admin-panel"
-                                 data-dojo-type="dijit/TitlePane"
-                                 data-dojo-props="title: '课程管理'"
-                                 style="padding-bottom: 10px;">
-                                <ul id="courseAdmin"
-                                    style="list-style: none;text-align: left;margin:0;padding:0;">
-                                    <li><i class="icon-list-alt"></i><span
-                                            style="padding-left: 5px;">
-                                        <a href="${createLink(controller: 'course', action: 'show', id: params.id)}">课程首页</a>
-                                    </span></li>
-                                    <li><i class="icon-briefcase"></i><span
-                                            style="padding-left: 5px;">
-                                        <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.id)}">课程资料</a>
-                                    </span></li>
-                                    <g:if test="${params.controller == 'course' && params.action == 'show'}">
-                                        <li id="turn-edit-on-or-off"><i
-                                                class="icon-edit"></i><a
-                                                href="#"
-                                                style="padding-left: 5px;"><span
-                                                    class="edit-course-region hide">打开编辑</span>
-                                            <span class="edit-course-region">关闭编辑</span>
-                                        </a>
-                                        </li>
-                                    </g:if>
-                                    <li><i class="icon-pencil"></i><span
-                                            style="padding-left: 5px;"><a
-                                                href="${createLink(controller: 'course', action: 'edit', id: params.id)}">编辑设置</a>
-                                    </span>
-                                    </li>
-                                    <li><i class="icon-user"></i><span
-                                            style="padding-left: 5px;"><a
-                                                href="${createLink(controller: 'course', action: 'enrol', id: params.id)}">成员</a>
-                                    </span>
-                                    </li>
-                                    <li><i class="icon-list"></i><span
-                                            style="padding-left: 5px;">
-                                        <a href="${createLink(controller: 'course', action: 'grade', id: params.id)}">成绩</a>
-                                    </span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </shiro:hasPermission>
-                    </shiro:hasAnyRole>
-                </g:if>
-                <shiro:hasRole name="系统管理员">
-                    <div data-dojo-type="dijit/TitlePane"
-                         data-dojo-props="title: '系统管理'"
-                         style="padding-bottom: 10px;">
-                        <p>
-                            <i class="icon-user"></i>
-                            <a href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
-                        </p>
-                        <p>
-                            <i class="icon-lock"></i>
-                            <a href="${createLink(controller: 'privilege', action: 'list')}">权限管理</a>
-                        </p>
-                        <p>
-                            <i class="icon-share"></i>
-                            <a href="${createLink(controller: 'teaching', action: 'list')}">授课情况</a>
-                        </p>
-                        <p>
-                            <i class="icon-pencil"></i>
-                            <a href="${createLink(controller: 'backup', action: 'list')}">系统备份</a>
-                        </p>
-                    </div>
-                </shiro:hasRole>
-                <shiro:hasRole name="学生">
-                    <div data-dojo-type="dijit/TitlePane"
-                         data-dojo-props="title: '我的课程'"
-                         style="padding-bottom: 10px;">
-                        <div id="myCourseList"></div>
-                        <script type="text/javascript">
-                            jQuery(function(){
-                                $.ajax("/mousika/student/myCourseList",{
-                                    type: "POST",
-//                                        data: params,
-                                    async:false,
-                                    beforeSend: function(XMLHttpRequest){
-                                        //ShowLoading();
-                                    },
-                                    success: function(data, textStatus){
-                                        var myCourseList = (data);
-                                        var linkList = "";
-                                        if(myCourseList!=null)
-                                            for(var i=0;i<myCourseList.length;i++){
-                                                linkList = linkList+"<p><a href='${request.contextPath}/course/show/"+(myCourseList[i].id)+"'>"+(myCourseList[i].title)+"</a></p>";
-                                            }
-                                        $("#myCourseList").html(linkList);
-                                    },
-                                    complete: function(XMLHttpRequest, textStatus){
-                                        //HideLoading();
-                                        //alert(12);
-                                    },
-                                    error: function(data){
-                                        //请求出错处理
-                                        //alert(13);
-                                    }
-                                });
-                            });
-                        </script>
-                        %{--<g:if test="${myCourses}">--}%
-                            %{--<g:each in="${myCourses}" status="i" var="course">--}%
-                                %{--<p>--}%
-                                    %{--<g:link action="show" id="${course.id}"> ${course.title}</g:link>--}%
-                                %{--</p>--}%
+            </g:if>
+            <shiro:hasRole name="系统管理员">
 
-                            %{--</g:each>--}%
-                        %{--</g:if>--}%
-                        %{--<g:else>--}%
-                            %{--没有任何课程--}%
-                        %{--</g:else>--}%
-                    </div>
-                    <div data-dojo-type="dijit/TitlePane"
-                         data-dojo-props="title: '我的活动'"
-                         style="padding-bottom: 10px;">
-                        <p>
-                            <g:link controller="student" action="regCourseList">注册课程</g:link>&nbsp; &nbsp;
-                            <g:link controller="student" action="assignmentList">我的作业</g:link>
-                        </p>
-                        <p>
-                            我的提问与解答
-                        </p>
-                        <p>
-                            <g:include view="shareto.gsp"></g:include>&nbsp;
-                        </p>
-                    </div>
-                </shiro:hasRole>
                 <div data-dojo-type="dijit/TitlePane"
-                     data-dojo-props="title: '我的个人文件'"
-                     style="padding-bottom: 10px;">
-                    <p>
-                        <g:if test="${fileRepository?.items?.size() > 0}">
-                            <!-- TODO -->
-                        </g:if>
-                        <g:else>
-                            没有任何文件
-                        </g:else>
-                    </p>
-                    <a class="btn"
-                       href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
-                </div>
-                <div data-dojo-type="dijit/TitlePane"
-                     data-dojo-props="title: '个人信息管理'"
+                     data-dojo-props="title: '系统管理'"
                      style="padding-bottom: 10px;">
                     <p>
                         <i class="icon-user"></i>
-                        <a href="${createLink(controller: 'user', action: 'updateInformationIndex')}">编辑个人信息</a>
+                        <a href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
                     </p>
+
                     <p>
                         <i class="icon-lock"></i>
-                        <a href="${createLink(controller: 'user', action: 'updatePasswordIndex')}">更改密码</a>
+                        <a href="${createLink(controller: 'privilege', action: 'list')}">权限管理</a>
                     </p>
+
                     <p>
-                        <i class="icon-picture"></i>
-                        <a href="${createLink(controller: 'user', action: 'uploadPhotoIndex')}">上传头像</a>
+                        <i class="icon-share"></i>
+                        <a href="${createLink(controller: 'teaching', action: 'list')}">授课情况</a>
+                    </p>
+
+                    <p>
+                        <i class="icon-pencil"></i>
+                        <a href="${createLink(controller: 'backup', action: 'list')}">系统备份</a>
+                    </p>
                 </div>
+            </shiro:hasRole>
+            <div data-dojo-type="dijit/TitlePane"
+                 data-dojo-props="title: '个人信息管理'"
+                 style="padding-bottom: 10px;">
+                <p>
+                    <i class="icon-user"></i>
+                    <a href="${createLink(controller: 'user', action: 'updateInformationIndex')}">编辑个人信息</a>
+                </p>
+
+                <p>
+                    <i class="icon-lock"></i>
+                    <a href="${createLink(controller: 'user', action: 'updatePasswordIndex')}">更改密码</a>
+                </p>
+
+                <p>
+                    <i class="icon-picture"></i>
+                    <a href="${createLink(controller: 'user', action: 'uploadPhotoIndex')}">上传头像</a>
+            </div>
+        </div>
+
+        <div class="span7">
+            <g:layoutBody/>
+            <g:javascript library="application"/>
+            <r:layoutResources/>
+
+        </div>
+
+        <div class="span3" style="padding-top: 20px;">
+            <div id="tp2" data-dojo-type="dijit/TitlePane"
+                 data-dojo-props="title: '新闻通知'"
+                 style="padding-bottom: 10px;">
+                <p>新增课程《计算机网络基础》</p>
+
+                <p>《Java程序设计》课程授课地点更改通知</p>
             </div>
 
-            <div class="span7">
-                <g:layoutBody/>
-                <g:javascript library="application"/>
-                <r:layoutResources/>
-
-            </div>
-
-            <div class="span3" style="padding-top: 20px;">
-                <div id="tp2" data-dojo-type="dijit/TitlePane"
-                     data-dojo-props="title: '新闻通知'"
-                     style="padding-bottom: 10px;">
-                    <p>新增课程《计算机网络基础》</p>
-
-                    <p>《Java程序设计》课程授课地点更改通知</p>
-                </div>
-
-                <div>
-                    <div data-dojo-type="dijit/Calendar">
-                        <script type="dojo/method"
-                                data-dojo-event="onChange"
-                                data-dojo-args="value">
-                            require(["dojo/dom", "dojo/date/locale","dojo/on"], function(dom, locale,on){
-                            dom.byId('formatted').innerHTML = locale.format(value, {formatLength: 'full', selector:'date',locale:'zh'});
-                            });
-                        </script>
-                    </div>
-
-                    <p id="formatted"></p>
-                </div>
-            </div>
-            <script>
-                require(['dojo/query', 'dojo/dom-class'], function (query, domClass) {
-                    query('#turn-edit-on-or-off').on('click', function () {
-                        query(".edit-course-region").forEach(function (node) {
-                            domClass.toggle(node, 'hide');
+            <div>
+                <div data-dojo-type="dijit/Calendar">
+                    <script type="dojo/method"
+                            data-dojo-event="onChange"
+                            data-dojo-args="value">
+                        require(["dojo/dom", "dojo/date/locale","dojo/on"], function(dom, locale,on){
+                        dom.byId('formatted').innerHTML = locale.format(value, {formatLength: 'full', selector:'date',locale:'zh'});
                         });
+                    </script>
+                </div>
+
+                <p id="formatted"></p>
+            </div>
+        </div>
+        <script>
+            require(['dojo/query', 'dojo/dom-class'], function (query, domClass) {
+                query('#turn-edit-on-or-off').on('click', function () {
+                    query(".edit-course-region").forEach(function (node) {
+                        domClass.toggle(node, 'hide');
                     });
                 });
-            </script>
-        </div>
-        <hr>
-
-        <footer>
-            <p class="text-center">
-                <mousika:copyright/>
-            </p>
-        </footer>
+            });
+        </script>
     </div>
+    <hr>
+
+    <footer>
+        <p class="text-center">
+            <mousika:copyright/>
+        </p>
+    </footer>
+</div>
 </body>
 </html>

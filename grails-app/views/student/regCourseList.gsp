@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="course"/>
+        <meta name="layout" content="student"/>
         <g:set var="entityName"
                value="${message(code: 'course.label')}"/>
         <title><g:message code="default.list.label"

@@ -12,6 +12,8 @@ class Post {
 
     Date lastUpdated
 
+    Date lastModified
+
     String attachment
 
     static hasMany = [replies: Reply]

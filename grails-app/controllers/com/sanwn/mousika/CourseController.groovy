@@ -225,8 +225,11 @@ class CourseController {
             redirect(action: "list")
             return
         }
+        def notifications = Notification.where {
+            course == courseInstance
+        }.list([max: 5, sort: 'dateCreated', order: 'desc', offset: 0])
 
-        [courseInstance: courseInstance]
+        [courseInstance: courseInstance, notifications:notifications]
     }
 
     def edit(Long id) {

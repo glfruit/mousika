@@ -13,7 +13,7 @@
                 <col width="180px"/>
                 <col width="30px"/>
                 <col width="55px"/>
-                <col width="50"/>
+                <col width="50px"/>
                 <thead style="background-color: #F7F7F9;">
                     <tr>
                         <th>主题</th>

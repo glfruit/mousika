@@ -237,6 +237,54 @@
     </g:form>
 </div>
 
+<div style="border: 1px solid #DEDEDE;width: 100%;">
+    <div class="row-fluid">
+        <div class="span5" style="padding-left: 35px;">
+            <h5><i class="icon-volume-up"></i>
+                <span style="padding-left: 5px;">授课信息</span>
+                <span class="edit-course-region"
+                      style="padding-left: 5px;">
+                    <a href="#" rel="tooltip" title="编辑">
+                        <i class="icon-pencil"></i>
+                    </a>
+                </span>
+            </h5>
+
+            <p>上课地点：西10-302</p>
+
+            <p>上课时间：每天10点</p>
+        </div>
+
+        <div class="span7 notification" style="padding-left: 5px;">
+            <h5><i class="icon-list"></i>
+                <span style="padding-left: 5px;">课程通知</span>
+                <span class="edit-course-region"
+                      style="padding-left: 5px;">
+                    <a href="${createLink(controller: 'notification', action: 'create', params: [courseId: courseInstance.id])}">
+                        <i class="icon-plus-sign" rel="tooltip"
+                           title="发布通知"></i>
+                    </a>
+                </span>
+            </h5>
+            <ul class="notification">
+                <g:each in="${notifications}" var="notification">
+                    <li>
+                        <a href="${createLink(controller: 'notification', action: 'show', id: notification.id, params: [courseId: courseInstance.id])}">
+                            ${notification.title}
+                        </a>
+                    </li>
+                </g:each>
+            </ul>
+            <g:if test="${notifications?.size() >= 5}">
+                <p class="pull-right"
+                   style="padding-right: 30px; position: relative; bottom: 0;right: 0;">
+                    <a href="${createLink(controller: 'notification', action: 'list', params: [courseId: courseInstance?.id])}">更多...</a>
+                </p>
+            </g:if>
+        </div>
+    </div>
+</div>
+
 <div data-dojo-type="dojo.dnd.Source"
      data-dojo-props="accept: ['section'], withHandles: true, autoSync: true"
      class="dojoDndSource">

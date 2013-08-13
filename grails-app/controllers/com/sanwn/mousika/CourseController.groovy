@@ -225,8 +225,11 @@ class CourseController {
             redirect(action: "list")
             return
         }
+        def notifications = Notification.where {
+            course == courseInstance
+        }.list([max: 5, sort: 'dateCreated', order: 'desc', offset: 0])
 
-        [courseInstance: courseInstance]
+        [courseInstance: courseInstance, notifications: notifications]
     }
 
     def edit(Long id) {
@@ -327,6 +330,7 @@ class CourseController {
         } else if ("教师" == role.name) {
             course.deliveredBy = user
             user.addToPermissions("course:*:${id}")
+            user.addToPermissions("notification:*")
         }
         course.save(flush: true)
         render(contentType: "text/json") {  //TODO: handle failure
@@ -444,6 +448,17 @@ class CourseController {
             } else {
                 render contentType: 'application/json', text: '{"success":false,"error":"更新失败"}'
             }
+        }
+    }
+
+    def updateDeliverInfo() {
+        def course = Course.get(params.courseId)
+        course.deliverPlace = params.deliverPlace
+        course.deliverTime = params.deliverTime
+        if (course.save(flush: true)) {
+            render contentType: 'application/json', text: '{"success":true}'
+        } else {
+            render contentType: 'application/json', text: '{"success":false}'
         }
     }
 }

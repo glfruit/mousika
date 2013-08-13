@@ -171,11 +171,24 @@ class MousikaTagLib {
     }
 
     def editor = { attrs ->
+        if (attrs.basic) {
+            out << "<script type='text/javascript' src='${request.contextPath}/tinymce/tinymce.min.js'></script>"
+            out << """
+                <script type="text/javascript">
+                tinyMCE.init({
+                  selector: "textarea",
+                  theme: "modern",
+                  language: "zh_CN"
+                });
+                </script>
+                 """
+            return
+        }
         def provider = attrs.provider
         def params
         if (attrs.query) {
             params = "{"
-            attrs.query.each { key,value ->
+            attrs.query.each { key, value ->
                 params = params + key + ':' + value + ","
             }
             params = params.substring(0, params.size() - 1)

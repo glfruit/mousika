@@ -72,12 +72,12 @@ class StudentController {
     }
 
     def works() {
-        def count
-        if (isStudent) {
-            count = Course.createCriteria().count {
-                'in'('id', myCourses.id)
-            }
-        }
+//        def count
+//        if (isStudent) {
+//            count = Course.createCriteria().count {
+//                'in'('id', myCourses.id)
+//            }
+//        }
 
         [courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses, assignments: assignments]
     }

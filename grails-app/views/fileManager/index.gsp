@@ -59,18 +59,6 @@
         margin: 0;
         padding: 0;
     }
-
-    .file-item {
-        max-width: 80px;
-        max-height: 60px;
-    }
-
-    .file-item-title {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        text-align: center;
-    }
     </style>
 </head>
 

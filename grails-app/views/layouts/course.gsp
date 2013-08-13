@@ -271,11 +271,9 @@
 
         <div class="span3" style="padding-top: 20px;">
             <div id="tp2" data-dojo-type="dijit/TitlePane"
-                 data-dojo-props="title: '新闻通知'"
+                 data-dojo-props="title: '新闻通知'" class="public-notifications"
                  style="padding-bottom: 10px;">
-                <p>新增课程《计算机网络基础》</p>
-
-                <p>《Java程序设计》课程授课地点更改通知</p>
+                <g:img dir="images" file="processing.gif"/>
             </div>
 
             <div>
@@ -293,13 +291,28 @@
             </div>
         </div>
         <script>
-            require(['dojo/query', 'dojo/dom-class'], function (query, domClass) {
-                query('#turn-edit-on-or-off').on('click', function () {
-                    query(".edit-course-region").forEach(function (node) {
-                        domClass.toggle(node, 'hide');
+            require(['dojo/query', 'dojo/dom-class', 'dojo/request', 'dojo/json', 'dojo/_base/array', 'dijit/registry', 'dojo/domReady!'],
+                    function (query, domClass, request, json, arrayUtils, registry) {
+                        query('#turn-edit-on-or-off').on('click', function () {
+                            query(".edit-course-region").forEach(function (node) {
+                                domClass.toggle(node, 'hide');
+                            });
+                        });
+                        request.post("${createLink(controller: 'notification',action: 'list')}", {
+                            headers: {
+                                'Accept': 'application/json'
+                            }
+                        }).then(function (response) {
+                                    var result = json.parse(response);
+                                    var html = "";
+                                    arrayUtils.forEach(result, function (notification) {
+                                        html = html + "<p><a href='${request.contextPath}/notification/show/" + notification.id + "'>" + notification.title + "</a></p>";
+                                    });
+                                    var list = "${createLink(controller: 'notification', action: 'list')}";
+                                    html = html + "<div style='text-align: right;'><a href='" + list + "'>更多...</a></div>";
+                                    registry.byId('tp2').set('content', html);
+                                });
                     });
-                });
-            });
         </script>
     </div>
     <hr>

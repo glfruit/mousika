@@ -14,10 +14,47 @@
     <link rel="stylesheet"
           href="${resource(dir: 'css', file: 'jplayer/jplayer.blue.monday.css')}"
           type="text/css"/>
-    <mousika:tinymce/>
 </head>
 
 <body>
+<div id="edit-deliver-info-div" class="modal hide fade">
+    <div class="modal-header">
+        <h4>编辑授课信息</h4>
+    </div>
+
+    <div class="modal-body">
+        <g:form class='form-horizontal'>
+            <div class='control-group'>
+                <label class='control-label' for='deliverPlace'>
+                    授课地点：
+                </label>
+
+                <div class='controls'>
+                    <input name='deliverPlace' id='deliverPlace' type='text'/>
+                </div>
+            </div>
+
+            <div class='control-group'>
+                <label class='control-label' for='deliverTime'>
+                    授课时间：
+                </label>
+
+                <div class='controls'>
+                    <g:textArea name="deliverTime" id="deliverTime" cols="10"
+                                rows="10"/>
+                </div>
+            </div>
+        </g:form>
+    </div>
+
+    <div class="modal-footer">
+        <p class="pull-right">
+            <a id="updateBtn" class="btn btn-primary" href="#">更新</a>
+            <button class="btn" data-dismiss="modal"
+                    aria-hidden="true">取消</button>
+        </p>
+    </div>
+</div>
 <h4 style="border-bottom: 1px solid #DEDEDE;color: #777777;padding-bottom: 5px;padding-top: 20px;">
     ${courseInstance?.title}
 </h4>
@@ -237,6 +274,58 @@
     </g:form>
 </div>
 
+<div style="border: 1px solid #DEDEDE;width: 100%;">
+    <div class="row-fluid">
+        <div class="span5" style="padding-left: 35px;">
+            <h5><i class="icon-volume-up"></i>
+                <span style="padding-left: 5px;">授课信息</span>
+                <span class="edit-course-region"
+                      style="padding-left: 5px;">
+                    <a href="#edit-deliver-info-div" rel="tooltip" title="编辑"
+                       data-toggle="modal"
+                       class="edit-deliver-info">
+                        <i class="icon-pencil"></i>
+                    </a>
+                </span>
+            </h5>
+
+            <div class="deliver-info">
+                <p>上课地点：${courseInstance?.deliverPlace}</p>
+
+                <p>上课时间：<%=courseInstance?.deliverTime%></p>
+            </div>
+        </div>
+
+        <div class="span7 notification" style="padding-left: 5px;">
+            <h5><i class="icon-list"></i>
+                <span style="padding-left: 5px;">课程通知</span>
+                <span class="edit-course-region"
+                      style="padding-left: 5px;">
+                    <a href="${createLink(controller: 'notification', action: 'create', params: [courseId: courseInstance.id])}">
+                        <i class="icon-plus-sign" rel="tooltip"
+                           title="发布通知"></i>
+                    </a>
+                </span>
+            </h5>
+            <ul class="notification">
+                <g:each in="${notifications}" var="notification">
+                    <li>
+                        <a href="${createLink(controller: 'notification', action: 'show', id: notification.id, params: [courseId: courseInstance.id])}">
+                            ${notification.title}
+                        </a>
+                    </li>
+                </g:each>
+            </ul>
+            <g:if test="${notifications?.size() >= 5}">
+                <p class="pull-right"
+                   style="padding-right: 30px; position: relative; bottom: 0;right: 0;">
+                    <a href="${createLink(controller: 'notification', action: 'list', params: [courseId: courseInstance?.id])}">更多...</a>
+                </p>
+            </g:if>
+        </div>
+    </div>
+</div>
+
 <div data-dojo-type="dojo.dnd.Source"
      data-dojo-props="accept: ['section'], withHandles: true, autoSync: true"
      class="dojoDndSource">
@@ -248,9 +337,9 @@
 </div>
 <script>
     require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event',
-        'dojo/dom-style', 'dojo/dom-class', 'dojo/json',
+        'dojo/dom-style', 'dojo/dom-class', 'dojo/json', 'dojo/dom',
         'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
-            function (query, topic, request, domAttr, on, Source, ioQuery, $, event, domStyle, domClass, json) {
+            function (query, topic, request, domAttr, on, Source, ioQuery, $, event, domStyle, domClass, json, dom) {
                 query("i.icon-eye-open,i.icon-eye-close").on('click', function (e) {
                     event.stop(e);
                     var classes = query(e.target).attr('class')[0].split(' ');
@@ -436,6 +525,26 @@
                             });
                         }
                     }
+                });
+                query('#updateBtn').on('click', function (e) {
+                    event.stop(e);
+                    var deliverPlace = dom.byId('deliverPlace').value;
+                    var deliverTime = dom.byId('deliverTime').value;
+                    request.post("${createLink(controller: 'course', action: 'updateDeliverInfo')}",
+                            {data: {
+                                courseId: ${courseInstance.id},
+                                deliverPlace: deliverPlace,
+                                deliverTime: deliverTime
+                            }}).then(function (response) {
+                                var r = json.parse(response);
+                                if (r.success) {
+                                    query('.deliver-info').innerHTML("<p>授课地点：" + deliverPlace + "</p>" +
+                                            "<p>授课时间：" + deliverTime + "</p>");
+                                    query('#edit-deliver-info-div').hide();
+                                } else {
+                                    alert("更新失败！");
+                                }
+                            });
                 });
             });
 </script>

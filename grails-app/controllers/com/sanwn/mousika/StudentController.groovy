@@ -127,7 +127,6 @@ class StudentController {
 //                'in'('id', myCourses.id)
 //            }
         }
-
         [courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses, assignments: assignments,fileRepository:fileRepository]
     }
 

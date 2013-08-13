@@ -25,7 +25,11 @@ class FileManagerController {
 
     private def getCourseFileRepo(course) {
         def path = request.servletContext.getRealPath(".")
-        def fileRepo = new File(path, "courseFiles/${course.courseToken}/repo")
+        def fileRepo
+        if (course)
+            fileRepo = new File(path, "courseFiles/${course.courseToken}/repo")
+        else
+            fileRepo = new File(path, "notifications")
         if (!fileRepo.exists()) {
             FileUtils.forceMkdir(fileRepo)
         }

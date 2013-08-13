@@ -53,11 +53,15 @@ class Course {
      */
     User deliveredBy
 
+    String deliverPlace
+
+    String deliverTime
+
     SortedSet students
 
     static searchable = true
 
-    static hasMany = [students: User, units: CourseUnit]
+    static hasMany = [students: User, units: CourseUnit, notifications: Notification]
 
     static hasOne = [gradeBook: GradeBook, forum: Forum]
 
@@ -75,6 +79,7 @@ class Course {
         table 'mousika_courses'
         description column: "description", sqlType: "text"
         units sort: "sequence", order: "asc"
+        notifications sort: "dateCreated", order: "desc"
     }
 
     def init() {

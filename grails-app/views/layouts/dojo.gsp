@@ -13,12 +13,13 @@
           href="${resource(dir: 'js/lib/dijit/themes/tundra', file: 'tundra.css')}"
           type="text/css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-          href="${resource(dir: 'css', file: 'bootstrap.css')}"
-          type="text/css"/>
-    <link rel="stylesheet"
-          href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"
-          type="text/css"/>
+    %{--<link rel="stylesheet"--}%
+    %{--href="${resource(dir: 'css', file: 'bootstrap.css')}"--}%
+    %{--type="text/css"/>--}%
+    %{--<link rel="stylesheet"--}%
+    %{--href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"--}%
+    %{--type="text/css"/>--}%
+    <r:require modules="bootstrap"/>
     <link rel="stylesheet"
           href="${resource(dir: 'css', file: 'mousika.css')}"
           type="text/css"/>
@@ -176,10 +177,12 @@
                             <i class="icon-user"></i>
                             <a href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
                         </p>
+
                         <p>
                             <i class="icon-lock"></i>
                             <a href="${createLink(controller: 'privilege', action: 'list')}">权限管理</a>
                         </p>
+
                         <p>
                             <i class="icon-pencil"></i>
                             <a href="${createLink(controller: 'backup', action: 'list')}">系统备份</a>

@@ -565,6 +565,4 @@ class StudentController {
         response.outputStream << photoByte
         response.outputStream.close()
     }
-
-
 }

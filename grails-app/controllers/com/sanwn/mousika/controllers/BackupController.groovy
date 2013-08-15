@@ -14,11 +14,21 @@ class BackupController {
             def dataBasePath = backupInstance.dataBasePath
             def userDir = System.getProperty("user.dir")
             def os = System.getProperty("os.name").toLowerCase();
-            def backupCommandLocation = "/grails-app/command/backup.bat"
+            def backupCommandLocation
+            def process
             if(os.indexOf( "win" ) >= 0){
-                def child = Runtime.getRuntime().exec("cmd.exe /c start "+userDir+backupCommandLocation)
+                backupCommandLocation = "/grails-app/command/backup.bat"
+                process = Runtime.getRuntime().exec("cmd /c start "+userDir+backupCommandLocation)
                 try {
-                    child.waitFor()
+                    process.waitFor()
+                } catch (InterruptedException e) {
+                    e.printStackTrace()
+                }
+            }else if (os.indexOf( "nix") >=0 || os.indexOf( "nux") >=0){
+                backupCommandLocation = "/grails-app/command/backup.sh"
+                process = Runtime.getRuntime().exec(userDir+backupCommandLocation)
+                try {
+                    process.waitFor()
                 } catch (InterruptedException e) {
                     e.printStackTrace()
                 }
@@ -47,18 +57,36 @@ class BackupController {
         def dataBasePath = backupInstance.dataBasePath
         def userDir = System.getProperty("user.dir")
         def os = System.getProperty("os.name").toLowerCase();
-        def backupCommandLocation = "/grails-app/command/backup.bat"
+        def backupCommandLocation
         //备份到该系统的根目录下的backup文件夹下
         def backupPath = userDir+"/backup"
         if(os.indexOf( "win" ) >= 0){
-            dataBasePath = "\""+dataBasePath+"\""
-            FileWriter fileWriter = new FileWriter(userDir+backupCommandLocation)
+            backupCommandLocation = "/grails-app/command/backup.bat"
+            dataBasePath = "\""+dataBasePath+"/bin/pg_dump.exe"+"\""
+            File file = new File(userDir+backupCommandLocation)
+            FileWriter fileWriter = new FileWriter(file)
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)
 
             bufferedWriter.append("set PGPASSWORD=mousika_dev\n")
             bufferedWriter.append(dataBasePath)
-            bufferedWriter.append(" --host localhost --port 5432 --username \"mousika_dev\" --format custom --blobs --verbose --file \""+backupPath+"/mousika_dev-%date:~0,4%-%date:~5,2%-%date:~8,2%-%time:~0,2%-%time:~3,2%-%time:~6,2%.dump\"")
-            bufferedWriter.append("\nexit")
+            bufferedWriter.append(" --host localhost --port 5432 --username \"mousika_dev\" --format custom --blobs --verbose --file \""+backupPath+"/mousika_dev-%date:~0,4%-%date:~5,2%-%date:~8,2%-%time:~0,2%-%time:~3,2%-%time:~6,2%.backup\"\n")
+            bufferedWriter.append("exit")
+            bufferedWriter.flush()
+            fileWriter.close()
+            bufferedWriter.close()
+
+        }else if (os.indexOf( "nix") >=0 || os.indexOf( "nux") >=0){
+            backupCommandLocation = "/grails-app/command/backup.sh"
+            dataBasePath = "\""+dataBasePath+"\""
+            File file = new File(userDir+backupCommandLocation)
+            FileWriter fileWriter = new FileWriter(file)
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)
+
+            bufferedWriter.append("#!/bin/bash\n")
+            bufferedWriter.append("CURTIME=`date +\"%Y-%m-%d-%H-%M-%S\"`\n")
+            bufferedWriter.append("export PGPASSWORD=mousika_dev\n")
+            bufferedWriter.append("pg_dump --host localhost --port 5432 --username \"mousika_dev\" --format custom --blobs --verbose --file \""+backupPath+"/mousika_dev-\$CURTIME.backup\"\n")
+            bufferedWriter.append("exit")
             bufferedWriter.flush()
             fileWriter.close()
             bufferedWriter.close()
@@ -72,11 +100,21 @@ class BackupController {
     def manualBackup() {
         def userDir = System.getProperty("user.dir")
         def os = System.getProperty("os.name").toLowerCase();
-        def backupCommandLocation = "/grails-app/command/backup.bat"
+        def backupCommandLocation
+        def process
         if(os.indexOf( "win" ) >= 0){
-            def child = Runtime.getRuntime().exec("cmd.exe /c start "+userDir+backupCommandLocation)
+            backupCommandLocation = "/grails-app/command/backup.bat"
+            process = Runtime.getRuntime().exec("cmd.exe /c start "+userDir+backupCommandLocation)
             try {
-                child.waitFor()
+                process.waitFor()
+            } catch (InterruptedException e) {
+                e.printStackTrace()
+            }
+        } else if (os.indexOf( "nix") >=0 || os.indexOf( "nux") >=0){
+            backupCommandLocation = "/grails-app/command/backup.sh"
+            process = Runtime.getRuntime().exec(userDir+backupCommandLocation)
+            try {
+                process.waitFor()
             } catch (InterruptedException e) {
                 e.printStackTrace()
             }

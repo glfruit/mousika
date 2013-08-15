@@ -52,7 +52,7 @@ class CourseController {
             courses = Course.findAllByGuestVisible(true, params)
         withFormat {
             html {
-                courses: courses
+                [courses: courses]
             }
             json {
                 def results = courses.collect { course ->
@@ -225,8 +225,11 @@ class CourseController {
             redirect(action: "list")
             return
         }
+        def notifications = Notification.where {
+            course == courseInstance
+        }.list([max: 5, sort: 'dateCreated', order: 'desc', offset: 0])
 
-        [courseInstance: courseInstance]
+        [courseInstance: courseInstance, notifications: notifications]
     }
 
     def edit(Long id) {
@@ -327,6 +330,7 @@ class CourseController {
         } else if ("教师" == role.name) {
             course.deliveredBy = user
             user.addToPermissions("course:*:${id}")
+            user.addToPermissions("notification:*")
         }
         course.save(flush: true)
         render(contentType: "text/json") {  //TODO: handle failure
@@ -372,7 +376,7 @@ class CourseController {
         }
         def token = course.courseToken
         SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, token)
-        redirect(controller: 'fileRepository', action: 'list')
+        [course: course]
     }
 
     def search() {
@@ -407,5 +411,54 @@ class CourseController {
         }
         def total = 10 //TODO: 获取totoal总数
         [assignments: items, course: course, total: total]
+    }
+
+    def toggleUnitOrItem(Long courseId, int unitSeq, int itemSeq) {
+        def course = Course.get(courseId)
+        if (!course) {
+            render contentType: 'application/json', text: "{\"success\":false,\"error\":\"未找到id为${courseId}的课程\"}"
+            return
+        }
+        def unit = CourseUnit.where {
+            course == course && sequence == unitSeq
+        }.find()
+        if (!unit) {
+            render contentType: 'application/json', text: "{\"success\":true,\"error\":\"未在id为${courseId}的课程里找到序列号为${unitSeq}的课程单元\"}"
+            return
+        }
+        if (itemSeq == -1) {
+            unit.visible = params.boolean('visible')
+            if (unit.save(flush: true)) {
+                render contentType: 'application/json', text: '{"success":true}'
+            } else {
+                render contentType: 'application/json', text: '{"success":false,"error":"更新失败"}'
+            }
+        } else {
+            def unitItem = UnitItem.where {
+                unit == unit && sequence == itemSeq
+            }.find()
+            if (!unitItem) {
+                render contentType: 'application/json',
+                        text: "{\"success\":false,\"error\":\"未在id为${courseId}的课程序列号为${unitSeq}的课程单元里找到${itemSeq}的课程内容\"}"
+                return
+            }
+            unitItem.visible = params.boolean('visible')
+            if (unitItem.save(flush: true)) {
+                render contentType: 'application/json', text: '{"success":true}'
+            } else {
+                render contentType: 'application/json', text: '{"success":false,"error":"更新失败"}'
+            }
+        }
+    }
+
+    def updateDeliverInfo() {
+        def course = Course.get(params.courseId)
+        course.deliverPlace = params.deliverPlace
+        course.deliverTime = params.deliverTime
+        if (course.save(flush: true)) {
+            render contentType: 'application/json', text: '{"success":true}'
+        } else {
+            render contentType: 'application/json', text: '{"success":false}'
+        }
     }
 }

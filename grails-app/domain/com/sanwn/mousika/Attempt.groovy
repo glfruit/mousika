@@ -23,6 +23,10 @@ class Attempt {
         evaluateDate nullable: true
     }
 
+    static mapping = {
+        table 'mousika_course_assignment_attempts'
+    }
+
     def addFeedback(Feedback feedback) {
         feedback.attempt = this
         this.feedback = feedback

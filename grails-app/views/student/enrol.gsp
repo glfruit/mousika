@@ -3,6 +3,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="layout" content="student"/>
         <g:set var="entityName"
                value="${message(code: 'course.label', default: 'Course')}"/>
         <title><g:message code="course.enrol.label"/></title>

@@ -3,25 +3,7 @@
 <html>
     <head>
         <title><g:message code="course.edit.label"/></title>
-        <g:javascript src="../tiny_mce/tiny_mce.js"/>
-        <r:script>
-            tinyMCE.init({
-                mode: "textareas",
-                theme: "advanced",
-                language: "cn",
-                plugins: "autoresize,autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",
-                theme_advanced_buttons3_add: "emotions",
-                theme_advanced_buttons3_add: "fullscreen",
-                fullscreen_new_window: true,
-                fullscreen_settings: {
-                    theme_advanced_path_location: "top"
-                },
-                dialog_type: "modal",
-                theme_advanced_buttons3_add: "preview",
-                plugin_preview_width: "500",
-                plugin_preview_height: "600"
-            });
-        </r:script>
+        <mousika:editor/>
     </head>
 
     <body>
@@ -55,7 +37,8 @@
                 </f:with>
                 <div class="control-group pagination-centered">
                     <g:submitButton id="update-course" name="update-course"
-                            class="btn btn-primary" value="${message(code: 'default.button.update.label')}"/>
+                                    class="btn btn-primary"
+                                    value="${message(code: 'default.button.update.label')}"/>
                     <a class="btn"
                        href="${createLink(action: 'show', id: courseInstance.id)}">取消</a>
                 </div>

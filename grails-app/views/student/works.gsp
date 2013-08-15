@@ -1,7 +1,8 @@
-<%@ page import="com.sanwn.mousika.Role; org.apache.commons.lang.StringEscapeUtils; com.sanwn.mousika.User; com.sanwn.mousika.Course" %>
+<%@ page import="com.sanwn.mousika.Role; org.apache.commons.lang.StringEscapeUtils; com.sanwn.mousika.User; com.sanwn.mousika.Course; com.sanwn.mousika.Assignment" %>
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="layout" content="student"/>
         <g:set var="entityName"
                value="${message(code: 'course.label')}"/>
         <title><g:message code="default.list.label"
@@ -18,26 +19,31 @@
         <div data-dojo-type="dijit/TitlePane"
              data-dojo-props="title: '我的作业'"
              style="padding-bottom: 10px;">
-                <g:if test="${assignments}">
-                    <table width="100%">
-                    <g:each in="${assignments}" status="i" var="assignment">
-                        <g:if test="${i<3}">
-                        <tr><td>
-                            <g:link action="resource" params="['id':assignment.id]">${assignment.title}【${assignment.section.course.title}】</g:link>
-                            %{--<g:link action="assignment" params="['assignmentId':assignment.id]">${assignment.title}【${assignment.section.course.title}】</g:link>--}%
-                        </td></tr>
-                        </g:if>
-                    </g:each>
-                    <g:if test="${assignments.size>3}">
-                        <tr><td align="right">
-                            <g:link action="assignmentList">&gt;&gt;more...</g:link>
-                        </td></tr>
+            <g:if test="${assignments!=null&&assignments.size()>0}">
+                <table width="100%">
+                <g:each in="${assignments}" status="i" var="ca">
+                        <tr>
+                            <td width="140" height="28" align="left" style="font-weight: bold">
+                                【${ca.getKey().title}】
+                            </td>
+                            <td><table width="100%"><tr>
+                            <g:each in="${ca.getValue()}" var="assignment">
+                                <td>
+                                    <g:link action="resource" params="['id':assignment.id]">${assignment.title}</g:link>
+                                </td>
+                            </g:each>
+                            </tr></table></td></tr>
+                </g:each>
+                <g:if test="${assignments.size>3}">
+                    <tr><td align="right">
+                        <g:link action="assignmentList">查看全部&gt;&gt;</g:link>
+                    </td></tr>
                     </g:if>
-                    </table>
-                </g:if>
-                <g:else>
-                    没有任何课程
-                </g:else>
+                </table>
+            </g:if>
+            <g:else>
+                没有任何作业
+            </g:else>
         </div>
 
         <div data-dojo-type="dijit/TitlePane"

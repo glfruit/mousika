@@ -20,7 +20,8 @@ class PageController {
     }
 
     def create() {
-        [pageInstance: new Page(params), sectionSeq: params.sectionSeq, courseId: params.courseId]
+        def course = Course.get(params.courseId)
+        [pageInstance: new Page(params), sectionSeq: params.sectionSeq, courseId: params.courseId, course: course]
     }
 
     def save() {
@@ -54,34 +55,35 @@ class PageController {
             return
         }
 
-        [pageInstance: pageInstance]
+        [pageInstance: pageInstance, course: Course.get(params.courseId), unit: CourseUnit.get(params.unitId)]
     }
 
     def edit(Long id) {
         def pageInstance = Page.get(id)
         if (!pageInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'page.label', default: 'Page'), id])
-            redirect(action: "list")
+            redirect(controller: 'course', action: "show", id: params.courseId)
             return
         }
 
-        [pageInstance: pageInstance]
+        [pageInstance: pageInstance, course: Course.get(params.courseId)]
     }
 
     def update(Long id, Long version) {
         def pageInstance = Page.get(id)
         if (!pageInstance) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'page.label', default: 'Page'), id])
-            redirect(action: "list")
+            redirect(controller: 'course', action: "show", id: params.courseId)
             return
         }
 
+        def course = Course.get(params.courseId)
         if (version != null) {
             if (pageInstance.version > version) {
                 pageInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
                         [message(code: 'page.label', default: 'Page')] as Object[],
                         "Another user has updated this Page while you were editing")
-                render(view: "edit", model: [pageInstance: pageInstance])
+                render(view: "edit", model: [pageInstance: pageInstance, course: course])
                 return
             }
         }
@@ -94,7 +96,7 @@ class PageController {
         }
 
         flash.message = message(code: 'default.updated.message', args: [message(code: 'page.label', default: 'Page'), pageInstance.id])
-        redirect(action: "show", id: pageInstance.id)
+        redirect(action: "show", id: pageInstance.id, params: [courseId: course.id, unitId: params.unitId])
     }
 
     def delete(Long id) {

@@ -15,6 +15,11 @@ class PostController {
         [post: new Post(params)]
     }
 
+    private def getCourseForumRepo(String courseToken) {
+        def path = request.servletContext.getRealPath(".")
+        return new File(path, "forumFiles/${courseToken}")
+    }
+
     def save() {
         def post = new Post(params);
         def newFile
@@ -22,7 +27,7 @@ class PostController {
         if (attachmentFile.size != 0) {
             post.attachment = attachmentFile.originalFilename
             def course = Course.get(params.courseId)
-            def fileRepo = new File(".", "courseFiles/${course.courseToken}/forum")
+            def fileRepo = getCourseForumRepo(course.courseToken)
             if (!fileRepo.exists()) {
                 FileUtils.forceMkdir(fileRepo)
             }
@@ -33,6 +38,7 @@ class PostController {
             username == SecurityUtils.subject.principal
         }.find()
         post.postedBy = user
+        post.lastModified = new Date()
         def forum = Forum.where {
             id == params.forumId
         }.find()
@@ -63,7 +69,7 @@ class PostController {
         def course = Course.where {
             id == params.courseId
         }.find()
-        def file = new File(".", "courseFiles/${course.courseToken}/forum/${id}")
+        def file = getCourseForumRepo(course.courseToken)
         response.setContentType("application/octet-stream")
         response.setContentLength(file.size().toInteger())
         def filename = new String(id.getBytes("UTF-8"), "ISO-8859-1")

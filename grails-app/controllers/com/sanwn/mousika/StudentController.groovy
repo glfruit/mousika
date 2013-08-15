@@ -1,7 +1,13 @@
 package com.sanwn.mousika
 
+import grails.converters.JSON
+import org.apache.commons.io.FileUtils
 import org.apache.shiro.SecurityUtils
+import org.apache.shiro.crypto.hash.Sha256Hash
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.web.multipart.commons.CommonsMultipartFile
+
+import java.text.SimpleDateFormat
 
 class StudentController {
 
@@ -10,7 +16,8 @@ class StudentController {
     def gsonBuilder
 
     def courses, myCourses, notRegCourses
-    def assignments
+    Map<Course, List<Assignment>> assignments
+    def fileRepository;
 
     User loginUser
     boolean isStudent
@@ -31,13 +38,22 @@ class StudentController {
         courses = Course.findAll() {
         }
 
-        myCourses = Course.findAll() {
-            deliveredBy == loginUser
+//        myCourses = Course.findAll() {
+//            deliveredBy == loginUser
+//        }
+
+        def courseApplications = CourseApplication.findAll(){
+            applicant == loginUser && (status =="approved"||status=="submitted")
         }
 
-//        notRegCourses = Course.findAll() {
-//            courseMembers.user != loginUser
+//        myCourses = Course.findAll() {
+//            courseMembers.user == loginUser
 //        }
+        myCourses = new ArrayList();
+        for(CourseApplication ca :courseApplications){
+            //if(ca.status =="approved")
+            myCourses.add(ca.applyFor)
+        }
 
         notRegCourses = new ArrayList();
         boolean isReg = false;
@@ -53,6 +69,13 @@ class StudentController {
                 notRegCourses.add(c)
             }
         }
+        myCourses.clear()
+        for(CourseApplication ca :courseApplications){
+            if(ca.status =="approved")
+            myCourses.add(ca.applyFor)
+        }
+
+
 //        for(int i=notRegCourses.size()-1;i>=0;i--){
 //            Course c = notRegCourses.get(i);
 //            if(c.courseMembers!=null&&c.courseMembers.size()>0) {
@@ -65,21 +88,51 @@ class StudentController {
 //            }
 //        }
 
-        assignments = Assignment.list()
 //        assignments = Assignment.list([sort: 'section', order: 'asc']);
         //type=="com.sanwn.mousika.Assignment";
 //        assignments = Assignment.findAll("from Assignment as a order by section asc");
+        fileRepository = FileRepository.findAll(){
+            owner == loginUser
+        };
+        //assignments = Assignment.list()
+
+        assignments = new HashMap<>();
+        Course key=null
+        List<Assignment> assignmentList = null;
+        for(Course course:myCourses){
+            assignmentList = null;
+            for(CourseUnit courseUnit:course.units){
+                for(UnitItem unitItem:courseUnit.items){
+                    if(unitItem.content instanceof  Assignment){
+                        Assignment a = unitItem.content
+                        if(new Date()<=a.dueDate){
+                            if(assignmentList==null)
+                                assignmentList = new ArrayList()
+                            assignmentList.add((Assignment)unitItem.content)
+                        }
+                    }
+                }
+            }
+            if(key==null||key.id!=course.id){
+                assignments.put(course,assignmentList)
+            }
+        }
+        return
     }
 
     def works() {
         def count
         if (isStudent) {
-            count = Course.createCriteria().count {
-                'in'('id', myCourses.id)
-            }
+//            count = Course.createCriteria().count {
+//                'in'('id', myCourses.id)
+//            }
         }
+        [courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses, assignments: assignments,fileRepository:fileRepository]
+    }
 
-        [courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses, assignments: assignments]
+    def myCourseList() {
+        render myCourses as JSON
+        //[myCourses: myCourses]
     }
 
     def assignment() {
@@ -155,6 +208,19 @@ class StudentController {
             def course = Course.findById(courseId);
             CourseApplication application =
                 new CourseApplication(applicant: user, applyFor: course, applyDate: new Date(), status: CourseApplication.STATUS_SUBMITTED)
+
+//            def sRole =  Role.findByName("学生")
+//            def cm = CourseMember.findByCourseAndUserAndRole(course,loginUser,sRole);
+//            if(cm!=null){
+//            }else {
+//                cm  = new CourseMember();
+//                cm.setRole(sRole)
+//            }
+//            cm.setCourse(course)
+//            cm.setUser(loginUser)
+//            cm.setStatus(1);
+//            cm.save();
+
             if (application.save(flush: true)) {
                 redirect(action: "regCourseList", params: params)
                 return
@@ -200,24 +266,69 @@ class StudentController {
         [assignment: assignment, attempt: attempt, courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses]
     }
 
+    boolean uploadedFile(Assignment assignment, CommonsMultipartFile uploadedFile){
+        boolean result = false
+        def filename = uploadedFile.originalFilename
+        def filePath = "courseFiles/assignment/"+loginUser.id+"/"+assignment.id
+        def fileRepo = new File(".", filePath)
+        if (!fileRepo.exists()) {
+            FileUtils.forceMkdir(fileRepo)
+        }
+        def newFile = new File(fileRepo, filename)
+        uploadedFile.transferTo(newFile)
+        def fileType
+        def pos = filename.lastIndexOf('.')
+        if (pos == -1) {
+            fileType = '*' //unknown file type
+        } else {
+            fileType = filename.substring(pos + 1)
+        }
+        try {
+            assignment.setFilePath(filePath+"/"+filename)
+            //assignment.save()
+            result = true
+        } catch (Exception e) {
+            newFile.delete()
+            flash.message = e.message
+        }
+
+        return result
+    }
+
+
     def createAttempt() {
         def attempt;
         def assignment = Assignment.get(params.assignmentId)
+        def file = request.getFile('assignmentFile')
         if (assignment.attempts != null && assignment.attempts.size() > 0) {
             attempt = assignment.attempts.first()
             attempt.attemptContent = params.attemptContent
         } else {
             attempt = new Attempt(params)
             attempt.submittedBy = loginUser
+            attempt.score = 0
+            attempt.submittedDate = new Date()
             assignment.addToAttempts(attempt)
         }
-        if (attempt.validate() && assignment.save()) {
+
+        if (attempt.validate() &&assignment.save()&&(file.size==0||(file.size>0&&uploadedFile(assignment,file)))) {
             flash.message = "保存答案成功"
             redirect(action: 'resource', id: assignment.id)
             return
         }
         flash.message = "保存答案失败"
         render(view: 'resource', model: [assignment: assignment, attempt: attempt])
+    }
+
+    def page(Long id) {
+        def pageInstance = Page.get(id)
+        if (!pageInstance) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'page.label', default: 'Page'), id])
+            //redirect(action: "list")
+            return
+        }
+
+        [pageInstance: pageInstance, courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses]
     }
 
     def show(Long id) {
@@ -355,5 +466,103 @@ class StudentController {
     def addResource() {
         def contentType = params.itemContentType
         redirect(controller: contentType, action: 'create', params: [sectionSeq: params.sectionSeq, courseId: params.courseId])
+    }
+
+    def fileList(Integer max){
+        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_TYPE, FileRepository.REPOSITORY_TYPE_FILE)
+        SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, SecurityUtils.subject.principal)
+
+        params.max = Math.min(max ?: 10, 100)
+        [fileRepositoryInstanceList: FileRepository.list(params), fileRepositoryInstanceTotal: FileRepository.count()]
+    }
+
+    def updatePasswordIndex(){
+        /*def subject = SecurityUtils.getSubject();
+        [subject:subject]*/
+    }
+
+    def updatePassword(){
+        def subject = SecurityUtils.getSubject();
+        def userInstance = User.findByUsername(subject.getPrincipal())
+        if (!userInstance.getPasswordHash().equals(new Sha256Hash(params.get("oldPassword")).toHex())){
+            flash.message = message(code: 'user.update.password.error.message')
+            redirect(action: "updatePasswordIndex")
+        }else{
+            userInstance.setPasswordHash(new Sha256Hash(params.get("newPassword1")).toHex())
+            userInstance.save(failOnError: true)
+            flash.message = message(code: 'user.update.password.success.message')
+            redirect(action: "updatePasswordIndex")
+        }
+    }
+
+    def updateInformationIndex(){
+        def subject = SecurityUtils.getSubject();
+        def userInstance = User.findByUsername(subject.getPrincipal())
+        [userInstance:userInstance]
+    }
+
+    def updateInformation(){
+        def subject = SecurityUtils.getSubject();
+        def userInstance = User.findByUsername(subject.getPrincipal())
+        userInstance.profile.email = params.get("email")
+        userInstance.profile.interests = params.get("interests")
+        try{
+            userInstance.save(flash: true)
+        }
+        catch(Exception exception) {
+            flash.message = "email格式错误"
+        }
+        redirect(action: "updateInformationIndex")
+    }
+
+    def uploadPhotoIndex(){
+
+    }
+
+    def uploadPhoto(){
+        def propertiesMap = params.get("photo").getProperties()
+        def contentType = propertiesMap.get("contentType")
+        if (propertiesMap.get("empty")){
+            flash.message = "上传的头像为空"
+            redirect(action: "uploadPhotoIndex")
+            return
+        }else if(!(contentType.equals("image/jpeg")||contentType.equals("image/png")||contentType.equals("image/bmp")||contentType.equals("image/gif"))) {
+            flash.message = "不支持的图片格式"
+            redirect(action: "uploadPhotoIndex")
+            return
+        } else if( propertiesMap.get("size")>200*1024) {
+            flash.message = "上传的头像太大"
+            redirect(action: "uploadPhotoIndex")
+            return
+        } else{
+            FileInputStream fileInputStream =  propertiesMap.get("inputStream")
+            def subject = SecurityUtils.getSubject();
+            def userInstance = User.findByUsername(subject.getPrincipal())
+            userInstance.profile.photo = fileInputStream.bytes
+            userInstance.save(failOnError: true)
+            flash.message = "上传头像成功"
+            redirect(action: "uploadPhotoIndex")
+        }
+    }
+
+    def displayPhoto(){
+        def userInstance
+        if (params.get("id")!=null){
+            userInstance = User.get(params.get("id"))
+        } else{
+            def subject = SecurityUtils.getSubject();
+            userInstance = User.findByUsername(subject.getPrincipal())
+        }
+        def photoByte
+        if (userInstance.getProfile()!=null&&userInstance.getProfile().getPhoto()!=null&&userInstance.getProfile().getPhoto().length!=0){
+            photoByte = userInstance.profile.photo
+        }else{
+            def fileName = System.getProperty("user.dir") + "/web-app/images/defaultUserPhoto/defaultUserPhoto.jpg"
+            def file = new File(fileName)
+            photoByte = new FileInputStream(file).bytes
+        }
+        response.setContentLength(photoByte.length)
+        response.outputStream << photoByte
+        response.outputStream.close()
     }
 }

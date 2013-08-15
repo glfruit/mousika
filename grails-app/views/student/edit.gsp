@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="layout" content="student"/>
         <title><g:message code="course.edit.label"/></title>
         <g:javascript src="../tiny_mce/tiny_mce.js"/>
         <r:script>

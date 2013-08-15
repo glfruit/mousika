@@ -2,29 +2,31 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="layout" content="student"/>
         <g:set var="entityName" value="${message(code: 'course.label')}"/>
         <title><g:message code="default.list.label" args="[entityName]"/></title>
-        <g:javascript src="../tiny_mce/tiny_mce.js"/>
-        <r:script>
-            tinyMCE.init({
-                mode: "textareas",
-                theme: "advanced",
-                language: "cn",
-                width: "98%",
-                height: 260,
-                plugins: "autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",
-                theme_advanced_buttons3_add: "emotions",
-                theme_advanced_buttons3_add: "fullscreen",
-                fullscreen_new_window: true,
-                fullscreen_settings: {
-                    theme_advanced_path_location: "top"
-                },
-                dialog_type: "modal",
-                theme_advanced_buttons3_add: "preview",
-                plugin_preview_width: "500",
-                plugin_preview_height: "600"
-            });
-        </r:script>
+        <mousika:editor/>
+        %{--<g:javascript src="../tinymce/tinymce.min.js"/>--}%
+        %{--<r:script>--}%
+            %{--tinyMCE.init({--}%
+                %{--mode: "textareas",--}%
+                %{--theme: "advanced",--}%
+                %{--language: "cn",--}%
+                %{--width: "98%",--}%
+                %{--height: 260,--}%
+                %{--plugins: "autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",--}%
+                %{--theme_advanced_buttons3_add: "emotions",--}%
+                %{--theme_advanced_buttons3_add: "fullscreen",--}%
+                %{--fullscreen_new_window: true,--}%
+                %{--fullscreen_settings: {--}%
+                    %{--theme_advanced_path_location: "top"--}%
+                %{--},--}%
+                %{--dialog_type: "modal",--}%
+                %{--theme_advanced_buttons3_add: "preview",--}%
+                %{--plugin_preview_width: "500",--}%
+                %{--plugin_preview_height: "600"--}%
+            %{--});--}%
+        %{--</r:script>--}%
     </head>
 
     <body>
@@ -38,19 +40,19 @@
              data-dojo-props="title: '我的作业'"
              style="padding-bottom: 10px;">
                 <g:if test="${assignment}">
-                    <g:form action="createAttempt">
+                    <g:uploadForm action="createAttempt">
                     <table width="96%" border="0">
                         <tr>
-                            <th width="90">
-                                课程名称：
-                            </th>
-                            <td>
-                                ${assignment.section.course.title}
-                            </td>
+                            %{--<th width="90">--}%
+                                %{--课程名称：--}%
+                            %{--</th>--}%
+                            %{--<td>--}%
+                                %{--${assignment.section.course.title}--}%
+                            %{--</td>--}%
                             <th width="90">
                                 作业名称：
                             </th>
-                            <td>
+                            <td colspan="3">
                                 ${assignment.title}
                             </td>
                         </tr>
@@ -59,7 +61,7 @@
                                 作业内容：
                             </th>
                             <td colspan="3">
-                                ${assignment.description}
+                                <%=assignment?.description%>
                             </td>
                         </tr>
                         <tr>
@@ -67,8 +69,16 @@
                                 回答：
                             </th>
                             <td colspan="3">
-                                <g:hiddenField name="assignmentId"  value="${assignment.id}"/>
+                                <g:hiddenField name="assignmentId"  value="${assignment?.id}"/>
                                 <g:textArea name="attemptContent" value="${attempt?.attemptContent}" rows="10"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                提交文件：
+                            </th>
+                            <td colspan="3">
+                                <input type="file" name="assignmentFile" size="40"/>
                             </td>
                         </tr>
                         <tr>
@@ -87,7 +97,7 @@
                             </td>
                         </tr>
                     </table>
-                    </g:form>
+                    </g:uploadForm>
                 </g:if>
                 <g:else>
                     无该作业

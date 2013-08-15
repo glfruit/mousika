@@ -27,7 +27,8 @@ class Data {
 
         def studentRole = new Role(name: "学生")
         studentRole.addToPermissions("course:list,show")
-        studentRole.addToPermissions("student:index,list,create,show,save,edit,update,myWorks,regCourse,regCourseList")
+        studentRole.addToPermissions("student:*")
+        studentRole.addToPermissions("user:*")
 
         studentRole.save()
 

@@ -13,7 +13,8 @@ class AssignmentController {
     def courseUnitService
 
     def create() {
-        [assignment: new Assignment(params), sectionSeq: params.sectionSeq, courseId: params.courseId]
+        def course = Course.get(params.courseId)
+        [assignment: new Assignment(params), sectionSeq: params.sectionSeq, courseId: params.courseId, course: course]
     }
 
     def save() {
@@ -68,7 +69,7 @@ class AssignmentController {
             submittedBy == u && assignment == assignment
         }.find()
 
-        [assignment: assignment, attempt: attempt]
+        [assignment: assignment, attempt: attempt, course: Course.get(params.courseId), unit: CourseUnit.get(params.unitId)]
     }
 
     def createAttempt() {
@@ -83,5 +84,44 @@ class AssignmentController {
         }
         flash.message = "保存答案失败"
         render(view: 'show', model: [assignment: assignment, attempt: attempt])
+    }
+
+    def edit(Long id) {
+        def assignment = Assignment.get(id)
+        if (!assignment) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assignment.label', default: 'Assignment'), id])
+            redirect(controller: "course", action: "show", id: params.courseId)
+            return
+        }
+
+        [assignment: assignment, course: Course.get(params.courseId), unit: CourseUnit.get(params.unitId)]
+    }
+
+    def update(Long id, Long version) {
+        def assignment = Assignment.get(id)
+        if (!assignment) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'assignment.label', default: 'Assignment'), id])
+            redirect(controller: 'course', action: 'show', id: params.courseId)
+            return
+        }
+
+        if (version != null) {
+            if (assignment.version > version) {
+                assignment.errors.rejectValue("version", "default.optimistic.locking.failure",
+                        [message(code: 'assignment.label', default: 'FileResource')] as Object[],
+                        "Another user has updated this FileResource while you were editing")
+                render(view: "edit", model: [fileResourceInstance: assignment, course: Course.get(params.courseId), unitId: params.unitId])
+                return
+            }
+        }
+
+        assignment.properties = params
+        if (!assignment.save(flush: true)) {
+            render(view: "edit", model: [assignment: assignment, course: Course.get(params.courseId), unitId: params.unitId])
+            return
+        }
+
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'assignment.label', default: 'Assignment'), assignment.id])
+        redirect(controller: 'course', action: "show", id: params.courseId)
     }
 }

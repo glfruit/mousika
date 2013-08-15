@@ -3,14 +3,17 @@
 <html>
     <head>
         <meta name="layout" content="course">
+        <mousika:editor/>
         <title><g:message code="fileResource.button.create.label"/></title>
-        <ckeditor:resources/>
     </head>
 
     <body>
         <div id="create-fileResource" class="content scaffold-create"
              role="main">
-            <h4>创建文件资源</h4>
+            <h4 class="content-top">
+                <a href="${createLink(controller: 'course', action: 'show', id: params.courseId)}">${course.title}</a>->
+            <g:message code="fileResource.button.create.label"/>
+            </h4>
             <g:if test="${flash.message}">
                 <div class="message" role="status">${flash.message}</div>
             </g:if>

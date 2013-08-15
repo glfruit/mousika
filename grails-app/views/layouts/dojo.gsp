@@ -13,12 +13,13 @@
           href="${resource(dir: 'js/lib/dijit/themes/tundra', file: 'tundra.css')}"
           type="text/css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-          href="${resource(dir: 'css', file: 'bootstrap.css')}"
-          type="text/css"/>
-    <link rel="stylesheet"
-          href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"
-          type="text/css"/>
+    %{--<link rel="stylesheet"--}%
+    %{--href="${resource(dir: 'css', file: 'bootstrap.css')}"--}%
+    %{--type="text/css"/>--}%
+    %{--<link rel="stylesheet"--}%
+    %{--href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"--}%
+    %{--type="text/css"/>--}%
+    <r:require modules="bootstrap"/>
     <link rel="stylesheet"
           href="${resource(dir: 'css', file: 'mousika.css')}"
           type="text/css"/>
@@ -143,7 +144,12 @@
                         <li>
                             <i class="icon-home"></i>
                             <span style="padding-left: 5px;">
-                                <a href="${request.contextPath}">首页</a>
+                                <shiro:hasRole name="学生">
+                                    <a href="${request.contextPath}/student">首页</a>
+                                </shiro:hasRole>
+                                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
+                                    <a href="${request.contextPath}">首页</a>
+                                </shiro:hasAnyRole>
                             </span>
                         </li>
                         <li>
@@ -152,6 +158,20 @@
                                 <a href="${createLink(controller: 'course', action: 'list')}">课程</a>
                             </span>
                         </li>
+                        <shiro:authenticated>
+                            <li>
+                                <i class="icon-folder-close"></i>
+                                <span style="padding-left: 5px;">
+                                    <a href="${createLink(controller: 'fileRepository', action: 'list')}">我的文件</a>
+                                </span>
+                            </li>
+                            <li>
+                                <i class="icon-list"></i>
+                                <span style="padding-left: 5px;">
+                                    <a href="${createLink(controller: 'course', action: 'list')}">我的课程</a>
+                                </span>
+                            </li>
+                        </shiro:authenticated>
                     </ul>
                 </div>
                 <shiro:hasRole name="系统管理员">
@@ -162,10 +182,12 @@
                             <i class="icon-user"></i>
                             <a href="${createLink(controller: 'user', action: 'list')}">用户管理</a>
                         </p>
+
                         <p>
                             <i class="icon-lock"></i>
                             <a href="${createLink(controller: 'privilege', action: 'list')}">权限管理</a>
                         </p>
+
                         <p>
                             <i class="icon-pencil"></i>
                             <a href="${createLink(controller: 'backup', action: 'list')}">系统备份</a>
@@ -173,50 +195,23 @@
                     </div>
                 </shiro:hasRole>
                 <shiro:hasRole name="教师">
-                    <div>
-                        <p id="courseAdminTitle" style="cursor: pointer;"><i
-                                id="titleIcon"
-                                class="icon-chevron-right"></i><span>课程管理</span>
-                        </p>
-                        <ul id="courseAdmin" style="list-style: none;">
-                            <li><i class="icon-edit"></i>打开编辑</li>
-                            <li><i class="icon-pencil"></i>编辑设置</li>
-                            <li><i class="icon-user"></i>成员</li>
-                            <li><i class="icon-list"></i> 成绩</li>
-                            <li><i class="icon-arrow-up"></i> 导入</li>
-                        </ul>
-                    </div>
-                    <script>
-                        require(['dojo/on', 'dojo/dom', 'dojo/dom-style', 'dojo/dom-class'], function (on, dom, domStyle, domClass) {
-                            on(dom.byId('courseAdminTitle'), "click", function () {
-                                if (domClass.contains("titleIcon", "icon-chevron-right")) {
-                                    domClass.replace("titleIcon", "icon-chevron-down", "icon-chevron-right");
-                                } else {
-                                    domClass.replace("titleIcon", "icon-chevron-right", "icon-chevron-down");
-                                }
-                                var display = domStyle.get(dom.byId('courseAdmin'), 'display');
-                                display = display == "none" ? "block" : "none";
-                                domStyle.set(dom.byId('courseAdmin'), 'display', display);
-                            });
-                        });
-                    </script>
+                    <g:if test="${params.action in ['edit', 'show', 'enrol', 'examine', 'grade', 'evaluate'] ||
+                            request.forwardURI =~ /\/course\/\d+\//}">
+                        <div>
+                            <p id="courseAdminTitle" style="cursor: pointer;"><i
+                                    id="titleIcon"
+                                    class="icon-chevron-right"></i><span>课程管理</span>
+                            </p>
+                            <ul id="courseAdmin" style="list-style: none;">
+                                <li><i class="icon-edit"></i>打开编辑</li>
+                                <li><i class="icon-pencil"></i>编辑设置</li>
+                                <li><i class="icon-user"></i>成员</li>
+                                <li><i class="icon-list"></i> 成绩</li>
+                                <li><i class="icon-arrow-up"></i> 导入</li>
+                            </ul>
+                        </div>
+                    </g:if>
                 </shiro:hasRole>
-                <shiro:authenticated>
-                    <div data-dojo-type="dijit/TitlePane"
-                         data-dojo-props="title: '我的个人文件'"
-                         style="padding-bottom: 10px;">
-                        <p>
-                            <g:if test="${fileRepository?.items?.size() > 0}">
-                                <!-- TODO -->
-                            </g:if>
-                            <g:else>
-                                没有任何文件
-                            </g:else>
-                        </p>
-                        <a class="btn"
-                           href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>
-                    </div>
-                </shiro:authenticated>
             </div>
 
             <div class="span7">

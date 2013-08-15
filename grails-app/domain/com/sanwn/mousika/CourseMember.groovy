@@ -18,6 +18,11 @@ class CourseMember {
      */
     Role role
 
+    /**
+     * 状态：1审核;2:通过
+     */
+    Integer status
+
     static belongsTo = [course: Course]
 
     static constraints = {

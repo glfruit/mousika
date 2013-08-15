@@ -1,5 +1,5 @@
 
-<%@ page import="com.sanwn.mousika.domain.Page" %>
+<%@ page import="com.sanwn.mousika.Page" %>
 <!DOCTYPE html>
 <html>
 	<head>

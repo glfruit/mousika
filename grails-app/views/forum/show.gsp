@@ -13,7 +13,7 @@
                 <col width="180px"/>
                 <col width="30px"/>
                 <col width="55px"/>
-                <col width="50"/>
+                <col width="50px"/>
                 <thead style="background-color: #F7F7F9;">
                     <tr>
                         <th>主题</th>
@@ -31,10 +31,6 @@
                             <td>${post.postedBy.fullname}</td>
                             <td>${post.replies.size()}/100</td>
                             <td>${post.lastUpdated}</td>
-                            %{--<td><g:formatDate format="yyyy-MM-dd HH:mm:ss"--}%
-                            %{--date="${user.profile?.firstAccessed}"/></td>--}%
-                            %{--<td><g:formatDate format="yyyy-MM-dd HH:mm:ss"--}%
-                            %{--date="${user.profile?.lastAccessed}"/></td>--}%
                         </tr>
                     </g:each>
                 </tbody>

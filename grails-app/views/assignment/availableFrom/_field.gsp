@@ -15,7 +15,7 @@
 
             %{--</label>--}%
         </div>
-        <g:checkBox name="enableAvailableFrom" checked="true" style="margin-left: 5px;"/>
+        <g:checkBox name="enableAvailableFrom" checked="${value}" style="margin-left: 5px;"/>
         <span>启用</span>
     </div>
 </div>

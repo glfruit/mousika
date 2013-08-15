@@ -7,10 +7,31 @@ class UrlMappings {
             }
         }
 
-        "/course/$courseId/forum/$id"(controller: 'forum', action: 'show')
+        "/course/$id" {
+            controller: 'course'
+            action: 'show'
+            constraints {
+                id(matches: /\d+/)
+            }
+        }
+        "/course/$courseId/forum/$id" {
+            controller: 'forum'
+            action: 'show'
+            constraints {
+                courseId(matches: /\d+/)
+                id(matches: /\d+/)
+            }
+        }
         "/course/$courseId/forum/$forumId/post/$action/$id?"(controller: 'post')
 
-        "/"(view: "/index")
+        name mousika: "/course/$courseId/unit/$unitId/$controller/$action?/$id?" {
+            constraints {
+                courseId(matches: /\d+/)
+                unitId(matches: /\d+/)
+            }
+        }
+
+        "/"(controller: "course", action: "list")
         "500"(view: '/error')
 
         name forum: "/course/$courseId/forum/$id" {

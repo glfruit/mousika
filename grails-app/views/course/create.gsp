@@ -2,34 +2,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        %{--<meta name="layout" content="dojo">--}%
-        <g:set var="entityName"
-               value="${message(code: 'course.label')}"/>
-        <g:javascript src="../tiny_mce/tiny_mce.js"/>
-        <r:script>
-            tinyMCE.init({
-                mode: "textareas",
-                theme: "advanced",
-                language: "cn",
-                plugins: "autoresize,autosave,emotions,contextmenu,fullscreen,inlinepopups,preview",
-                theme_advanced_buttons3_add: "emotions",
-                theme_advanced_buttons3_add: "fullscreen",
-                fullscreen_new_window: true,
-                fullscreen_settings: {
-                    theme_advanced_path_location: "top"
-                },
-                dialog_type: "modal",
-                theme_advanced_buttons3_add: "preview",
-                plugin_preview_width: "500",
-                plugin_preview_height: "600"
-            });
-        </r:script>
         <link rel="stylesheet"
               href="${resource(dir: 'css', file: 'datepicker.css')}"
               type="text/css"/>
-        %{--<ckeditor:resources/>--}%
-        <title><g:message code="default.create.label"
-                          args="[entityName]"/></title>
+        <mousika:editor/>
+        <title>${message(code:'course.create.label')}</title>
     </head>
 
     <body>

@@ -11,7 +11,7 @@ class FileResource extends Content {
             'ppt': 'application/vnd.ms-powerpoint', 'pptx': 'application/vnd.ms-powerpoint',
             'exe': 'application/x-msdownload', 'pdf': 'application/pdf',
             'swf': 'application/x-shockwave-flash', 'jpg': 'image/jpeg', 'png': 'image/png', 'gif': 'image/gif',
-            'mp3': 'audio/mp3',
+            'mp3': 'audio/mpeg', 'mp4': 'application/mp4','flv':'video/x-flv',
             'avi': 'video/avi']
 
     static searchable = true

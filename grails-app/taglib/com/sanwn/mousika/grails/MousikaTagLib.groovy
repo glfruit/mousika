@@ -187,12 +187,14 @@ class MousikaTagLib {
         def provider = attrs.provider
         def params
         if (attrs.query) {
-            params = "{"
+            params = []
             attrs.query.each { key, value ->
-                params = params + key + ':' + value + ","
+                if (value)
+                    params << (key + ':' + value)
             }
-            params = params.substring(0, params.size() - 1)
-            params = params + "}"
+            if (params) {
+                params = "{" + params.join(",") + "}"
+            }
         }
         if (!provider) {
             provider = "tinymce"

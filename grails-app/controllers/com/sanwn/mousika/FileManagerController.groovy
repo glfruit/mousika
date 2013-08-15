@@ -23,7 +23,7 @@ class FileManagerController {
             'gif': true
     ]
 
-    private def getCourseFileRepo(course) {
+    def getCourseFileRepo(course) {
         def path = request.servletContext.getRealPath(".")
         def fileRepo
         if (course)
@@ -38,11 +38,11 @@ class FileManagerController {
 
     def index() {
         def course = Course.get(params.courseId)
-        if (!course) {
-            flash.message = "未找到指定ID${params.courseId}的课程"
-        }
+//        if (!course) {
+//            flash.error = "未找到指定ID${params.courseId}的课程"
+//        }
         def fileRepo = getCourseFileRepo(course)
-        log.debug("寻找课程${course.courseToken}的文件存放位置${fileRepo.getCanonicalPath()}")
+        log.debug("寻找课程${course?.courseToken}的文件存放位置${fileRepo.getCanonicalPath()}")
         def currentPath = params.currentPath ?: '.'
         currentPath = currentPath + '/' + (params.target ?: '')
         def targetDirectory = new File(fileRepo, currentPath)

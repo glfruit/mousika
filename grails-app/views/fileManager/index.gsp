@@ -77,7 +77,11 @@
     <div class="space10"></div>
     <g:uploadForm controller="fileManager" action="upload"
                   id="uploadForm" class="dropzone">
+<<<<<<< HEAD
         <input type="hidden" name="courseId" value="${course.id}"/>
+=======
+        <input type="hidden" name="courseId" value="${course?.id}"/>
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
         <input type="hidden" name="currentPath" value="${currentPath}"/>
 
         <div class="fallback">
@@ -91,7 +95,11 @@
     <div class="row-fluid">
         <ul class="breadcrumb" style="height:20px;">
             <li class="pull-left">
+<<<<<<< HEAD
                 <a href="${createLink(controller: 'fileManager', params: [courseId: course.id])}"><i
+=======
+                <a href="${createLink(controller: 'fileManager', params: [courseId: course?.id])}"><i
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                         class="icon-home"></i></a>
                 <span class="divider">/</span>
             </li>
@@ -108,7 +116,11 @@
                     <g:if test="${i < splittedPaths.size() - 1}">
                         <li class="pull-left">
                             <a href="${createLink(controller: 'fileManager',
+<<<<<<< HEAD
                                     params: [courseId: course.id,
+=======
+                                    params: [courseId: course?.id,
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                                             currentPath: normalizedPath.substring(0, normalizedPath.indexOf(path) + path.length())])}">${path}</a>
                             <span class="divider">/</span>
                         </li>
@@ -122,7 +134,11 @@
             </g:if>
             <li class="pull-right">
                 <a id="refresher"
+<<<<<<< HEAD
                    href="${request.contextPath}/fileManager?courseId=${course.id}&currentPath=${FilenameUtils.normalizeNoEndSeparator(currentPath)}">
+=======
+                   href="${request.contextPath}/fileManager?courseId=${course?.id}&currentPath=${FilenameUtils.normalizeNoEndSeparator(currentPath)}">
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                     <i class="icon-refresh"></i>
                 </a>
             </li>
@@ -146,7 +162,11 @@
             <li class="span2">
                 <g:if test="${file.isDirectory()}">
                     <div class="thumbnail" style="text-align: center;">
+<<<<<<< HEAD
                         <a href="${createLink(controller: 'fileManager', params: [courseId: course.id, target: file.name, currentPath: currentPath])}"
+=======
+                        <a href="${createLink(controller: 'fileManager', params: [courseId: course?.id, target: file.name, currentPath: currentPath])}"
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                            class="directory-link">
                             <g:img file="folder.jpeg" class="file-item"
                                    alt="目录"></g:img>
@@ -176,7 +196,14 @@
                     <g:if test="${com.sanwn.mousika.FileManagerController.IMAGES[fileType]}">
                         <div class="thumbnail" style="text-align: center;">
                             <g:set var="imgPath"
+<<<<<<< HEAD
                                    value="${org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator('courseFiles/' + course.courseToken + '/repo/' + currentPath)}"/>
+=======
+                                   value="${org.apache.commons.io.FilenameUtils.normalizeNoEndSeparator(
+                                           course ?
+                                               'courseFiles/' + course.courseToken + '/repo/' + currentPath :
+                                               'notifications/' + currentPath)}"/>
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                             <g:img dir="${imgPath}"
                                    class="file-item"
                                    file="${file.name}"></g:img>
@@ -209,7 +236,11 @@
                                     </li>
                                     <li rel="tooltip" title="下载">
                                         <a href="${createLink(controller: 'fileManager', action: 'download',
+<<<<<<< HEAD
                                                 params: [courseId: course.id, filename: file.name, currentPath: currentPath])}">
+=======
+                                                params: [courseId: course?.id, filename: file.name, currentPath: currentPath])}">
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                                             <i class="icon-download"></i>
                                         </a>
                                     </li>
@@ -242,7 +273,11 @@
                                     </li>
                                     <li rel="tooltip" title="下载">
                                         <a href="${createLink(controller: 'fileManager', action: 'download',
+<<<<<<< HEAD
                                                 params: [courseId: course.id, filename: file.name, currentPath: currentPath])}">
+=======
+                                                params: [courseId: course?.id, filename: file.name, currentPath: currentPath])}">
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                                             <i class="icon-download"></i>
                                         </a>
                                     </li>
@@ -284,13 +319,21 @@
                 $.ajax({
                     type: 'post',
                     url: "${createLink(controller: 'fileManager', action: 'newFolder')}",
+<<<<<<< HEAD
                     data: {folder: folder, courseId: ${course.id}, currentPath: "${currentPath}"}
+=======
+                    data: {folder: folder, courseId: ${course ? course.id : -1}, currentPath: "${currentPath}"}
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                 }).done(function (response) {
                             if (!response.success) {
                                 alert(response.error);
                                 return;
                             }
+<<<<<<< HEAD
                             window.location.href = "${request.contextPath}/fileManager?courseId=${course.id}&currentPath=" + response.currentPath;
+=======
+                            window.location.href = "${request.contextPath}/fileManager?courseId=${course?.id}&currentPath=" + response.currentPath;
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                         });
             }
         });
@@ -309,10 +352,17 @@
                 $.ajax({
                     type: 'post',
                     url: "${createLink(controller: 'fileManager', action: 'rename')}",
+<<<<<<< HEAD
                     data: {title: title, newTitle: newTitle, courseId: ${course.id}, currentPath: "${currentPath}"}
                 }).done(function (response) {
                             if (response.success) {
                                 window.location.href = "${request.contextPath}/fileManager?courseId=${course.id}&currentPath=" + response.currentPath;
+=======
+                    data: {title: title, newTitle: newTitle, courseId: ${course ? course.id : -1}, currentPath: "${currentPath}"}
+                }).done(function (response) {
+                            if (response.success) {
+                                window.location.href = "${request.contextPath}/fileManager?courseId=${course?.id}&currentPath=" + response.currentPath;
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                             }
                         });
             }
@@ -327,10 +377,17 @@
                 $.ajax({
                     type: 'post',
                     url: "${createLink(controller: 'fileManager', action: 'remove')}",
+<<<<<<< HEAD
                     data: {filename: title, courseId:${course.id}, currentPath: "${currentPath}"}
                 }).done(function (response) {
                             if (response.success) {
                                 window.location.href = "${request.contextPath}/fileManager?courseId=${course.id}&currentPath=" + response.currentPath;
+=======
+                    data: {filename: title, courseId:${course ? course.id : -1}, currentPath: "${currentPath}"}
+                }).done(function (response) {
+                            if (response.success) {
+                                window.location.href = "${request.contextPath}/fileManager?courseId=${course?.id}&currentPath=" + response.currentPath;
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
                             }
                         });
             }
@@ -344,7 +401,11 @@
             var track = $('#editor_track').val();
             var target = $('#' + track + '_ifr', parent.document);
             var filename = $(this).siblings('.box').children('p').text().trim();
+<<<<<<< HEAD
             var href = "${request.contextPath}/fileManager/download?courseId=${course.id}&currentPath=${FilenameUtils.normalizeNoEndSeparator(currentPath)}";
+=======
+            var href = "${request.contextPath}/fileManager/download?courseId=${course?.id}&currentPath=${FilenameUtils.normalizeNoEndSeparator(currentPath)}";
+>>>>>>> 560b91b4a6cf542808796cfb86134fd7d5824ede
             href = href + "&filename=" + filename;
             var fileLink;
             var fileType = filename.substring(filename.lastIndexOf('.') + 1);

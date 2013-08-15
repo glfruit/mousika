@@ -73,6 +73,8 @@ class Course {
         title blank: false
         deliveredBy nullable: true
         description nullable: true
+        deliverPlace nullable: true, blank: false
+        deliverTime nullable: true, blank: false
     }
 
     static mapping = {

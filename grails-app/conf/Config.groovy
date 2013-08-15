@@ -122,6 +122,9 @@ ckeditor {
     }
 }
 
+// disable database session plugin
+grails.plugin.databasesession.enabled=false
+
 // disable searchable operations, will be enabled in Bootstrap.groovy
 mirrorChanges = false
 bulkIndexOnStartup = false

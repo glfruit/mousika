@@ -26,21 +26,26 @@
     <div class="container">
         <form class="form-horizontal" action="updateInformation">
             <div class="control-group">
-                <label class="control-label" for="username">用户名</label>
+                <label class="control-label">用户名</label>
                 <div class="controls">
-                    <input type="text" id="username" name="username"  value="${fieldValue(bean: userInstance, field: "username")}" disabled='disabled'>
+                    ${fieldValue(bean: userInstance, field: "username")}
+                    %{--<input type="text" id="username" name="username"  value="${fieldValue(bean: userInstance, field: "username")}" disabled='disabled'>--}%
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="fullname">姓名</label>
+                <label class="control-label">姓名</label>
                 <div class="controls">
-                    <input type="text" id="fullname" name="fullname"  value="${fieldValue(bean: userInstance, field: "fullname")}" disabled='disabled'>
+                    ${fieldValue(bean: userInstance, field: "fullname")}
+                    %{--<input type="text" id="fullname" name="fullname"  value="${fieldValue(bean: userInstance, field: "fullname")}" disabled='disabled'>--}%
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="roles">角色</label>
+                <label class="control-label">角色</label>
                 <div class="controls">
-                    <g:select name="roles" from="${com.sanwn.mousika.Role.list()}" multiple="multiple" optionKey="id" size="5" value="${userInstance?.roles*.id}" class="many-to-many" disabled='disabled'/>
+                    <g:each in="${userInstance.roles}" var="role">
+                        ${role.name}；
+                    </g:each>
+                    %{--<g:select name="roles" from="${com.sanwn.mousika.Role.list()}" multiple="multiple" optionKey="id" size="5" value="${userInstance?.roles*.id}" class="many-to-many" disabled='disabled'/>--}%
                 </div>
             </div>
             <div class="control-group">
@@ -56,7 +61,7 @@
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="dateCreated">创建日期</label>
+                <label class="control-label" for="dateCreated">创建时间</label>
                 <div class="controls">
                     <label id="dateCreated"  name="dateCreated">
                         <g:formatDate format="yyyy-MM-dd HH:mm:ss" date="${userInstance.dateCreated}"/>

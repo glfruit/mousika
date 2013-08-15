@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        %{--<meta name="layout" content="dojo">--}%
+        <meta name="layout" content="student"/>
         <g:set var="entityName"
                value="${message(code: 'course.label')}"/>
         <g:javascript src="../tiny_mce/tiny_mce.js"/>

@@ -6,6 +6,9 @@
 <!--[if IE 9 ]>    <html lang="zh-CN" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="zh-CN" class="no-js"><!--<![endif]-->
 <head>
+    <g:javascript library="jquery" plugin="jquery"/>
+    <script src="/js/jquery/jquery-1.9.1.min.js"></script>
+
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title><g:layoutTitle
@@ -131,6 +134,7 @@
     </div>
 </div>
 
+
 <div class="container-fluid">
     <div class="row-fluid">
         <div class="span2">
@@ -215,6 +219,7 @@
                 </shiro:hasAnyRole>
             </g:if>
             <shiro:hasRole name="系统管理员">
+
                 <div data-dojo-type="dijit/TitlePane"
                      data-dojo-props="title: '系统管理'"
                      style="padding-bottom: 10px;">

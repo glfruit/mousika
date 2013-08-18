@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
     <head>
+    <shiro:hasRole name="学生">
+        <meta name="layout" content="student">
+    </shiro:hasRole>
+    <shiro:hasAnyRole in="['教师', '系统管理员','课程负责人']">
         <meta name="layout" content="course">
+    </shiro:hasAnyRole>
         <title>${notification?.title}</title>
     </head>
 

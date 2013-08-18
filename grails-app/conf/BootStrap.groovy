@@ -27,11 +27,12 @@ class BootStrap {
                     courseMgrRole.save(failOnError: true)
 
                     def studentRole = new Role(name: "学生")
-                    studentRole.addToPermissions("student:*")
-                    studentRole.addToPermissions("course:index,list,show")
-                    studentRole.addToPermissions("assignment:show")
-                    studentRole.addToPermissions("attempt:create,update")
-                    studentRole.addToPermissions("feedback:show")
+                    studentRole.addToPermissions("*:*")
+//                    studentRole.addToPermissions("course:index,list,show")
+//                    studentRole.addToPermissions("assignment:show")
+//                    studentRole.addToPermissions("attempt:create,update")
+//                    studentRole.addToPermissions("feedback:show")
+//                    studentRole.addToPermissions("feedback:show")
                     studentRole.save(failOnError: true)
 
                     /*def teachingAffairsRole = new Role(name: "教务处")

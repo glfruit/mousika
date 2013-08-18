@@ -3,7 +3,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="layout" content="system">
+    <shiro:hasRole name="学生">
+        <meta name="layout" content="student">
+    </shiro:hasRole>
+    <shiro:hasAnyRole in="['教师', '系统管理员','课程负责人']">
+        <meta name="layout" content="system">
+    </shiro:hasAnyRole>
     <title><g:message code="user.upload.photo"/></title>
     <style type="text/css">
     ul{list-style:none;}

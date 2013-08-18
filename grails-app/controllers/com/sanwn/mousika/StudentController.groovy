@@ -134,7 +134,10 @@ class StudentController {
         render myCourses as JSON
         //[myCourses: myCourses]
     }
-
+    def courseList() {
+        def jsonData = [rows: myCourses, page: 1, records: 1, total: 1]
+        render jsonData as JSON
+    }
     def assignment() {
         def assignment = Assignment.findById(params.assignmentId);
 
@@ -338,17 +341,11 @@ class StudentController {
             redirect(action: "list")
             return
         }
+        def notifications = Notification.where {
+            course == courseInstance
+        }.list([max: 5, sort: 'dateCreated', order: 'desc', offset: 0])
 
-//        def courses, count, myCourses
-//        def user = User.findByUsername(SecurityUtils.subject.principal)
-//        courses = Course.findAll() {
-//            courseMembers.user == user
-//        }
-//        count = Course.createCriteria().count {
-//            'in'('id', courses.id)
-//        }
-
-        [courseInstance: courseInstance, courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses]
+        [courseInstance: courseInstance, notifications: notifications, courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses]
     }
 
     def edit(Long id) {

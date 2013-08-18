@@ -116,7 +116,7 @@
                             code="label.app.menu.nav"/></a>
                     %{--<g:link action="student"><g:message code="label.app.menu.nav"/></g:link>--}%
                 </h4>
-                <g:if test="${controllerName == 'student'}">
+                %{--<g:if test="${controllerName == 'student'}">--}%
                     %{--actionName == 'list'--}%
                     <shiro:hasRole name="学生">
                         <div data-dojo-type="dijit/TitlePane"
@@ -125,7 +125,7 @@
                             <div id="myCourseList"></div>
                             <script type="text/javascript">
                                 jQuery(function(){
-                                    $.ajax("/mousika/student/myCourseList",{
+                                    $.ajax("${request.contextPath}/student/myCourseList",{
                                         type: "POST",
 //                                        data: params,
                                         async:false,
@@ -137,7 +137,7 @@
                                             var linkList = "";
                                             if(myCourseList!=null)
                                             for(var i=0;i<myCourseList.length;i++){
-                                                linkList = linkList+"<p><a href='show/"+(myCourseList[i].id)+"'>"+(myCourseList[i].title)+"</a></p>";
+                                                linkList = linkList+"<p><a href='${request.contextPath}/course/show/"+(myCourseList[i].id)+"'>"+(myCourseList[i].title)+"</a></p>";
                                             }
                                             $("#myCourseList").html(linkList);
                                         },
@@ -192,16 +192,17 @@
                             </p>
                             %{--<a class="btn"  href="${createLink(controller: 'fileRepository')}">管理我的个人文件</a>--}%
                             <p>
-                                <g:link controller="student" action="updateInformationIndex">编辑个人信息</g:link>
+                                <g:link controller="user" action="updateInformationIndex">编辑个人信息</g:link>
                             </p>
                             <P>
-                            <g:link controller="student" action="updatePasswordIndex">更改密码</g:link>
+                            <g:link controller="user" action="updatePasswordIndex">更改密码</g:link>
                             </p>
                             <P>
-                            <g:link controller="student" action="uploadPhotoIndex">上传头像</g:link>
+                            <g:link controller="user" action="uploadPhotoIndex">上传头像</g:link>
                             </p>
                             <P>
-                                <g:link controller="student" action="fileList">管理个人文件</g:link>
+                                <g:link controller="fileRepository" action="list">管理个人文件</g:link>
+                                %{--<g:link controller="fileRepository" action="fileList">管理个人文件</g:link>--}%
                             </p>
                             %{--<p>--}%
                                 %{--<i class="icon-user"></i>--}%
@@ -216,7 +217,7 @@
                                 %{--<a href="${createLink(controller: 'user', action: 'uploadPhotoIndex')}">上传头像</a>--}%
                         </div>
                     </shiro:hasRole>
-                </g:if>
+                %{--</g:if>--}%
             </div>
 
             <div class="span7">
@@ -230,9 +231,7 @@
                 <div id="tp2" data-dojo-type="dijit/TitlePane"
                      data-dojo-props="title: '新闻通知'"
                      style="padding-bottom: 10px;">
-                    <p>新增课程《计算机网络基础》</p>
-
-                    <p>《Java程序设计》课程授课地点更改通知</p>
+                    <g:img dir="images" file="processing.gif"/>
                 </div>
 
                 <div>
@@ -249,14 +248,30 @@
                     <p id="formatted"></p>
                 </div>
             </div>
+
             <script>
-                require(['dojo/query', 'dojo/dom-class'], function (query, domClass) {
-                    query('#turn-edit-on-or-off').on('click', function () {
-                        query(".edit-course-region").forEach(function (node) {
-                            domClass.toggle(node, 'hide');
+                require(['dojo/query', 'dojo/dom-class', 'dojo/request', 'dojo/json', 'dojo/_base/array', 'dijit/registry', 'dojo/domReady!'],
+                        function (query, domClass, request, json, arrayUtils, registry) {
+                            query('#turn-edit-on-or-off').on('click', function () {
+                                query(".edit-course-region").forEach(function (node) {
+                                    domClass.toggle(node, 'hide');
+                                });
+                            });
+                            request.post("${createLink(controller: 'notification',action: 'list')}", {
+                                headers: {
+                                    'Accept': 'application/json'
+                                }
+                            }).then(function (response) {
+                                        var result = json.parse(response);
+                                        var html = "";
+                                        arrayUtils.forEach(result, function (notification) {
+                                            html = html + "<p><a href='${request.contextPath}/notification/show/" + notification.id + "'>" + notification.title + "</a></p>";
+                                        });
+                                        var list = "${createLink(controller: 'notification', action: 'list')}";
+                                        html = html + "<div style='text-align: right;'><a href='" + list + "'>更多...</a></div>";
+                                        registry.byId('tp2').set('content', html);
+                                    });
                         });
-                    });
-                });
             </script>
         </div>
         <hr>

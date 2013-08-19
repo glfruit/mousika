@@ -262,9 +262,13 @@ class StudentController {
             redirect(action: 'list')
             return
         }
-        def attempt = Attempt.where {
+        def attempts = Attempt.where {
             submittedBy == loginUser && assignment == assignment
         }.list()
+        def attempt = null;
+        if(attempts?.size()>0){
+            attempt = attempts.get(0)
+        }
 
         [assignment: assignment, attempt: attempt, courselist: courses, myCourses: myCourses, notRegCourses: notRegCourses]
     }

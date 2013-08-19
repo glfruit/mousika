@@ -50,4 +50,13 @@ class Assignment extends Content {
     def copy() {
         new Assignment(title: title, description: description, style: style)
     }
+
+    boolean isSubmitAttempt(){
+        Date date = new Date();
+        boolean isSubmit =  false
+        //isSubmit = availableFrom<=date&&date<=dueDate
+        isSubmit = attempts?.size()>0&&attempts.first().feedback!=null
+
+        return isSubmit
+    }
 }

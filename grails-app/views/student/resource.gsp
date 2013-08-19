@@ -5,7 +5,7 @@
         <meta name="layout" content="student"/>
         <g:set var="entityName" value="${message(code: 'course.label')}"/>
         <title><g:message code="default.list.label" args="[entityName]"/></title>
-        <mousika:editor/>
+        <mousika:editor query="[assignmentId: assignment.id]"/>
         %{--<g:javascript src="../tinymce/tinymce.min.js"/>--}%
         %{--<r:script>--}%
             %{--tinyMCE.init({--}%
@@ -70,6 +70,9 @@
                             </th>
                             <td colspan="3">
                                 <g:hiddenField name="assignmentId"  value="${assignment?.id}"/>
+                                %{--<f:with bean="attempt">--}%
+                                    %{--<f:field property="attemptContent" required="true"/>--}%
+                                %{--</f:with>--}%
                                 <g:textArea name="attemptContent" value="${attempt?.attemptContent}" rows="10"/>
                             </td>
                         </tr>
@@ -91,11 +94,20 @@
                         </tr>
                         <tr>
                             <td colspan="4" align="center">
-                                <g:if test="${assignment.availableFrom<=new Date()&&new Date()<=assignment.dueDate}">
+                                <g:if test="${assignment.availableFrom<=new Date()&&new Date()<=assignment.dueDate&&!assignment.isSubmitAttempt()}">
                                     <button type="submit" class="btn btn-primary">提交作业</button>
                                 </g:if>
                             </td>
                         </tr>
+                        <g:if test="${assignment.isSubmitAttempt()}">
+                            <tr>
+                                <th><a style="color: blue;">批改结果：</a></th>
+                                <td colspan="4" align="left" height="30">
+                                    <div class="message" role="status"><%= attempt?.feedback?.suggestion %></div>
+                                    %{--<g:textArea name="feedback" value="${attempt?.feedback?.suggestion}" rows="10" readonly="readonly"/>--}%
+                               </td>
+                            </tr>
+                        </g:if>
                     </table>
                     </g:uploadForm>
                 </g:if>

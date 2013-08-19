@@ -25,6 +25,7 @@ class Attempt {
 
     static mapping = {
         table 'mousika_course_assignment_attempts'
+        description column: "attempt_content", sqlType: "text"
     }
 
     def addFeedback(Feedback feedback) {
@@ -32,4 +33,5 @@ class Attempt {
         this.feedback = feedback
         this
     }
+
 }

@@ -8,15 +8,15 @@ class UrlMappings {
         }
 
         "/course/$id" {
-            controller: 'course'
-            action: 'show'
+            controller = 'course'
+            action = 'show'
             constraints {
                 id(matches: /\d+/)
             }
         }
         "/course/$courseId/forum/$id" {
-            controller: 'forum'
-            action: 'show'
+            controller = 'forum'
+            action = 'show'
             constraints {
                 courseId(matches: /\d+/)
                 id(matches: /\d+/)

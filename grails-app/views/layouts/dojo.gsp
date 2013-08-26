@@ -143,14 +143,22 @@
                     <ul style="list-style: none;text-align: left;margin: 0;padding: 0;">
                         <li>
                             <i class="icon-home"></i>
-                            <span style="padding-left: 5px;">
-                                <shiro:hasRole name="学生">
-                                    <a href="${request.contextPath}/student">首页</a>
-                                </shiro:hasRole>
-                                <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
+                            <shiro:notAuthenticated>
+                                <span style="padding-left: 5px;">
                                     <a href="${request.contextPath}">首页</a>
-                                </shiro:hasAnyRole>
-                            </span>
+                                </span>
+                            </shiro:notAuthenticated>
+                            <shiro:authenticated>
+                                <span style="padding-left: 5px;">
+                                    <shiro:hasRole name="学生">
+                                        <a href="${request.contextPath}/student">首页</a>
+                                    </shiro:hasRole>
+                                    <shiro:hasAnyRole
+                                            in="['教师', '系统管理员', '课程负责人']">
+                                        <a href="${request.contextPath}">首页</a>
+                                    </shiro:hasAnyRole>
+                                </span>
+                            </shiro:authenticated>
                         </li>
                         <li>
                             <i class="icon-book"></i>

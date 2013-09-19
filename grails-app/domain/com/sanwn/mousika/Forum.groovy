@@ -11,6 +11,6 @@ class Forum extends Content {
 
     static mapping = {
         table name: "mousika_forums"
-        posts sort: 'lastUpdated', order: 'desc'
+        posts sort: 'lastModified', order: 'desc'
     }
 }

@@ -16,6 +16,8 @@ class Post {
 
     String attachment
 
+    static hasOne = [statistics: PostStatistics]
+
     static hasMany = [replies: Reply]
 
     static belongsTo = [forum: Forum]

@@ -1,5 +1,6 @@
 package com.sanwn.mousika.controllers
 
+import com.sanwn.mousika.Auth
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

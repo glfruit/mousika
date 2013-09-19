@@ -1,4 +1,4 @@
-package com.sanwn.mousika.controllers
+package com.sanwn.mousika
 
 import com.sanwn.mousika.*
 import org.apache.shiro.SecurityUtils

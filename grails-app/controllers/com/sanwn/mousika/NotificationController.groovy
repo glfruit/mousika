@@ -30,7 +30,11 @@ class NotificationController {
             }
         }
         if (notification.save(flush: true)) {
-            redirect(controller: 'course', action: 'show', id: course.id)
+            if (course) {
+                redirect(controller: 'course', action: 'show', id: course.id)
+            } else {
+                redirect(controller: 'notification', action: 'show', id: notification.id)
+            }
         } else {
             render(view: "create", model: [courseId: params.courseId])
         }

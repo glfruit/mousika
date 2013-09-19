@@ -46,28 +46,12 @@
                         <g:if test="${course}">
                             <g:hiddenField name="courseId" id="courseId"
                                            value="${course?.id}"/>
+                            <g:hiddenField name="notificationType"
+                                           id="notificationType"
+                                           value="${course ? 'course' : 'public'}"/>
                         </g:if>
                         <f:field property="title" required="true"/>
                         <f:field property="content"/>
-                        <div class="control-group">
-                            <label class="control-label"
-                                   for="notificationType">
-                                通知类型
-                            </label>
-
-                            <div class="controls">
-                                <label class="radio inline">
-                                    <input type="radio" name="notificationType"
-                                           id="courseNotification" value="course" checked>
-                                    课程通知
-                                </label>
-                                <label class="radio">
-                                    <input type="radio" name="notificationType"
-                                           id="publicNotification" value="public">
-                                    公共通知
-                                </label>
-                            </div>
-                        </div>
                     </f:with>
                 </fieldset>
                 <fieldset class="buttons" style="text-align: center;">

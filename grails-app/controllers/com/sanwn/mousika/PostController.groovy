@@ -1,7 +1,6 @@
 package com.sanwn.mousika
 
 import org.apache.commons.io.FileUtils
-import org.apache.shiro.SecurityUtils
 
 /**
  *
@@ -10,6 +9,8 @@ import org.apache.shiro.SecurityUtils
  *
  */
 class PostController {
+
+    def postService
 
     def create() {
         [post: new Post(params)]
@@ -21,36 +22,30 @@ class PostController {
     }
 
     def save() {
-        def post = new Post(params);
+        def post = new Post(params)
         def newFile
+        def course = Course.get(params.courseId)
+        def fileRepo = checkFileRepo(course.courseToken)
         def attachmentFile = request.getFile('attachment')
-        if (attachmentFile.size != 0) {
-            post.attachment = attachmentFile.originalFilename
-            def course = Course.get(params.courseId)
-            def fileRepo = getCourseForumRepo(course.courseToken)
-            if (!fileRepo.exists()) {
-                FileUtils.forceMkdir(fileRepo)
-            }
-            newFile = new File(fileRepo, attachmentFile.originalFilename)
-            attachmentFile.transferTo(newFile)
-        }
-        def user = User.where {
-            username == SecurityUtils.subject.principal
-        }.find()
-        post.postedBy = user
-        post.lastModified = new Date()
-        def forum = Forum.where {
-            id == params.forumId
-        }.find()
-        forum.addToPosts(post)
-        if (post.validate() && forum.save(flush: true)) {
+        try {
+            post = postService.createPost(params.forumId, post, fileRepo, attachmentFile)
             redirect(mapping: 'post', params: [courseId: params.courseId, forumId: params.forumId, id: post.id])
-        } else {
+        } catch (PostException pe) {
             flash.message = "创建新帖子失败"
-            if (newFile)
-                newFile.delete()
+            render(view: 'create', model: [post: post], params: [id: params.forumId])
+        } catch (Exception e) {
+            flash.message = "系统错误-创建新帖子失败"
+            log.error(e)
             render(view: 'create', model: [post: post], params: [id: params.forumId])
         }
+    }
+
+    private checkFileRepo(courseToken) {
+        def fileRepo = getCourseForumRepo(courseToken)
+        if (!fileRepo.exists()) {
+            FileUtils.forceMkdir(fileRepo)
+        }
+        return fileRepo
     }
 
     def show(Long id) {

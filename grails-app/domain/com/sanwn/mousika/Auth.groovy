@@ -1,4 +1,4 @@
-package com.sanwn.mousika.controllers
+package com.sanwn.mousika
 
 class Auth {
 

@@ -29,7 +29,7 @@
                                 <a href="${createLink(mapping: 'post', params: [courseId: params.courseId, forumId: params.id, id: post.id])}">
                                     ${post.title}</a></td>
                             <td>${post.postedBy.fullname}</td>
-                            <td>${post.replies.size()}/100</td>
+                            <td>${post.replies.size()}/${post.statistics.total}</td>
                             <td>${post.lastUpdated}</td>
                         </tr>
                     </g:each>

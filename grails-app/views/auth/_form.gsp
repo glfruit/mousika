@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.controllers.Auth" %>
+<%@ page import="com.sanwn.mousika.Auth" %>
 
 
 

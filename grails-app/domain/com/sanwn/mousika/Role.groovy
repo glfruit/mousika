@@ -12,11 +12,15 @@ class Role {
 
     String name
 
+    Context context
+
     static hasMany = [users: User, permissions: String]
+
     static belongsTo = User
 
     static constraints = {
-        name(nullable: false, blank: false, unique: true)
+        name(nullable: false, blank: false)
+        context nullable: true
     }
 
     @Override

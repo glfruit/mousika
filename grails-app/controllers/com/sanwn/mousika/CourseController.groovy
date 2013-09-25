@@ -12,6 +12,8 @@ class CourseController {
 
     def gsonBuilder
 
+    def courseService
+
     def searchableService
 
     def index() {
@@ -315,24 +317,31 @@ class CourseController {
         members.addAll(course.students)
         def registered = course.students.size()
         def applied = CourseApplication.countByApplyForAndStatus(course, CourseApplication.STATUS_SUBMITTED)
-        [users: User.list(params), members: members,
+        [users: User.list(params), members: members, course: course,
                 userCount: userCount, pages: Math.ceil(userCount / params.max), offset: params.offset, registered: registered, applied: applied]
     }
 
     def assign(Long id) {
         def course = Course.get(id)
+        def remove = params.boolean("remove")
         def user = User.get(params.uid)
-        def role = Role.get(params.rid)
-        user.addToRoles(role)
-        if ("学生" == role.name) {
-            course.addToStudents(user)
-            user.addToPermissions("course:show:${id}")
-        } else if ("教师" == role.name) {
-            course.deliveredBy = user
-            user.addToPermissions("course:*:${id}")
-            user.addToPermissions("notification:*")
+        if (remove) {
+            if (user.id == course.deliveredBy?.id) {
+                courseService.removeTeacher(course, user)
+            } else {
+                courseService.removeStudent(course, user)
+            }
+            render(contentType: "text/json") {  //TODO: handle failure
+                [success: !course.hasErrors()]
+            }
+            return
         }
-        course.save(flush: true)
+
+        if (Role.STUDENT == params.rid) {
+            courseService.addStudents(course, user)
+        } else if (Role.TEACHER == params.rid) {
+            courseService.addTeacher(course, user)
+        }
         render(contentType: "text/json") {  //TODO: handle failure
             [success: !course.hasErrors()]
         }
@@ -347,6 +356,9 @@ class CourseController {
                 [members: members, courseId: course.id]
             }
             json {
+                def context = CourseContext.where {
+                    course == course
+                }.find()
                 def json = members.collect { member ->
                     [
                             id: member.id,
@@ -354,7 +366,13 @@ class CourseController {
                             fullname: member.fullname,
                             email: member.profile?.email,
                             lastAccessed: member.profile?.lastAccessed,
-                            roles: member.roles.collect { [id: it.id, name: it.name] }
+                            roles: member.roles.findResults {
+                                if (it.context && it.context.id == context?.id)
+                                    [id: it.id, name: it.name]
+//                                if (it.context && it.context instanceof CourseContext && it.context.course?.id == course.id) {
+//                                    [id: it.id, name: it.name,]
+//                                }
+                            }
                     ]
                 }
                 def gson = gsonBuilder.create()

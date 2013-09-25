@@ -149,3 +149,10 @@ ul.breadcrumb {
     overflow: hidden;
     /*text-align: center;*/
 }
+
+.course-content-title {
+    border-bottom: 1px solid #DEDEDE;
+    color: #777777;
+    padding-bottom: 5px;
+    padding-top: 20px;
+}

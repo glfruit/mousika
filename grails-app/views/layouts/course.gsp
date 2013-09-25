@@ -15,11 +15,11 @@
           type="text/css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     %{--<link rel="stylesheet"--}%
-          %{--href="${resource(dir: 'css', file: 'bootstrap.css')}"--}%
-          %{--type="text/css"/>--}%
+    %{--href="${resource(dir: 'css', file: 'bootstrap.css')}"--}%
+    %{--type="text/css"/>--}%
     %{--<link rel="stylesheet"--}%
-          %{--href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"--}%
-          %{--type="text/css"/>--}%
+    %{--href="${resource(dir: 'css', file: 'bootstrap-responsive.css')}"--}%
+    %{--type="text/css"/>--}%
     <r:require modules="bootstrap"/>
     <link rel="stylesheet"
           href="${resource(dir: 'css', file: 'mousika.css')}"
@@ -176,14 +176,18 @@
                              style="padding-bottom: 10px;">
                             <ul id="courseAdmin"
                                 style="list-style: none;text-align: left;margin:0;padding:0;">
-                                <li><i class="icon-list-alt"></i><span
-                                        style="padding-left: 5px;">
-                                    <a href="${createLink(controller: 'course', action: 'show', id: params.courseId ?: params.id)}">课程首页</a>
-                                </span></li>
-                                <li><i class="icon-briefcase"></i><span
-                                        style="padding-left: 5px;">
-                                    <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.courseId ?: params.id)}">课程资料</a>
-                                </span></li>
+                                <li>
+                                    <i class="icon-list-alt"></i>
+                                    <span style="padding-left: 5px;">
+                                        <a href="${createLink(controller: 'course', action: 'show', id: params.courseId ?: params.id)}">课程首页</a>
+                                    </span>
+                                </li>
+                                <li>
+                                    <i class="icon-briefcase"></i>
+                                    <span style="padding-left: 5px;">
+                                        <a href="${createLink(controller: 'course', action: 'listMaterials', id: params.courseId ?: params.id)}">课程资料</a>
+                                    </span>
+                                </li>
                                 <g:if test="${params.controller == 'course' && params.action == 'show'}">
                                     <li id="turn-edit-on-or-off"><i
                                             class="icon-edit"></i><a
@@ -195,20 +199,23 @@
                                     </li>
 
                                 </g:if>
-                                <li><i class="icon-pencil"></i><span
-                                        style="padding-left: 5px;"><a
-                                            href="${createLink(controller: 'course', action: 'edit', id: params.courseId ?: params.id)}">编辑设置</a>
-                                </span>
+                                <li>
+                                    <i class="icon-pencil"></i>
+                                    <span style="padding-left: 5px;">
+                                        <a href="${createLink(controller: 'course', action: 'edit', id: params.courseId ?: params.id)}">编辑设置</a>
+                                    </span>
                                 </li>
-                                <li><i class="icon-user"></i><span
-                                        style="padding-left: 5px;"><a
-                                            href="${createLink(controller: 'course', action: 'enrol', id: params.courseId ?: params.id)}">成员</a>
-                                </span>
+                                <li>
+                                    <i class="icon-user"></i>
+                                    <span style="padding-left: 5px;">
+                                        <a href="${createLink(controller: 'course', action: 'enrol', id: params.courseId ?: params.id)}">课程成员</a>
+                                    </span>
                                 </li>
-                                <li><i class="icon-list"></i><span
-                                        style="padding-left: 5px;">
-                                    <a href="${createLink(controller: 'course', action: 'grade', id: params.courseId ?: params.id)}">成绩</a>
-                                </span>
+                                <li>
+                                    <i class="icon-list"></i>
+                                    <span style="padding-left: 5px;">
+                                        <a href="${createLink(controller: 'course', action: 'grade', id: params.courseId ?: params.id)}">课程成绩</a>
+                                    </span>
                                 </li>
                             </ul>
                         </div>
@@ -241,23 +248,25 @@
                     </p>
                 </div>
             </shiro:hasRole>
-            <div data-dojo-type="dijit/TitlePane"
-                 data-dojo-props="title: '个人信息管理'"
-                 style="padding-bottom: 10px;">
-                <p>
-                    <i class="icon-user"></i>
-                    <a href="${createLink(controller: 'user', action: 'updateInformationIndex')}">编辑个人信息</a>
-                </p>
+            <shiro:isLoggedIn>
+                <div data-dojo-type="dijit/TitlePane"
+                     data-dojo-props="title: '个人信息管理'"
+                     style="padding-bottom: 10px;">
+                    <p>
+                        <i class="icon-user"></i>
+                        <a href="${createLink(controller: 'user', action: 'updateInformationIndex')}">编辑个人信息</a>
+                    </p>
 
-                <p>
-                    <i class="icon-lock"></i>
-                    <a href="${createLink(controller: 'user', action: 'updatePasswordIndex')}">更改密码</a>
-                </p>
+                    <p>
+                        <i class="icon-lock"></i>
+                        <a href="${createLink(controller: 'user', action: 'updatePasswordIndex')}">更改密码</a>
+                    </p>
 
-                <p>
-                    <i class="icon-picture"></i>
-                    <a href="${createLink(controller: 'user', action: 'uploadPhotoIndex')}">上传头像</a>
-            </div>
+                    <p>
+                        <i class="icon-picture"></i>
+                        <a href="${createLink(controller: 'user', action: 'uploadPhotoIndex')}">上传头像</a>
+                </div>
+            </shiro:isLoggedIn>
         </div>
 
         <div class="span7">
@@ -289,27 +298,29 @@
             </div>
         </div>
         <script>
-            require(['dojo/query', 'dojo/dom-class', 'dojo/request', 'dojo/json', 'dojo/_base/array', 'dijit/registry', 'dojo/domReady!'],
-                    function (query, domClass, request, json, arrayUtils, registry) {
-                        query('#turn-edit-on-or-off').on('click', function () {
-                            query(".edit-course-region").forEach(function (node) {
-                                domClass.toggle(node, 'hide');
-                            });
-                        });
-                        request.post("${createLink(controller: 'notification',action: 'list')}", {
-                            headers: {
-                                'Accept': 'application/json'
-                            }
-                        }).then(function (response) {
-                                    var result = json.parse(response);
-                                    var html = "";
-                                    arrayUtils.forEach(result, function (notification) {
-                                        html = html + "<p><a href='${request.contextPath}/notification/show/" + notification.id + "'>" + notification.title + "</a></p>";
-                                    });
-                                    var list = "${createLink(controller: 'notification', action: 'list')}";
-                                    html = html + "<div style='text-align: right;'><a href='" + list + "'>更多...</a></div>";
-                                    registry.byId('tp2').set('content', html);
+            require(['dojo/query', 'dojo/dom-class', 'dojo/request', 'dojo/json', 'dojo/_base/array', 'dijit/registry', 'dojo/ready'],
+                    function (query, domClass, request, json, arrayUtils, registry, ready) {
+                        ready(function () {
+                            query('#turn-edit-on-or-off').on('click', function () {
+                                query(".edit-course-region").forEach(function (node) {
+                                    domClass.toggle(node, 'hide');
                                 });
+                            });
+                            request.post("${createLink(controller: 'notification',action: 'list')}", {
+                                headers: {
+                                    'Accept': 'application/json'
+                                }
+                            }).then(function (response) {
+                                        var result = json.parse(response);
+                                        var html = "";
+                                        arrayUtils.forEach(result, function (notification) {
+                                            html = html + "<p><a href='${request.contextPath}/notification/show/" + notification.id + "'>" + notification.title + "</a></p>";
+                                        });
+                                        var list = "${createLink(controller: 'notification', action: 'list')}";
+                                        html = html + "<div style='text-align: right;'><a href='" + list + "'>更多...</a></div>";
+                                        registry.byId('tp2').set('content', html);
+                                    });
+                        });
                     });
         </script>
     </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="layout" content="dojo"/>
+        <meta name="layout" content="course"/>
     </head>
 
     <body>

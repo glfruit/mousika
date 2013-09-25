@@ -55,7 +55,7 @@
         </p>
     </div>
 </div>
-<h4 style="border-bottom: 1px solid #DEDEDE;color: #777777;padding-bottom: 5px;padding-top: 20px;">
+<h4 class="course-content-title">
     ${courseInstance?.title}
 </h4>
 <g:if test="${flash.message}">

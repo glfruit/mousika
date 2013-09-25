@@ -10,6 +10,7 @@ class SecurityFilters {
                 if (!controllerName) return true
 
                 if (controllerName == "course" && actionName == "listPublic") return true
+                if (controllerName == "notification" && actionName == "list") return true
 
                 // Access control by convention.
                 accessControl()

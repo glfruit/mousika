@@ -23,7 +23,7 @@ class FileManagerController {
             'gif': true
     ]
 
-    def getCourseFileRepo(course) {
+    private def getCourseFileRepo(course) {
         def path = request.servletContext.getRealPath(".")
         def fileRepo
         if (course)

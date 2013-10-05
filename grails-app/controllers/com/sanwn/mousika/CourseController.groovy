@@ -1,5 +1,6 @@
 package com.sanwn.mousika
 
+import org.apache.commons.io.FileUtils
 import org.apache.shiro.SecurityUtils
 import org.compass.core.engine.SearchEngineQueryParseException
 import org.springframework.dao.DataIntegrityViolationException
@@ -386,6 +387,15 @@ class CourseController {
         redirect(controller: contentType, action: 'create', params: [sectionSeq: params.sectionSeq, courseId: params.courseId])
     }
 
+    private def getCourseFileRepo(course) {
+        def path = request.servletContext.getRealPath(".")
+        def fileRepo = new File(path, "courseFiles/${course.courseToken}/materials")
+        if (!fileRepo.exists()) {
+            FileUtils.forceMkdir(fileRepo)
+        }
+        return fileRepo
+    }
+
     def listMaterials(Long id) {
         SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_TYPE, FileRepository.REPOSITORY_TYPE_COURSE)
         def course = Course.get(id)
@@ -394,7 +404,14 @@ class CourseController {
         }
         def token = course.courseToken
         SecurityUtils.subject.session.setAttribute(FileRepository.REPOSITORY_PATH, token)
-        [course: course]
+        def fileRepo = getCourseFileRepo(course)
+        def currentPath = params.currentPath ?: '.'
+        currentPath = currentPath + '/' + (params.target ?: '')
+        def targetDirectory = new File(fileRepo, currentPath)
+        def files = targetDirectory.listFiles({ file ->
+            !file.isHidden()
+        } as FileFilter)
+        [course: course, files: files, editor: params.editor, currentPath: currentPath]
     }
 
     def search() {

@@ -121,9 +121,22 @@ ul.breadcrumb {
 
 .item-command {
     list-style-type: none;
+    width: 90%;
+    margin-left: 15px;
 }
 
 .item-command li {
+    display: inline-block;
+    *display: inline;
+}
+
+.image-command {
+    list-style-type: none;
+    width: 90%;
+    margin-left: 5px;
+}
+
+.image-command li {
     display: inline-block;
     *display: inline;
 }

@@ -51,6 +51,9 @@
                 },
                 {
                     name: 'jplayer', location: "${request.contextPath}/js/jplayer", main: "jplayer"
+                },
+                {
+                    name: 'dropzone', location: "${request.contextPath}/js/lib/dropzone", main: "dropzone"
                 }
             ],
             has: {

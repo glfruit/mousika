@@ -1,6 +1,7 @@
 package com.sanwn.mousika
 
 import org.apache.commons.io.FileUtils
+import org.apache.commons.io.FilenameUtils
 import org.apache.shiro.SecurityUtils
 import org.compass.core.engine.SearchEngineQueryParseException
 import org.springframework.dao.DataIntegrityViolationException
@@ -414,6 +415,20 @@ class CourseController {
         [course: course, files: files, editor: params.editor, currentPath: currentPath]
     }
 
+    def addMaterial() {
+        def uploadedFile = request.getFile('file')
+        if (!uploadedFile) {
+            //TODO: 处理上传出现问题的情况
+        }
+        def course = Course.get(params.courseId)
+        if (!course) {
+            //TODO: 处理未找到课程的情况
+        }
+        def rootPath = getCourseFileRepo(course)
+        def targetFilepath = FilenameUtils.normalizeNoEndSeparator(params.currentPath) + '/' + uploadedFile.originalFilename
+        uploadedFile.transferTo(new File(rootPath, targetFilepath))
+    }
+
     def search() {
         if (!params.q?.trim()) {
             return [:]
@@ -428,6 +443,73 @@ class CourseController {
         } catch (SearchEngineQueryParseException ex) {
             return [parseException: true]
         }
+    }
+
+    def upload() {
+        def course = Course.get(params.courseId)
+        if (!course) {
+            render(status: 404, text: "未找到指定课程，ID为${params.courseId}")
+            return
+        }
+        try {
+            def fileRepo = getCourseFileRepo(course)
+            def uploadedFile = request.getFile('file')
+            def targetFilepath = FilenameUtils.normalizeNoEndSeparator(params.currentPath) + '/' + uploadedFile.originalFilename
+            uploadedFile.transferTo(new File(fileRepo, targetFilepath))
+            render(status: 200, text: "文件上传成功")
+        } catch (Exception e) {
+            log.error("文件上传错误：${e}")
+            render(status: 503, text: '文件上传错误')
+        }
+    }
+
+    def newFolder() {
+        def fileRepo = getCourseFileRepo(Course.get(params.courseId))
+        def newFolderPath = FilenameUtils.normalizeNoEndSeparator(params.currentPath) + '/' + params.folder
+        def newFolder = new File(fileRepo, newFolderPath)
+        if (newFolder.exists()) {
+            render contentType: 'application/json', text: '{"success":false,"error":"已存在同名文件夹"}'
+            return
+        }
+        FileUtils.forceMkdir(new File(fileRepo, newFolderPath))
+        render contentType: 'application/json', text: '{"success":true,"currentPath":"' + newFolderPath + '"}'
+    }
+
+    def download() {
+        def course = Course.get(params.courseId)
+        def fileRepo = getCourseFileRepo(course)
+        def filepath = FilenameUtils.normalizeNoEndSeparator(params.currentPath) + '/' + params.filename
+        def file = new File(fileRepo, filepath)
+        def fileType = file.name.substring(file.name.lastIndexOf('.') + 1)
+        def contentType = FileResource.FILE_TYPES[fileType]
+        contentType = contentType ?: 'application/octet-stream'
+        response.setContentType(contentType)
+        response.setContentLength(file.size().toInteger())
+        response.setCharacterEncoding("UTF-8")
+        def filename = new String(file.name.getBytes("UTF-8"), "ISO-8859-1")
+//        filename = URLEncoder.encode(filename, "UTF-8")
+        response.setHeader("Content-disposition", "attachment;filename=\"${filename}\";")
+        response.outputStream << file.newInputStream()
+    }
+
+
+    def rename() {
+        def course = Course.get(params.courseId)
+        def fileRepo = getCourseFileRepo(course)
+        def oldFilename = FilenameUtils.normalizeNoEndSeparator(params.currentPath) + '/' + params.title
+        def oldFile = new File(fileRepo, oldFilename)
+        def newFilename = FilenameUtils.normalizeNoEndSeparator(params.currentPath) + '/' + params.newTitle
+        oldFile.renameTo(new File(fileRepo, newFilename))
+        render contentType: 'application/json', text: '{"success":true, "currentPath":"' + params.currentPath + '"}'
+    }
+
+    def remove() {
+        def course = Course.get(params.courseId)
+        def fileRepo = getCourseFileRepo(course)
+        def removeFilename = FilenameUtils.normalizeNoEndSeparator(params.currentPath) + '/' + params.filename
+        def file = new File(fileRepo, removeFilename)
+        FileUtils.forceDelete(file)
+        render contentType: 'application/json', text: '{"success":true,"currentPath":"' + params.currentPath + '"}'
     }
 
     def grade(Long id) {

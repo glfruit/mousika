@@ -23,11 +23,11 @@ class FileManagerController {
             'gif': true
     ]
 
-    def getCourseFileRepo(course) {
+    private def getCourseFileRepo(course) {
         def path = request.servletContext.getRealPath(".")
         def fileRepo
         if (course)
-            fileRepo = new File(path, "courseFiles/${course.courseToken}/repo")
+            fileRepo = new File(path, "courseFiles/${course.courseToken}")
         else
             fileRepo = new File(path, "notifications")
         if (!fileRepo.exists()) {
@@ -36,13 +36,31 @@ class FileManagerController {
         return fileRepo
     }
 
+    private def getCourseMaterialRepo(Course course) {
+        def path = request.servletContext.getRealPath(".")
+        def fileRepo = new File(path, "courseMaterials/${course.courseToken}")
+        if (!fileRepo.exists()) {
+            FileUtils.forceMkdir(fileRepo)
+        }
+        return fileRepo
+    }
+
     def index() {
         def course = Course.get(params.courseId)
-//        if (!course) {
-//            flash.error = "未找到指定ID${params.courseId}的课程"
-//        }
         def fileRepo = getCourseFileRepo(course)
         log.debug("寻找课程${course?.courseToken}的文件存放位置${fileRepo.getCanonicalPath()}")
+        def currentPath = params.currentPath ?: '.'
+        currentPath = currentPath + '/' + (params.target ?: '')
+        def targetDirectory = new File(fileRepo, currentPath)
+        def files = targetDirectory.listFiles({ file ->
+            !file.isHidden()
+        } as FileFilter)
+        [files: files, course: course, currentPath: currentPath, editor: params.editor]
+    }
+
+    def changePath() {
+        def course = Course.get(params.courseId)
+        def fileRepo = getCourseMaterialRepo(course)
         def currentPath = params.currentPath ?: '.'
         currentPath = currentPath + '/' + (params.target ?: '')
         def targetDirectory = new File(fileRepo, currentPath)

@@ -121,9 +121,22 @@ ul.breadcrumb {
 
 .item-command {
     list-style-type: none;
+    width: 90%;
+    margin-left: 15px;
 }
 
 .item-command li {
+    display: inline-block;
+    *display: inline;
+}
+
+.image-command {
+    list-style-type: none;
+    width: 90%;
+    margin-left: 5px;
+}
+
+.image-command li {
     display: inline-block;
     *display: inline;
 }
@@ -148,4 +161,11 @@ ul.breadcrumb {
     white-space: nowrap;
     overflow: hidden;
     /*text-align: center;*/
+}
+
+.course-content-title {
+    border-bottom: 1px solid #DEDEDE;
+    color: #777777;
+    padding-bottom: 5px;
+    padding-top: 20px;
 }

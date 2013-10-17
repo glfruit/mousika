@@ -19,9 +19,8 @@
 </head>
 
 <body>
-<h4 id="courseTitleHead"
-    style="border-bottom: 1px solid #000;color: #777777;">
-    添加成员
+<h4 id="courseTitleHead" class="course-content-title">
+    <a href="${createLink(controller: 'course', action: 'show', id: course?.id)}">${course?.title}</a>->课程成员
 </h4>
 <a href="#myModal" role="button" class="btn"
    data-toggle="modal">添加成员</a>
@@ -37,8 +36,7 @@
 
     <div class="modal-body">
         分配角色：<g:select id="roleList" name="role"
-                       from="${com.sanwn.mousika.Role.list(order: 'name')}"
-                       optionKey="id" optionValue="name"/>
+                       from="${[Role.TEACHER, Role.STUDENT]}"/>
         <table id="userTbl" class="table table-striped">
             <g:each in="${users}" var="u" status="i">
                 <tr>
@@ -47,8 +45,12 @@
                     <td>${u.fullname}</td>
                     <td>${u.profile?.email}</td>
                     <td>
+                        <g:set var="isMember"
+                               value="${members.id.indexOf(u.id) != -1}"/>
                         <button id="btn${u.id}" type="button"
-                                class="btn enrol">添加</button>
+                                class="btn enrol ${isMember ? 'hide' : ''}">添加</button>
+                        <button id="btn${u.id}" type="button"
+                                class="btn btn-danger unenrol ${isMember ? '' : 'hide'}">移除</button>
                     </td>
                 </tr>
             </g:each>
@@ -82,7 +84,7 @@
     </div>
 
     <div class="modal-footer">
-        <button id="enrol-done" class="btn" data-dismiss="modal"
+        <button id="enrol-done" class="btn close" data-dismiss="modal"
                 aria-hidden="true">关闭</button>
     </div>
 </div>
@@ -111,8 +113,10 @@
                     </g:else>
                 </td>
                 <td>
-                    <g:each in="${member.roles}" var="role">
-                        ${role.name}；
+                    <g:each var="role" in="${member.roles}">
+                        <g:if test="${role.context?.instanceOf(com.sanwn.mousika.CourseContext)}">
+                            ${role.name}<i class="icon-remove"></i>
+                        </g:if>
                     </g:each>
                 </td>
             </tr>
@@ -123,9 +127,12 @@
     </tbody>
 </table>
 
-<p>已注册人数：${registered};<span style="padding-left: 5px;">待审批人数：<a
-        href="${createLink(action: 'examine', id: params.id)}">${applied}</a>
-</span></p>
+<p>
+    <span>已注册人数：<span id="registeredStudents">${registered};</span></span>
+    <span style="padding-left: 5px;">待审批人数：
+        <a href="${createLink(action: 'examine', id: params.id)}">${applied}</a>
+    </span>
+</p>
 <script type="text/javascript">
     require(["dojo/query",
         "dojo/ready",
@@ -152,8 +159,29 @@
                                     if (json.parse(response).success) {
                                         query(e.target).parents("tr").first().addClass("success");
                                         query(e.target).addClass("hide");
+                                        domClass.remove(query(e.target).siblings('.unenrol')[0], 'hide');
                                     } else {
                                         alert("注册课程失败!" + json.parse(response).error);
+                                    }
+                                });
+                            });
+                });
+            });
+            query(".unenrol").on("click", function (e) {
+                require(['dojo/request'], function (request) {
+                    var uid = query(e.target)[0].id.match(/btn(\d+)$/)[1];
+                    request.post("${request.contextPath}/course/assign/${params.id}", {
+                        data: {
+                            uid: uid,
+                            remove: true
+                        }
+                    }).then(function (response) {
+                                require(["dojo/json"], function (json) {
+                                    if (json.parse(response).success) {
+                                        query(e.target).addClass("hide");
+                                        domClass.remove(query(e.target).siblings('.enrol')[0], 'hide');
+                                    } else {
+                                        alert("更新失败!" + json.parse(response).error);
                                     }
                                 });
                             });
@@ -315,7 +343,7 @@
                     }
                 });
             });
-            query("#enrol-done").on("click", function () {
+            query(".close").on("click", function () {
                 require(['dojo/request'], function (request) {
                     request.post("${request.contextPath}/course/listMembers/${params.id}", {
                         headers: {
@@ -326,6 +354,7 @@
                                         function (dom, domConstruct, arrayUtil, json, query, locale, domConstruct) {
                                             domConstruct.empty(dom.byId('userRows'));
                                             var users = json.parse(response);
+                                            var delta = 0;
                                             arrayUtil.forEach(users, function (user) {
                                                 var userDiv = dom.byId('userRows');
                                                 var tr = domConstruct.create('tr', null, userDiv);
@@ -333,15 +362,21 @@
                                                 domConstruct.create("td", {innerHTML: user.profile ? user.profile.email : ''}, tr);
                                                 var lastAccessed = 'N/A';
                                                 if (user.lastAccessed) {
-                                                    lastAccessed = locale.format(user.lastAccessed, {
-                                                        datePattern: 'yyyy-MM-dd hh:mm:ss'
+                                                    lastAccessed = new Date(user.lastAccessed);
+                                                    lastAccessed = locale.format(new Date(user.lastAccessed), {
+                                                        datePattern: 'yyyy-MM-dd',
+                                                        timePattern: 'HH:mm:ss'
                                                     });
                                                 }
                                                 domConstruct.create("td", {innerHTML: lastAccessed}, tr);
                                                 var roles = '';
                                                 arrayUtil.forEach(user.roles, function (role) {
-                                                    roles = roles + role.name + ';';
+                                                    roles = roles + role.name + '<i class="icon-remove"></i>;';
+                                                    if (role.name == "教师") {
+                                                        delta = -1;
+                                                    }
                                                 });
+                                                query("#registeredStudents")[0].innerHTML = users.length + delta;
                                                 domConstruct.create("td", {innerHTML: roles}, tr);
                                             });
                                             query('.inSearch').removeClass('inSearch');

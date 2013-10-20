@@ -568,6 +568,29 @@ class CourseController {
         }
     }
 
+    def updateUnitTitle() {
+        def course = Course.get(params.courseId)
+        if (!course) {
+            log.error("未找到指定ID为${params.courseId}的课程")
+            render contentType: "application/json", text: '{"success": false, "message": "未找到指定的课程"}'
+            return
+        }
+        def unit = CourseUnit.where {
+            course == course && sequence == params.sequence
+        }.find()
+        if (!unit) {
+            log.error("未在ID为${params.courseId}的课程中找到sequence为${params.sequence}的课程单元")
+            render contentType: "application/json", text: '{"success": false, "message": "未找到指定的课程单元"}'
+            return
+        }
+        unit.title = params.title
+        if (unit.save()) {
+            render contentType: "application/json", text: '{"success": true}'
+        } else {
+            render contentType: "application/json", text: '{"success": false, "message": "更新课程单元名称失败"}'
+        }
+    }
+
     def updateDeliverInfo() {
         def course = Course.get(params.courseId)
         course.deliverPlace = params.deliverPlace

@@ -337,9 +337,9 @@
 </div>
 <script>
     require(['dojo/query', 'dojo/topic', 'dojo/request', 'dojo/dom-attr', 'dojo/on', 'dojo/dnd/Source', 'dojo/io-query', 'jquery', 'dojo/_base/event',
-        'dojo/dom-style', 'dojo/dom-class', 'dojo/json', 'dojo/dom',
+        'dojo/dom-style', 'dojo/dom-class', 'dojo/json', 'dojo/dom','dijit/InlineEditBox', 'dijit/form/TextBox',
         'jplayer', 'bootstrap/Modal', 'dojo/domReady!'],
-            function (query, topic, request, domAttr, on, Source, ioQuery, $, event, domStyle, domClass, json, dom) {
+            function (query, topic, request, domAttr, on, Source, ioQuery, $, event, domStyle, domClass, json, dom,InlineEditBox,TextBox) {
                 query("i.icon-eye-open,i.icon-eye-close").on('click', function (e) {
                     event.stop(e);
                     var classes = query(e.target).attr('class')[0].split(' ');
@@ -372,6 +372,30 @@
                             break;
                         }
                     }
+                });
+                query(".edit-section-title").forEach(function (node) {
+                    var eb = new InlineEditBox({
+                        editor: TextBox,
+                        autoSave: false,
+                        onChange: function (text) {
+                            var matched = node.id.match(/^editSectionTitle(\d)+/);
+                            request.post("${createLink(controller: 'course', action: 'updateUnitTitle')}", {
+                                data: {
+                                    courseId: courseId,
+                                    sequence: matched[1],
+                                    title: text
+                                }
+                            }).then(function (response) {
+                                        var result = json.parse(response);
+                                        if (!result.success) {
+                                            eb.cancel();
+                                            alert(result.message);
+                                            return;
+                                        }
+                                        query('#sectionTitle' + matched[1])[0].innerHTML = text;
+                                    });
+                        }
+                    }, node.id);
                 });
                 define.amd.jQuery = true;
                 query(".addContent").on('click', function (e) {

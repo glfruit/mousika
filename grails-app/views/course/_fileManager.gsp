@@ -52,8 +52,8 @@
                         <li class="pull-left">
                             <a href="${createLink(controller: 'course', action: 'listMaterials',
                                     params: [currentPath:
-                                               normalizedPath.substring(0,
-                                                                       normalizedPath.indexOf(path) + path.length())])}">${path}</a>
+                                            normalizedPath.substring(0,
+                                                    normalizedPath.indexOf(path) + path.length())])}">${path}</a>
                             <span class="divider">/</span>
                         </li>
                     </g:if>
@@ -67,7 +67,7 @@
             <li class="pull-right">
                 <a id="refresher"
                    href="${createLink(controller: 'course', action: 'listMaterials', id: course?.id,
-                           params:[currentPath:FilenameUtils.normalizeNoEndSeparator(currentPath)])}"
+                           params: [currentPath: FilenameUtils.normalizeNoEndSeparator(currentPath)])}"
                 <i class="icon-refresh"></i>
             </a>
             </li>
@@ -166,10 +166,8 @@
                     </g:if>
                     <g:else>
                         <div class="thumbnail">
-                            <g:img dir="images/ico"
-                                   file="${fileType}.png"
-                                   alt="${fileType}文件"
-                                   class="file-item"></g:img>
+                            <mousika:img dir="images/ico" file="${fileType}.png" altImg="Default.png"
+                                         class="file-item"></mousika:img>
                             <div class="box">
                                 <p rel="tooltip" title="${file.getName()}"
                                    class="file-item-title">${file.getName()}</p>

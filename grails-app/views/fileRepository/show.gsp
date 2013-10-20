@@ -1,65 +1,125 @@
-
-<%@ page import="com.sanwn.mousika.FileRepository" %>
+<%@ page import="org.apache.commons.io.FilenameUtils; com.sanwn.mousika.FileRepository" %>
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="layout" content="main">
-		<g:set var="entityName" value="${message(code: 'fileRepository.label', default: 'FileRepository')}" />
-		<title><g:message code="default.show.label" args="[entityName]" /></title>
-	</head>
-	<body>
-		<a href="#show-fileRepository" class="skip" tabindex="-1"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div class="nav" role="navigation">
-			<ul>
-				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
-			</ul>
-		</div>
-		<div id="show-fileRepository" class="content scaffold-show" role="main">
-			<h1><g:message code="default.show.label" args="[entityName]" /></h1>
-			<g:if test="${flash.message}">
-			<div class="message" role="status">${flash.message}</div>
-			</g:if>
-			<ol class="property-list fileRepository">
-			
-				<g:if test="${fileRepositoryInstance?.items}">
-				<li class="fieldcontain">
-					<span id="items-label" class="property-label"><g:message code="fileRepository.items.label" default="Items" /></span>
-					
-						<g:each in="${fileRepositoryInstance.items}" var="i">
-						<span class="property-value" aria-labelledby="items-label"><g:link controller="fileRepositoryItem" action="show" id="${i.id}">${i?.encodeAsHTML()}</g:link></span>
-						</g:each>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${fileRepositoryInstance?.location}">
-				<li class="fieldcontain">
-					<span id="location-label" class="property-label"><g:message code="fileRepository.location.label" default="Location" /></span>
-					
-						<span class="property-value" aria-labelledby="location-label"><g:fieldValue bean="${fileRepositoryInstance}" field="location"/></span>
-					
-				</li>
-				</g:if>
-			
-				<g:if test="${fileRepositoryInstance?.owner}">
-				<li class="fieldcontain">
-					<span id="owner-label" class="property-label"><g:message code="fileRepository.owner.label" default="Owner" /></span>
-					
-						<span class="property-value" aria-labelledby="owner-label"><g:link controller="user" action="show" id="${fileRepositoryInstance?.owner?.id}">${fileRepositoryInstance?.owner?.encodeAsHTML()}</g:link></span>
-					
-				</li>
-				</g:if>
-			
-			</ol>
-			<g:form>
-				<fieldset class="buttons">
-					<g:hiddenField name="id" value="${fileRepositoryInstance?.id}" />
-					<g:link class="edit" action="edit" id="${fileRepositoryInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
-				</fieldset>
-			</g:form>
-		</div>
-	</body>
+<head>
+    <meta name="layout" content="course">
+    <link rel="stylesheet"
+          href="${resource(dir: 'css', file: 'dropzone.css')}"
+          type="text/css"/>
+    <title>我的个人文件</title>
+</head>
+
+<body>
+<g:render template="fileManager"
+          model="[user: user, files: files, editor: params.editor, currentPath: currentPath]"/>
+<script type="text/javascript">
+    require(['jquery', 'dropzone', 'dojo/query', 'dojox/image/Lightbox', 'dojo/domReady!'], function ($, Dropzone, query) {
+        Dropzone.options.uploadForm = {
+            dictDefaultMessage: '将文件拖至此处上传',
+            dictInvalidFileType: "无效的文件类型",
+            dictFileTooBig: "文件大小超过允许范围",
+            dictResponseError: "系统错误",
+            paramName: "file", // The name that will be used to transfer the file
+            maxFilesize: 20
+        };
+        $('#refresher').click(function () {
+            window.location.href = $(this).attr('href');
+        });
+        $('.upload-btn').click(function () {
+            $('.uploader').show(500);
+        });
+        $('.close-uploader').click(function () {
+            $('.uploader').hide(500);
+            setTimeout(function () {
+                window.location.href = $('#refresher').attr('href');
+            }, 1000);
+        });
+        $('.new-folder-btn').click(function () {
+            var folder = window.prompt("新建文件夹", "新文件夹");
+            if (folder) {
+                $.ajax({
+                    type: 'post',
+                    url: "${createLink(controller: 'fileRepository', action: 'newFolder')}",
+                    data: {folder: folder, username: "${user.username}", currentPath: "${currentPath}"}
+                }).done(function (response) {
+                            if (!response.success) {
+                                alert(response.error);
+                                return;
+                            }
+                            window.location.href = "${request.contextPath}/fileRepository/show/${user?.username}?currentPath=" + response.currentPath;
+                        });
+            }
+        });
+        $('.thumbnail').mouseover(function () {
+            $(this).find('.box').animate({top: "-20px"}, {queue: false});
+        });
+        $('.thumbnail').mouseout(function () {
+            $(this).find('.box').animate({top: "0px"}, {queue: false});
+        });
+        $('.icon-pencil').click(function (e) {
+            e.preventDefault();
+            var p = $(this).parents('.commandsDiv').siblings('.box').children('p');
+            var title = p.text();
+            var newTitle = window.prompt("重命名", title);
+            if (newTitle && newTitle != title) {
+                $.ajax({
+                    type: 'post',
+                    url: "${createLink(controller: 'fileRepository', action: 'rename')}",
+                    data: {title: title, newTitle: newTitle, username: "${user.username}", currentPath: "${currentPath}"}
+                }).done(function (response) {
+                            if (response.success) {
+                                window.location.href = "${request.contextPath}/fileRepository/show/${user?.username}?currentPath=" + response.currentPath;
+                            }
+                        });
+            }
+        });
+        $('.icon-trash').click(function (e) {
+            e.preventDefault();
+            var answer = window.confirm("是否删除该文件？");
+            if (answer) {
+                var thumbnail = $(this).parents('.thumbnail');
+                var p = $(this).parents('.commandsDiv').siblings('.box').children('p');
+                var title = p.text();
+                $.ajax({
+                    type: 'post',
+                    url: "${createLink(controller: 'fileRepository', action: 'remove')}",
+                    data: {filename: title, username: "${user.username}", currentPath: "${currentPath}"}
+                }).done(function (response) {
+                            if (response.success) {
+                                window.location.href = "${request.contextPath}/fileRepository/show/${user?.username}?currentPath=" + response.currentPath;
+                            }
+                        });
+            }
+        });
+        $('.file-item').click(function (e) {
+            var isDirectory = $(this).parents('.directory-link').length;
+            if (isDirectory) return;
+
+            e.preventDefault();
+            var images = {jpg: true, jpeg: true, gif: true, tif: true, png: true, bmp: true};
+            var track = $('#editor_track').val();
+            var target = $('#' + track + '_ifr', parent.document);
+            var filename = $(this).siblings('.box').children('p').text().trim();
+            var href = "${request.contextPath}/fileRepository/download?username=${user?.username}&currentPath=${FilenameUtils.normalizeNoEndSeparator(currentPath)}";
+            href = href + "&filename=" + filename;
+            var fileLink;
+            var fileType = filename.substring(filename.lastIndexOf('.') + 1);
+            if (images[fileType])
+                fileLink = '<img src="' + href + '"/>';
+            else
+                fileLink = '<a href="' + href + '">' + filename + '</a>';
+            var imgTarget = $('.mce-img_' + track, parent.document);
+            var mediaTarget = $('.mce-video3_' + track, parent.document);
+            if (imgTarget.length > 0) {
+                imgTarget.children('input').val(href);
+            } else if (mediaTarget.length > 0) {
+                mediaTarget.val(href);
+            } else {
+                $(target).contents().find('#tinymce').append(fileLink);
+            }
+            $('.mce-filemanager', parent.document).find('.mce-close').trigger('click');
+        });
+    });
+</script>
+</body>
 </html>

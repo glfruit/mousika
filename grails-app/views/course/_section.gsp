@@ -22,7 +22,9 @@
 <div style="width:650px;display:table-cell;background-color: #FAFAFA;height: 100%;">
     <g:if test="${section.sequence != 0}">
         <h4 style="padding-left: 10px;color: #777777;">
-            ${section.title}
+            <div id="editSectionTitle${section.sequence}" class="edit-course-region edit-section-title"><%=section.title%></div>
+
+            <div id="sectionTitle${section.sequence}" class="edit-course-region hide"><%=section.title%></div>
         </h4>
     </g:if>
     <div>
@@ -78,7 +80,7 @@
                         <div class="edit-course-region">
                             <span class="commands">
                                 %{--<a href="#" rel="tooltip" title="编辑标题">--}%
-                                    %{--<i class="icon-pencil"></i>--}%
+                                %{--<i class="icon-pencil"></i>--}%
                                 %{--</a>--}%
                                 <a href="#" rel="tooltip" title="移动内容"
                                    style="cursor: move;">
@@ -110,7 +112,7 @@
            style="text-align: right;margin: 0 5px 0 0;">
             <span>
                 <shiro:hasAnyRole in="['教师', '系统管理员', '课程负责人']">
-                <i class="icon-plus"></i> 添加一个活动或资源
+                    <i class="icon-plus"></i> 添加一个活动或资源
                 </shiro:hasAnyRole>
             </span>
         </a>

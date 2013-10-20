@@ -22,6 +22,29 @@ class MousikaTagLib {
     }
 
     /**
+     * 对grails的img标签的扩展，在找不到指定图片文件的情况下提供默认的图片文件
+     *
+     * @emptyTag
+     *
+     * @attr dir Optional name of resource directory, defaults to "images"
+     * @attr file Name of resource file (optional if uri specified)
+     * @attr plugin Optional the name of the grails plugin if the resource is not part of the application
+     * @attr uri Optional app-relative URI path of the resource if not using dir/file attributes - only if Resources plugin is in use
+     * @attr altImg alternative img if specified img not exist
+     */
+    def img = { attrs ->
+        if (attrs.dir) { // only extend img tag when dir attribute is used
+            def file = grailsAttributes.applicationContext.getResource(attrs.dir).file
+            file = new File(file, attrs.file)
+            if (!file.exists()) {
+                attrs.file = attrs.altImg
+            }
+        }
+        def result = g.img(attrs)
+        out << result
+    }
+
+    /**
      * 拷贝自grails的twitter bootstrap插件，以使用twitter bootstrap风格的分页控件
      */
     def paginate = { attrs ->

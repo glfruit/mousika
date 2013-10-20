@@ -1,4 +1,4 @@
-<%@ page import="com.sanwn.mousika.FileRepository" %>
+<%@ page import="org.apache.shiro.SecurityUtils; com.sanwn.mousika.FileRepository" %>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="zh-CN" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="zh-CN" class="no-js ie7"> <![endif]-->
@@ -158,7 +158,7 @@
                     <li>
                         <i class="icon-folder-close"></i>
                         <span style="padding-left: 5px;">
-                            <a href="${createLink(controller: 'fileRepository', action: 'list')}">我的文件</a>
+                            <a href="${createLink(controller: 'fileRepository', action: 'show', id: SecurityUtils.subject.principal)}">我的文件</a>
                         </span>
                     </li>
                     <li>

@@ -222,10 +222,8 @@
                     </g:if>
                     <g:else>
                         <div class="thumbnail">
-                            <g:img dir="images/ico"
-                                   file="${fileType}.png"
-                                   alt="${fileType}文件"
-                                   class="file-item"></g:img>
+                            <mousika:img dir="images/ico" file="${fileType}.png" altImg="Default.png"
+                                         class="file-item"></mousika:img>
                             <div class="box">
                                 <p rel="tooltip" title="${file.getName()}"
                                    class="file-item-title">${file.getName()}</p>

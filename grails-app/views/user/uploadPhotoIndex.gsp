@@ -16,7 +16,8 @@
     <g:if test="${flash.message}">
         <div class="message" role="error">${flash.message}</div>
     </g:if>
-    <img src="${createLink(controller: 'user', action: 'displayPhoto')}" width="100" height="100"/>
+    %{--<g:img file="girl.jpg" width="10" height="10"/>--}%
+    %{--<img --}%%{--src="${createLink(controller: 'user', action: 'displayPhoto')}"--}%%{-- src="./girl.jpg"--}%%{-- width="10" height="10"--}%%{--/>--}%
     <div class="container">
         <g:uploadForm action="uploadPhoto">
             <input type="file" name="photo" />

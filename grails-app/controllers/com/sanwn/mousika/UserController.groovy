@@ -149,8 +149,14 @@ class UserController {
             def role
             for(int row = 2; ; row++){
                 username = sheet.getCell(0,row-1).getContents()
+                fullname = sheet.getCell(1,row-1).getContents()
+                roleNames = sheet.getCell(2,row-1).getContents()
                 //end为结束标记
                 if("end".equals(username)) {
+                    break;
+                }
+                if((username == null || "".equals(username)) && (fullname == null || "".equals(fullname)) && (roleNames == null || "".equals(roleNames))) {
+                    //都为空，表示最后一行
                     break;
                 }
                 fullname = sheet.getCell(1,row-1).getContents()
@@ -175,13 +181,14 @@ class UserController {
                 userInstance.setPasswordHash(passwordHash)
 
                 //角色
-                roleNames = sheet.getCell(2,row-1).getContents()
                 if (roleNames != null && !("".equals(roleNames))){
                     roleNameList = roleNames.split(",")
                     for(int roleNameIndex=0; roleNameIndex<roleNameList.size();roleNameIndex++){
                         role = Role.findByName(roleNameList[roleNameIndex])
                         if(role != null){
                             userInstance.addToRoles(role)
+                        }  else{
+                            errorMessage += "导入失败：第"+row+"行的角色不存在；"
                         }
                     }
                 }
@@ -292,6 +299,7 @@ class UserController {
         def userInstance = User.findByUsername(subject.getPrincipal())
         userInstance.profile.email = params.get("email")
         userInstance.profile.interests = params.get("interests")
+        System.out.println(params.get("interests"));
         try{
             userInstance.save(flash: true)
         }

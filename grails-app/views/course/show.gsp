@@ -30,7 +30,7 @@
                 </label>
 
                 <div class='controls'>
-                    <input name='deliverPlace' id='deliverPlace' type='text'/>
+                    <input name='deliverPlace' id='deliverPlace' type='text' value="${courseInstance?.deliverPlace}"/>
                 </div>
             </div>
 
@@ -41,7 +41,7 @@
 
                 <div class='controls'>
                     <g:textArea name="deliverTime" id="deliverTime" cols="10"
-                                rows="10"/>
+                                rows="10" value="${courseInstance?.deliverTime}"/>
                 </div>
             </div>
         </g:form>

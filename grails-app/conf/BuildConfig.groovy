@@ -75,10 +75,10 @@ grails.project.dependency.resolution = {
         compile ':heroku:1.0.1'
         compile ':cloud-support:1.0.8'
 
-        build ':jetty:2.0.3'
-//        build ":tomcat:$grailsVersion"
-
+//        build ':jetty:2.0.3'
+        build ":tomcat:$grailsVersion"
         runtime ":database-migration:1.3.3"
+
         compile ':cache:1.0.1'
         compile ":shiro:1.2.0-SNAPSHOT"
         compile ":codenarc:0.18.1"

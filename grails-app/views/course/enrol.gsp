@@ -41,7 +41,12 @@
             <g:each in="${users}" var="u" status="i">
                 <tr>
                     <td>${i + 1}</td>
-                    <td>${u.profile?.photo}</td>
+                    <td>
+                        <g:if test="${u.profile?.photo}">
+                            <img id="userPhoto" name="userPhoto"
+                                 src="${createLink(controller: 'user', action: 'displayPhoto', id:"${u.id}")}" width="60" height="60"/>
+                        </g:if>
+                    </td>
                     <td>${u.fullname}</td>
                     <td>${u.profile?.email}</td>
                     <td>

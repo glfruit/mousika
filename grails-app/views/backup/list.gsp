@@ -14,7 +14,7 @@
 
 <div id="list-privilege" class="content scaffold-show" role="system">
     <h4 style="border-bottom: 1px solid black;"><g:message  code="backup.list.label"/></h4>
-    <font color="red">在第一次运行手动备份和自动备份前请先进行备份设置，备份的数据库存放在教学经验分享系统的buckup目录下</font>
+    <font color="red">在第一次运行手动备份和自动备份前请先进行备份设置，并配置环境变量POSTGRESQL_HOME(例如：POSTGRESQL_HOME=C:\Program Files\PostgreSQL\9.1)，备份的数据库存放在教学经验分享系统的buckup目录下</font>
     </br>
     <table>
         <tr>
@@ -24,12 +24,12 @@
             <td>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <form class="form-horizontal" action="save">
-                    <div class="control-group">
+                    %{--<div class="control-group">
                         <label class="control-label" for="dataBasePath">数据库路径</label>
                         <div class="controls">
                             <input type="text" id="dataBasePath" name="dataBasePath"  value="${fieldValue(bean: backupInstance, field: "dataBasePath")}" onfocus="this.value=''" onblur="if(this.value==''){this.value='${fieldValue(bean: backupInstance, field: "dataBasePath")}'}">
                         </div>
-                    </div>
+                    </div>--}%
                     <div class="control-group">
                         <label class="control-label" for="backupDelay">自动备份延迟(小时)</label>
                         <div class="controls">

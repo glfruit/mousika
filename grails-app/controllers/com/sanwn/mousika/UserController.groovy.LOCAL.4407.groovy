@@ -1,11 +1,10 @@
 package com.sanwn.mousika
 
-import com.sanwn.mousika.User
+import jxl.Workbook
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.crypto.hash.Sha256Hash
 import org.compass.core.engine.SearchEngineQueryParseException
 import org.springframework.dao.DataIntegrityViolationException
-import jxl.*
 
 class UserController {
 
@@ -90,8 +89,8 @@ class UserController {
         if (version != null) {
             if (userInstance.version > version) {
                 userInstance.errors.rejectValue("version", "default.optimistic.locking.failure",
-                          [message(code: 'user.label', default: 'User')] as Object[],
-                          "Another user has updated this User while you were editing")
+                        [message(code: 'user.label', default: 'User')] as Object[],
+                        "Another user has updated this User while you were editing")
                 render(view: "edit", model: [userInstance: userInstance])
                 return
             }
@@ -128,13 +127,13 @@ class UserController {
         }
     }
 
-    def batchImportIndex(){
+    def batchImportIndex() {
     }
 
-    def batchImport(){
-        def errorMessage=""
+    def batchImport() {
+        def errorMessage = ""
         def excelFile = params.get("excelFile")
-        if(excelFile != null){
+        if (excelFile != null) {
             def workbook = Workbook.getWorkbook(excelFile.getProperties().get("inputStream"));
             def sheet = workbook.getSheet("用户");
             def content
@@ -147,31 +146,25 @@ class UserController {
             def passwordHash
             def userInstanceList = new ArrayList<User>()
             def role
-            for(int row = 2; ; row++){
-                username = sheet.getCell(0,row-1).getContents()
-                fullname = sheet.getCell(1,row-1).getContents()
-                roleNames = sheet.getCell(2,row-1).getContents()
+            for (int row = 2; ; row++) {
+                username = sheet.getCell(0, row - 1).getContents()
                 //end为结束标记
-                if("end".equals(username)) {
+                if ("end".equals(username)) {
                     break;
                 }
-                if((username == null || "".equals(username)) && (fullname == null || "".equals(fullname)) && (roleNames == null || "".equals(roleNames))) {
-                    //都为空，表示最后一行
-                    break;
-                }
-                fullname = sheet.getCell(1,row-1).getContents()
+                fullname = sheet.getCell(1, row - 1).getContents()
                 /*email = sheet.getCell(2,row-1).getContents()*/
-                if (username == null || "".equals(username) || fullname == null || "".equals(fullname)){
-                    errorMessage += "导入失败：第"+row+"行的用户名或姓名不能为空；"
+                if (username == null || "".equals(username) || fullname == null || "".equals(fullname)) {
+                    errorMessage += "导入失败：第" + row + "行的用户名或姓名不能为空；"
                     break
                 }
 
                 //通过username查看用户是否存在存在就用原来的用户并且删除原来的角色
                 def userInstance = User.findByUsername(username)
-                if (userInstance != null){
-                    errorMessage += "导入失败：第"+row+"行的用户名已经存在；"
+                if (userInstance != null) {
+                    errorMessage += "导入失败：第" + row + "行的用户名已经存在；"
                     break
-                }else{
+                } else {
                     userInstance = new User()
                 }
                 passwordHash = new Sha256Hash("username").toHex()
@@ -181,14 +174,13 @@ class UserController {
                 userInstance.setPasswordHash(passwordHash)
 
                 //角色
-                if (roleNames != null && !("".equals(roleNames))){
+                roleNames = sheet.getCell(2, row - 1).getContents()
+                if (roleNames != null && !("".equals(roleNames))) {
                     roleNameList = roleNames.split(",")
-                    for(int roleNameIndex=0; roleNameIndex<roleNameList.size();roleNameIndex++){
+                    for (int roleNameIndex = 0; roleNameIndex < roleNameList.size(); roleNameIndex++) {
                         role = Role.findByName(roleNameList[roleNameIndex])
-                        if(role != null){
+                        if (role != null) {
                             userInstance.addToRoles(role)
-                        }  else{
-                            errorMessage += "导入失败：第"+row+"行的角色不存在；"
                         }
                     }
                 }
@@ -197,19 +189,19 @@ class UserController {
             }
             //数据没有问题时才保存
             if ("".equals(errorMessage)) {
-                try{
+                try {
                     User.saveAll(userInstanceList)
                     /*for(int k=0;k<userInstanceList.size();k++){
                         userInstanceList.get(k).save(failOnError: true)
                     }*/
-                }catch(Exception exception){
-                    errorMessage += "导入失败！保存数据出现异常。" + exception.getMessage().replace('\'',' ').replace("\"","").replace("\n","");
+                } catch (Exception exception) {
+                    errorMessage += "导入失败！保存数据出现异常。" + exception.getMessage().replace('\'', ' ').replace("\"", "").replace("\n", "");
                 }
             }
-        }else{
+        } else {
             errorMessage += "excel存在问题。"
         }
-        if(errorMessage.equals("")){
+        if (errorMessage.equals("")) {
             errorMessage += "导入成功"
         }
         flash.message = message(code: errorMessage)
@@ -218,20 +210,17 @@ class UserController {
 
     def search() {
         if (!params.q?.trim()) {
-            return [:]
-        }
-        try {
-            def searchResult = User.search(params.q, params)
             withFormat {
                 html {
-                    [searchResult: searchResult]
+                    [:]
                 }
                 json {
+                    def users = User.list(sort: "username", max: 10, offset: 0)
                     def results = [
-                            total: searchResult.total,
-                            max: searchResult.max,
-                            offset: searchResult.offset,
-                            users: searchResult.results.collect {
+                            total: User.count(),
+                            max: users.size(),
+                            offset: 0,
+                            users: users.collect {
                                 [
                                         id: it.id,
                                         username: it.username,
@@ -246,8 +235,36 @@ class UserController {
                     render contentType: 'text/json', text: gsonBuilder.create().toJson(results)
                 }
             }
-        } catch (SearchEngineQueryParseException ex) {
-            return [parseException: true]
+        } else {
+            try {
+                def searchResult = User.search(params.q, params)
+                withFormat {
+                    html {
+                        [searchResult: searchResult]
+                    }
+                    json {
+                        def results = [
+                                total: searchResult.total,
+                                max: searchResult.max,
+                                offset: searchResult.offset,
+                                users: searchResult.results.collect {
+                                    [
+                                            id: it.id,
+                                            username: it.username,
+                                            fullname: it.fullname,
+                                            email: it.profile?.email,
+                                            firstAccessed: it.profile?.firstAccessed,
+                                            lastAccessed: it.profile?.lastAccessed,
+                                            roles: it.roles.collect { [id: it.id, name: it.name] }
+                                    ]
+                                }
+                        ]
+                        render contentType: 'text/json', text: gsonBuilder.create().toJson(results)
+                    }
+                }
+            } catch (SearchEngineQueryParseException ex) {
+                return [parseException: true]
+            }
         }
     }
 
@@ -269,18 +286,18 @@ class UserController {
         }
     }
 
-    def updatePasswordIndex(){
+    def updatePasswordIndex() {
         /*def subject = SecurityUtils.getSubject();
         [subject:subject]*/
     }
 
-    def updatePassword(){
+    def updatePassword() {
         def subject = SecurityUtils.getSubject();
         def userInstance = User.findByUsername(subject.getPrincipal())
-        if (!userInstance.getPasswordHash().equals(new Sha256Hash(params.get("oldPassword")).toHex())){
+        if (!userInstance.getPasswordHash().equals(new Sha256Hash(params.get("oldPassword")).toHex())) {
             flash.message = message(code: 'user.update.password.error.message')
             redirect(action: "updatePasswordIndex")
-        }else{
+        } else {
             userInstance.setPasswordHash(new Sha256Hash(params.get("newPassword1")).toHex())
             userInstance.save(failOnError: true)
             flash.message = message(code: 'user.update.password.success.message')
@@ -288,48 +305,47 @@ class UserController {
         }
     }
 
-    def updateInformationIndex(){
+    def updateInformationIndex() {
         def subject = SecurityUtils.getSubject();
         def userInstance = User.findByUsername(subject.getPrincipal())
-        [userInstance:userInstance]
+        [userInstance: userInstance]
     }
 
-    def updateInformation(){
+    def updateInformation() {
         def subject = SecurityUtils.getSubject();
         def userInstance = User.findByUsername(subject.getPrincipal())
         userInstance.profile.email = params.get("email")
         userInstance.profile.interests = params.get("interests")
-        System.out.println(params.get("interests"));
-        try{
+        try {
             userInstance.save(flash: true)
         }
-        catch(Exception exception) {
+        catch (Exception exception) {
             flash.message = "email格式错误"
         }
         redirect(action: "updateInformationIndex")
     }
 
-    def uploadPhotoIndex(){
+    def uploadPhotoIndex() {
 
     }
 
-    def uploadPhoto(){
+    def uploadPhoto() {
         def propertiesMap = params.get("photo").getProperties()
         def contentType = propertiesMap.get("contentType")
-        if (propertiesMap.get("empty")){
+        if (propertiesMap.get("empty")) {
             flash.message = "上传的头像为空"
             redirect(action: "uploadPhotoIndex")
             return
-        }else if(!(contentType.equals("image/jpeg")||contentType.equals("image/png")||contentType.equals("image/bmp")||contentType.equals("image/gif"))) {
+        } else if (!(contentType.equals("image/jpeg") || contentType.equals("image/png") || contentType.equals("image/bmp") || contentType.equals("image/gif"))) {
             flash.message = "不支持的图片格式"
             redirect(action: "uploadPhotoIndex")
             return
-        } else if( propertiesMap.get("size")>200*1024) {
+        } else if (propertiesMap.get("size") > 200 * 1024) {
             flash.message = "上传的头像太大"
             redirect(action: "uploadPhotoIndex")
             return
-        } else{
-            FileInputStream fileInputStream =  propertiesMap.get("inputStream")
+        } else {
+            FileInputStream fileInputStream = propertiesMap.get("inputStream")
             def subject = SecurityUtils.getSubject();
             def userInstance = User.findByUsername(subject.getPrincipal())
             userInstance.profile.photo = fileInputStream.bytes
@@ -339,18 +355,18 @@ class UserController {
         }
     }
 
-    def displayPhoto(){
+    def displayPhoto() {
         def userInstance
-        if (params.get("id")!=null){
+        if (params.get("id") != null) {
             userInstance = User.get(params.get("id"))
-        } else{
+        } else {
             def subject = SecurityUtils.getSubject();
             userInstance = User.findByUsername(subject.getPrincipal())
         }
         def photoByte
-        if (userInstance.getProfile()!=null&&userInstance.getProfile().getPhoto()!=null&&userInstance.getProfile().getPhoto().length!=0){
+        if (userInstance.getProfile() != null && userInstance.getProfile().getPhoto() != null && userInstance.getProfile().getPhoto().length != 0) {
             photoByte = userInstance.profile.photo
-        }else{
+        } else {
             def fileName = System.getProperty("user.dir") + "/web-app/images/defaultUserPhoto/defaultUserPhoto.jpg"
             def file = new File(fileName)
             photoByte = new FileInputStream(file).bytes
@@ -361,12 +377,12 @@ class UserController {
     }
 
 
-    def resetPassword(){
+    def resetPassword() {
         def userInstance = User.get(params.get("id"))
         userInstance.setPasswordHash(new Sha256Hash(userInstance.getUsername()).toHex())
         if (userInstance.save(flush: true)) {
             flash.message = "重置密码成功"
-        }else{
+        } else {
             flash.message = "重置密码失败"
         }
 
